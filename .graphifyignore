@@ -1,0 +1,8 @@
+# generated or binary output: not useful in the knowledge graph
+build/
+dist/
+site/audio/
+site/data/
+site/downloads/
+site/fonts/
+graphify-out/

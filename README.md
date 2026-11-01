@@ -54,6 +54,18 @@ python tools/build.py            # rebuild model, audio, website data and Anki d
 
 The first run downloads the source data into `build/` (git-ignored). Lessons live in [`content/`](content/) as JSON, and each example is a *reference* to a verse (`{"ref": "68:19", "at": "من ربك"}`), so no Arabic is typed by hand and a wrong example fails the build. See the [content guide](docs/CONTENT-GUIDE.md) and the [architecture](docs/ARCHITECTURE.md).
 
+## Knowledge graph (graphify)
+
+The code is indexed with [graphify](https://graphify.com), so Claude Code can look up how the pipeline and app fit together instead of reading every file. Open `graphify-out/graph.html` for the interactive view, or read `graphify-out/GRAPH_REPORT.md`.
+
+```bash
+pip install graphifyy                                # once per machine: the project's hooks call this CLI
+graphify query "how are audio clips cut?"            # ask the graph
+graphify update .                                    # refresh after changing code (no API key needed)
+```
+
+The graph covers code only (`tools/` and `site/js/`). Lessons in `content/` are not in it. Generated files are excluded through `.graphifyignore`.
+
 ## Publish
 
 The website is served by GitHub Pages from the `gh-pages` branch: <https://husseinbenz.github.io/tarteel/>. After changing `site/`, run `tools/publish_pages.sh` (it pushes the `site/` folder to that branch). A printable summary of the course is in [`docs/HANDOUT.md`](docs/HANDOUT.md).
