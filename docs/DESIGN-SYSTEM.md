@@ -86,7 +86,8 @@ The header, hero, lesson banner, due card and footer are always dark: `.on-dark`
 Every button is glass: a translucent fill, a top-to-bottom sheen, a lit top edge and a soft shadow (`--glass-*` tokens). This departs from xintra.org, whose buttons are flat.
 
 - **Neutral** buttons use `--glass-bg`. **Filled** ones (the primary action and anything selected) use `--glass-primary`, a deeper tint than the solid primary, because it blends with what is behind it.
-- **Blur only where it shows.** `backdrop-filter` is applied only over the dark panels and in the header. On a flat surface a blur changes nothing visible and still costs GPU time.
+- **Shared stylesheet.** The rules live in `site/css/glass-buttons.css`, a copy of `husseinbenz-website/shared/glass-buttons.css` synced by `tools/sync-glass.py` in that repo, so edit the canonical file. Tarteel's tints stay in the `--glass-*` tokens in `style.css`.
+- **Blur.** The shared stylesheet blurs every button (8px). At most 31 are blurred at once, on the Symbols page. Scrolling smoothness on low-end phones has not been measured.
 - **Contrast is tested on the blended color.** `tools/audit_site.cjs` fails if button text drops below 4.5:1 in either theme.
 - `prefers-reduced-transparency` and forced-colors modes get solid buttons.
 
