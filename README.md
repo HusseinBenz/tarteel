@@ -7,7 +7,9 @@ A cute, calm e-learning course for **tajweed**, delivered two ways from one sour
 | 🌐 **Static website** | [`site/`](site/) | Open `site/index.html`, or host the folder anywhere (GitHub Pages, Netlify, any web server). No build step, no backend. |
 | 🃏 **Anki decks** | [`dist/anki/`](dist/anki/) | `Tarteel-Complete.apkg` plus one package per level and one for the rule symbols. 438 notes, 570 cards, with audio. |
 
-Everything is in English. The Quran text is the **Madinah Mushaf** shown in its **original KFGQPC Uthmanic Hafs font**, colored with tajweed, and every fragment of a verse carries a label with the **surah, verse number and Mushaf page**.
+The website is available in **English and Arabic**, with a language switch in the header. Arabic uses a right-to-left interface and concise, adapted explanations for all 52 lessons, all 173 concept cards, and all 26 symbols. Both languages share the same 527 website cards, Quran examples, audio and saved progress. Downloadable Anki decks remain in English (438 notes, 570 cards, including reverse symbol and color cards).
+
+The Quran text is the **Madinah Mushaf** shown in its **original KFGQPC Uthmanic Hafs font**, colored with tajweed, and every fragment of a verse carries a label with the **surah, verse number and Mushaf page**.
 
 ## How learning works
 
@@ -41,6 +43,8 @@ python -m http.server 8765 --directory site     # then visit http://localhost:87
 
 Progress and review schedules are stored only in your browser.
 
+Use `?lang=ar` or `?lang=en` before a route (for example `index.html?lang=ar#/path`) to link to a specific language. The language switch remembers your choice when browser storage is available and keeps the current route. The site works directly from disk in both languages.
+
 **Anki.** In Anki choose *File ▸ Import* and pick `dist/anki/Tarteel-Complete.apkg` (or just the levels you want). You get a deck tree: `Tarteel ▸ Level N ▸ one subdeck per rule`, plus `Tarteel ▸ Rule Symbols`. The font is embedded, so the Mushaf script displays correctly on desktop, AnkiDroid and AnkiMobile. The packages can also be downloaded from the website's home page.
 
 ## Rebuild or extend
@@ -53,6 +57,18 @@ python tools/build.py            # rebuild model, audio, website data and Anki d
 ```
 
 The first run downloads the source data into `build/` (git-ignored). Lessons live in [`content/`](content/) as JSON, and each example is a *reference* to a verse (`{"ref": "68:19", "at": "من ربك"}`), so no Arabic is typed by hand and a wrong example fails the build. See the [content guide](docs/CONTENT-GUIDE.md) and the [architecture](docs/ARCHITECTURE.md).
+
+Arabic prose is maintained in `content/ar.json`, interface copy in `site/js/i18n.js`. Run `python tools/build_site.py` after editing Arabic content; it generates `site/data/ar.js` from the shared model and fails if concept-card coverage is out of date. The Arabic edition uses shorter lesson explanations and general practice notes; it omits English word glosses. Quran text and recitation are never translated or rewritten by the localization build.
+
+For the browser audit, install Playwright into the ignored build directory and run:
+
+```bash
+npm install --prefix build/browser-check playwright
+npx --prefix build/browser-check playwright install chromium
+node tools/audit_site.cjs
+```
+
+See [`docs/AUDIT.md`](docs/AUDIT.md) for findings and remaining gaps.
 
 ## Knowledge graph (graphify)
 

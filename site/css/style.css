@@ -68,8 +68,9 @@ p { margin: 0 0 1em; }
 a { color: var(--link); text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: var(--r-sm); }
 code { font-family: var(--font-mono); font-size: .9em; }
-.skip { position: absolute; left: -999px; top: 8px; background: var(--primary); color: var(--on-primary); padding: var(--s-2) var(--s-4); border-radius: var(--r-md); z-index: 99; }
-.skip:focus { left: 8px; }
+.skip { position: absolute; inset-inline-start: 8px; top: 8px; transform: translateY(calc(-100% - 16px)); background: var(--primary); color: var(--on-primary); padding: var(--s-2) var(--s-4); border-radius: var(--r-md); z-index: 99; }
+.skip:focus { transform: none; }
+main:focus-visible { outline: none; }
 
 /* The mono label style. Arabic must never inherit tracking: it breaks letter joining. */
 .eyebrow, .btn, .play, .nav a, .kind, .step, .toggle, .num, .tag, .here, .go, .stat span, .fact h3, .counts, .count { font-family: var(--font-mono); font-size: .8125rem; font-weight: 400; letter-spacing: .02em; text-transform: uppercase; }
@@ -282,4 +283,25 @@ dialog::backdrop { background: rgba(17, 17, 19, .6); backdrop-filter: blur(4px);
   .examples { grid-template-columns: 1fr; }
   .here { position: static; display: inline-block; margin-bottom: var(--s-2); }
   .card, .flash, .level-card, .path-card { padding: var(--s-4); }
+}
+
+/* Arabic prose uses an everyday UI font; Quran text keeps its Mushaf font. */
+.language-btn { border: 1px solid currentColor; color: inherit; background: transparent; border-radius: var(--r-md); padding: .35rem .65rem; cursor: pointer; font: inherit; white-space: nowrap; min-height: 2.5rem; }
+:root[dir="rtl"] { --font-ui: Tahoma, "Segoe UI", Arial, sans-serif; --font-mono: Tahoma, "Segoe UI", Arial, sans-serif; }
+[dir="rtl"] body { font-family: Tahoma, "Segoe UI", Arial, sans-serif; line-height: 1.85; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] .eyebrow, [dir="rtl"] .btn, [dir="rtl"] .nav, [dir="rtl"] .grade { letter-spacing: 0; text-transform: none; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 { line-height: 1.6; }
+[dir="rtl"] .play, [dir="rtl"] .nav a, [dir="rtl"] .kind, [dir="rtl"] .step, [dir="rtl"] .toggle, [dir="rtl"] .num, [dir="rtl"] .tag, [dir="rtl"] .here, [dir="rtl"] .go, [dir="rtl"] .stat span, [dir="rtl"] .fact h3, [dir="rtl"] .counts, [dir="rtl"] .count { letter-spacing: 0; text-transform: none; }
+[dir="rtl"] .here { right: auto; inset-inline-end: var(--s-4); }
+[dir="rtl"] .lesson-link > .ar-inline, [dir="rtl"] .lesson-head > .ar, [dir="rtl"] .label .surah-ar { display: none; }
+.label .tag, .session-top .count, .stat b, .grade small { unicode-bidi: isolate; }
+.session-top .count, .stat b { direction: ltr; }
+.grade small { white-space: nowrap; }
+@media (max-width: 420px) {
+  .top { gap: .5rem; }
+  .top-actions { gap: .35rem; }
+  .nav { justify-content: space-between; gap: 0; }
+  .nav a { padding-inline: .35rem; }
+  .lesson-list { grid-template-columns: minmax(0, 1fr); }
+  .facts { grid-template-columns: minmax(0, 1fr); }
 }

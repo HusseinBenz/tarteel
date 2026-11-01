@@ -2,6 +2,7 @@
 
   site/data/content.js    window.TARTEEL = {...}   (a <script>, so the site also
                                                     works when opened from disk)
+  site/data/ar.js         window.TARTEEL_AR = {...} (Arabic website edition)
   site/css/tajweed.css    one CSS variable + class per tajweed rule color
 
 Everything else in site/ (HTML, CSS, JS, fonts, audio) is hand-written or
@@ -12,6 +13,7 @@ from __future__ import annotations
 import json
 
 import quran_data as q
+from localize_site import arabic_model
 
 ROOT = q.ROOT
 SITE = ROOT / "site"
@@ -46,6 +48,8 @@ def main() -> None:
     (SITE / "css").mkdir(parents=True, exist_ok=True)
     payload = json.dumps(model, ensure_ascii=False, separators=(",", ":"))
     (SITE / "data" / "content.js").write_text(f"window.TARTEEL={payload};\n", "utf8")
+    arabic = json.dumps(arabic_model(model), ensure_ascii=False, separators=(",", ":"))
+    (SITE / "data" / "ar.js").write_text(f"window.TARTEEL_AR={arabic};\n", "utf8")
     (SITE / "css" / "tajweed.css").write_text(tajweed_css(model["legend"]), "utf8")
     kb = (SITE / "data" / "content.js").stat().st_size / 1024
     print(f"site/data/content.js {kb:.0f} KB, site/css/tajweed.css written")

@@ -1,17 +1,17 @@
 # Graph Report - tarteel  (2026-11-01)
 
 ## Corpus Check
-- 29 files · ~32,784 words
+- 34 files · ~41,365 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 3, .css 2)
 
 ## Summary
-- 232 nodes · 486 edges · 12 communities (8 shown, 4 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 16 edges (avg confidence: 0.86)
+- 262 nodes · 520 edges · 14 communities (10 shown, 4 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `794329d1`
+- Built from commit: `a71b6377`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -28,6 +28,8 @@
 - CLAUDE.md
 - publish_pages.sh
 - .claude/CLAUDE.md
+- audit_site.cjs
+- i18n.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `esc()` - 23 edges
@@ -56,23 +58,23 @@
 ## Import Cycles
 - None detected.
 
-## Communities (12 total, 4 thin omitted)
+## Communities (14 total, 4 thin omitted)
 
 ### Community 0 - "quran_data.py"
-Cohesion: 0.09
-Nodes (25): The Quran text and font, main(), tajweed_css(), resolve_example(), align_markup(), chapters(), display_tajweed(), enrich_natural_madd() (+17 more)
+Cohesion: 0.10
+Nodes (22): align_markup(), chapters(), display_tajweed(), enrich_natural_madd(), _explode(), fragment(), full_tajweed(), _get() (+14 more)
 
 ### Community 1 - "curriculum.py"
 Cohesion: 0.10
 Nodes (17): cut(), main(), main(), build(), _strip(), check_heavy(), check_idhhar(), check_idhhar_shafawi() (+9 more)
 
 ### Community 2 - "render"
-Cohesion: 0.22
-Nodes (17): exampleNote(), fmtInterval(), lessonLink(), playClip(), setPlaying(), startSession(), doGrade(), gradesHTML() (+9 more)
+Cohesion: 0.24
+Nodes (17): fmtInterval(), playClip(), setPlaying(), shuffle(), startSession(), doGrade(), finish(), gradesHTML() (+9 more)
 
 ### Community 3 - "Tarteel Handout: Tajweed at a Glance"
 Cohesion: 0.05
-Nodes (32): Add a lesson, Add an example to a lesson, Colors, Content guide: adding or changing lessons, Keep examples honest: `expect` and `check`, Known limitation, Symbols, 10. Your 8 levels (+24 more)
+Nodes (36): Implemented, Remaining gaps, Verification, Website audit — 1 November 2026, Add a lesson, Add an example to a lesson, Colors, Content guide: adding or changing lessons (+28 more)
 
 ### Community 4 - "build_anki.py"
 Cohesion: 0.21
@@ -87,8 +89,16 @@ Cohesion: 0.17
 Nodes (11): Audit, Color: primitives, Color: semantic, Components, Design system, Known gap, Rules that override the system, Shape, space, motion (+3 more)
 
 ### Community 7 - "Architecture"
-Cohesion: 0.25
-Nodes (8): Accessibility and robustness, Anki deck tree, Architecture, Content model, Curriculum (Levels 0 to 7), Folder layout, Website routes, Why this shape
+Cohesion: 0.22
+Nodes (9): Accessibility and robustness, Anki deck tree, Architecture, Content model, Curriculum (Levels 0 to 7), Folder layout, The Quran text and font, Website routes (+1 more)
+
+### Community 8 - "preview_anki.py"
+Cohesion: 0.17
+Nodes (5): main(), tajweed_css(), arabic_model(), main(), render()
+
+### Community 12 - "audit_site.cjs"
+Cohesion: 0.11
+Nodes (10): ar, assert, data, en, fs, http, path, server (+2 more)
 
 ## Knowledge Gaps
 - **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
@@ -96,17 +106,17 @@ Nodes (8): Accessibility and robustness, Anki deck tree, Architecture, Content m
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Architecture` connect `Architecture` to `quran_data.py`, `Tarteel Handout: Tajweed at a Glance`?**
-  _High betweenness centrality (0.237) - this node is a cross-community bridge._
+- **Why does `Architecture` connect `Architecture` to `Tarteel Handout: Tajweed at a Glance`?**
+  _High betweenness centrality (0.210) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `startSession()` (e.g. with `onClick()` and `onKey()`) actually correct?**
   _`startSession()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **Should `quran_data.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.08502415458937199 - nodes in this community are weakly interconnected._
-- **Why does `The Quran text and font` connect `quran_data.py` to `Architecture`?**
-  _High betweenness centrality (0.225) - this node is a cross-community bridge._
+  _Cohesion score 0.0975609756097561 - nodes in this community are weakly interconnected._
+- **Why does `align_markup()` connect `quran_data.py` to `Architecture`?**
+  _High betweenness centrality (0.204) - this node is a cross-community bridge._
 - **Should `curriculum.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.0960960960960961 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10158730158730159 - nodes in this community are weakly interconnected._
+- **Why does `The Quran text and font` connect `Architecture` to `quran_data.py`?**
+  _High betweenness centrality (0.199) - this node is a cross-community bridge._
 - **Should `Tarteel Handout: Tajweed at a Glance` be split into smaller, more focused modules?**
-  _Cohesion score 0.05405405405405406 - nodes in this community are weakly interconnected._
-- **Should `app.js` be split into smaller, more focused modules?**
-  _Cohesion score 0.14492753623188406 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.047619047619047616 - nodes in this community are weakly interconnected._

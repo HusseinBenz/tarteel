@@ -8,8 +8,23 @@
 (function () {
   'use strict';
 
-  var D = window.TARTEEL;
-  if (!D) { document.getElementById('app').textContent = 'Could not load the course data.'; return; }
+  var I18n = window.TarteelI18n;
+  var language = new URLSearchParams(location.search).get('lang');
+  if (language !== 'ar' && language !== 'en') {
+    try { language = localStorage.getItem('tarteel.language'); } catch (e) { /* optional storage */ }
+  }
+  language = language === 'ar' ? 'ar' : 'en';
+  I18n.use(language);
+  var D = language === 'ar' ? window.TARTEEL_AR : window.TARTEEL;
+  if (D && language === 'ar') {
+    D.downloads = (window.TARTEEL.downloads || []).map(function (item) {
+      var level = item.file.match(/Level-(\d+)/);
+      return Object.assign({}, item, { title: level ? 'المستوى ' + level[1] + ' · ' + D.levels[+level[1]].title + ' (Anki بالإنجليزية)' : I18n.text(item.title) });
+    });
+  }
+  document.documentElement.lang = language;
+  document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  if (!D) { document.getElementById('app').textContent = I18n.text(language === 'ar' ? 'Could not load Arabic content.' : 'Could not load the course data.'); return; }
 
   // ---------------------------------------------------------------- helpers
   var $ = function (s, el) { return (el || document).querySelector(s); };
@@ -17,9 +32,9 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   var AR_RUN = /(?:[؀-ۿݐ-ݿ‌]+(?:\s+(?=[؀-ۿݐ-ݿ]))?)+/g;
   // escape plain text, and give Arabic runs the Mushaf font
-  function rich(s) { return esc(s).replace(AR_RUN, function (m) { return '<span class="ar-inline" lang="ar">' + m + '</span>'; }); }
+  function rich(s) { return language === 'ar' ? esc(s) : esc(s).replace(AR_RUN, function (m) { return '<span class="ar-inline" lang="ar">' + m + '</span>'; }); }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+  function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : w === 'miss' ? 'es' : 's'); }
 
   var legend = {}; D.legend.forEach(function (c) { legend[c.id] = c; });
   var cardById = {}; D.cards.forEach(function (c) { cardById[c.id] = c; });
@@ -32,7 +47,7 @@
   var KEY = 'tarteel.v1';
   var S = { cards: {}, lessons: {}, days: {}, settings: {} };
   function loadState() {
-    try { var raw = localStorage.getItem(KEY); if (raw) S = JSON.parse(raw); } catch (e) { /* private mode: run without saving */ }
+    try { var raw = localStorage.getItem(KEY); if (raw) { var parsed = JSON.parse(raw); if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) S = parsed; } } catch (e) { /* private mode: run without saving */ }
     S.cards = S.cards || {}; S.lessons = S.lessons || {}; S.days = S.days || {};
     S.settings = Object.assign({ autoplay: false, newPerDay: 12, mode: 'smart', types: { r: true, i: true, c: true, s: true, k: true }, theme: 'auto' }, S.settings || {});
   }
@@ -86,9 +101,9 @@
   // ---------------------------------------------------------------- audio
   var player = $('#player'), playing = null;
   function setPlaying(btn) {
-    if (playing) { playing.setAttribute('aria-pressed', 'false'); var t = $('.t', playing); if (t) t.textContent = 'Listen'; }
+    if (playing) { playing.setAttribute('aria-pressed', 'false'); var t = $('.t', playing); if (t) t.textContent = I18n.text('Listen'); }
     playing = btn;
-    if (btn) { btn.setAttribute('aria-pressed', 'true'); var t2 = $('.t', btn); if (t2) t2.textContent = 'Playing…'; }
+    if (btn) { btn.setAttribute('aria-pressed', 'true'); var t2 = $('.t', btn); if (t2) t2.textContent = I18n.text('Playing…'); }
   }
   function playClip(src, btn) {
     if (btn && playing === btn && !player.paused) { player.pause(); setPlaying(null); return; }
@@ -105,7 +120,7 @@
   var toastTimer;
   function toast(msg) {
     var t = $('.toast'); if (t) t.remove();
-    t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg; document.body.appendChild(t);
+    t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = I18n.text(msg); document.body.appendChild(t);
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.remove(); }, 2200);
   }
 
@@ -133,7 +148,7 @@
     var e = l.examples.filter(function (x) { return x.f === card.f; })[0];
     return e && e.note ? '<div class="note">' + rich(e.note) + '</div>' : '';
   }
-  function progressBar(p) { return '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(p * 100) + '"><i style="width:' + Math.round(p * 100) + '%"></i></div>'; }
+  function progressBar(p) { return '<div class="progress" role="progressbar" aria-label="Review progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(p * 100) + '"><i style="width:' + Math.round(p * 100) + '%"></i></div>'; }
   function mascot(label, small) {
     return '<svg class="mascot' + (small ? ' sm' : '') + '" viewBox="0 0 240 240" role="img" aria-label="' + esc(label || 'Noor, the Tarteel mascot') + '">' +
       '<ellipse cx="120" cy="222" rx="70" ry="9" fill="#a355ff" opacity=".3"/>' +
@@ -155,7 +170,7 @@
   var cleanup = null;
 
   function setNav(name) { $$('.nav a').forEach(function (a) { if (a.dataset.nav === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); }
-  function setTitle(t) { document.title = (t ? t + ' · ' : '') + 'Tarteel'; }
+  function setTitle(t) { document.title = (t ? I18n.text(t) + ' · ' : '') + I18n.text('Tarteel'); }
 
   function lessonDone(id) { return !!(S.lessons[id] && S.lessons[id].done); }
   function nextLesson() { for (var i = 0; i < lessonOrder.length; i++) if (!lessonDone(lessonOrder[i])) return lessonOrder[i]; return null; }
@@ -170,14 +185,14 @@
     app.innerHTML =
       '<section class="hero on-dark"><div class="hero-in"><div><div class="eyebrow">Levels 0 to ' + (D.levels.length - 1) + ' · Madinah Mushaf</div><h1>Learn tajweed,<br>one friendly step at a time</h1>' +
       '<p class="lead">Read the Madinah Mushaf in color, hear each rule recited, then practice with flashcards until it feels natural.</p>' +
-      '<div class="row"><a class="btn big" href="#/' + (done ? 'lesson/' + nl : 'path') + '">' + (done ? 'Continue learning' : 'Start at Level 0') + ' ↗</a><a class="btn soft big" href="#/practice">Flashcards</a></div></div>' +
+      '<div class="row"><a class="btn big" href="#/' + (nl && done ? 'lesson/' + nl : 'path') + '">' + (nl ? (done ? 'Continue learning' : 'Start at Level 0') : 'Course complete — revisit the path') + ' ↗</a><a class="btn soft big" href="#/practice">Flashcards</a></div></div>' +
       '<div>' + mascot('Noor, the Tarteel mascot, holding an open book') + '</div></div></section>' +
       '<div class="section-head"><div class="eyebrow">Two ways to learn</div><h2>Choose how you like to learn</h2></div><div class="paths">' +
       '<a class="path-card" href="#/path"><span class="index">01</span><h3>Guided path</h3><p>Levels 0 to ' + (D.levels.length - 1) + ', in order. Each lesson shows the rule, what it means, examples, then flashcards.</p><span class="go">Follow the path ↗</span></a>' +
       '<a class="path-card" href="#/practice"><span class="index">02</span><h3>Repetitive practice</h3><p>Jump straight into flashcards. A fragment of a verse appears: recite it, flip, press play, and compare.</p><span class="go">Open the decks ↗</span></a></div>' +
       '<div class="stats"><div class="stat"><b>' + done + '/' + lessonOrder.length + '</b><span>Lessons done</span></div><div class="stat"><b>' + learned + '</b><span>Cards learned</span></div><div class="stat"><b>' + st.due + '</b><span>Due now</span></div><div class="stat"><b>' + streak() + '</b><span>Day streak</span></div></div>' +
       '<div class="section-head"><div class="eyebrow">Color key</div><h2>The colors you will learn</h2></div><div class="legend-strip">' + strip + '</div><p class="small muted" style="margin-top:var(--s-3)"><a href="#/colors">See the whole color key</a></p>' +
-      '<div class="section-head"><div class="eyebrow">Anki</div><h2>Take it with you</h2></div><div class="card stack"><p>The same course is available as Anki decks: ' + D.meta.counts.cards + ' cards with audio, organized into one deck per rule.</p><div class="row" id="dl-row"></div></div>';
+      '<div class="section-head"><div class="eyebrow">Anki</div><h2>Take it with you</h2></div><div class="card stack"><p>The same course is available as Anki decks: ' + (D.meta.counts.cards + D.meta.counts.symbol + D.meta.counts.color) + ' cards with audio, organized into one deck per rule.</p><div class="row" id="dl-row"></div></div>';
     fillDownloads($('#dl-row'));
   }
   function fillDownloads(el) {
@@ -231,7 +246,7 @@
 
     var head = '<div class="crumbs"><a href="#/path">Guided path</a> › <a href="#/level/' + lv.level + '">Level ' + lv.level + '</a> › ' + esc(l.title) + '</div>' +
       '<div class="lesson-head on-dark"><div class="ar" lang="ar" dir="rtl">' + esc(l.arabic) + '</div><h1>' + esc(l.title) + '</h1><div class="muted"><b>' + esc(l.meaning) + '</b></div></div>' +
-      '<div class="steps" role="tablist">' + STEPS.map(function (s) { return '<a class="step ' + (rec.seen[s[0]] && s[0] !== step ? 'done' : '') + '" href="#/lesson/' + id + '/' + s[0] + '"' + (s[0] === step ? ' aria-current="step"' : '') + '>' + s[1] + '</a>'; }).join('') + '</div>';
+      '<nav class="steps" aria-label="Lesson steps">' + STEPS.map(function (s) { return '<a class="step ' + (rec.seen[s[0]] && s[0] !== step ? 'done' : '') + '" href="#/lesson/' + id + '/' + s[0] + '"' + (s[0] === step ? ' aria-current="step"' : '') + '>' + s[1] + '</a>'; }).join('') + '</nav>';
 
     var body = '';
     if (step === 'learn') {
@@ -271,6 +286,10 @@
       var ids = l.cards.filter(function (cid) { return S.settings.types[cardById[cid].t]; });
       var root = $('#lesson-session');
       if (!ids.length) {
+        if (l.cards.length) {
+          root.innerHTML = '<div class="card"><p>No cards match your filters. Enable card types to practice this lesson.</p><a class="btn" href="#/practice">Settings</a></div>';
+          return;
+        }
         root.innerHTML = '<div class="card center stack"><p>This lesson has no flashcards' + (l.practice_link ? ', but the Symbols deck covers it.' : '.') + '</p>' + (l.practice_link ? '<a class="btn" href="#/practice/symbols-stop-signs">Practice stop signs</a>' : '') + '</div>';
         finishLesson(id, root, next);
       } else {
@@ -289,6 +308,7 @@
       (next ? '<a class="btn big" href="#/lesson/' + next + '">Next: ' + esc(D.lessons[next].title) + ' →</a>' : '<a class="btn big" href="#/path">Back to the path</a>') +
       '<a class="btn soft" href="#/path">All levels</a></div>';
     root.appendChild(box);
+    I18n.localize(box);
   }
 
   // ----- practice hub
@@ -315,6 +335,7 @@
         return '<h3 style="margin-top:1rem">Level ' + lv.level + ': ' + esc(lv.title) + '</h3><div class="grid">' + lv.lessons.map(function (id) { var d = deckById['lesson-' + id]; return d ? deckCard(d) : ''; }).join('') + '</div>';
       }).join('') + '</details>';
     app.innerHTML = html;
+    I18n.localize(app);
     $('#toggles').parentNode.addEventListener('click', function (e) {
       var b = e.target.closest('.toggle'); if (!b) return;
       if (b.dataset.type) S.settings.types[b.dataset.type] = !S.settings.types[b.dataset.type];
@@ -352,11 +373,13 @@
       render();
     }
     function finish() {
+      cur = null;
       root.innerHTML = '<div class="done-screen card">' + mascot('Noor', true) + '<h2>Session complete</h2>' +
         '<p>You reviewed <b>' + plural(total, 'card') + '</b>' + (again ? ' (' + plural(again, 'miss') + ' came back and were practiced again)' : '') + '. Nice recitation!</p>' +
         '<div class="row" style="justify-content:center">' + (opts.onFinish ? '' : '<a class="btn big" href="#/practice">More decks</a>') +
         '<button class="btn soft" type="button" data-act="again-session">Practice again</button></div></div>';
       if (opts.onFinish) opts.onFinish();
+      I18n.localize(root);
     }
     function top() {
       var p = total ? done / total : 1;
@@ -416,6 +439,7 @@
       }
       h += '</div><div class="hint-keys">Keys: <kbd>Space</kbd> flip · <kbd>1</kbd>–<kbd>4</kbd> grade · <kbd>P</kbd> play</div>';
       root.innerHTML = h;
+      I18n.localize(root);
     }
     function reveal() {
       revealed = true; render();
@@ -482,6 +506,7 @@
         '<p style="margin:0">' + rich(s.meaning) + '</p><p style="margin:0"><b>' + rich(s.action) + '</b></p>' + (f ? verseBox(f, null, { play: true, gloss: true }) + (s.note ? '<div class="note">' + rich(s.note) + '</div>' : '') : '') + '</div>';
       $$('.sym', app).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.sym === id)); });
       $('#sym-detail').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      I18n.localize($('#sym-detail'));
     }
     app.onclick = function (e) { var b = e.target.closest('.sym'); if (b) show(b.dataset.sym); };
     if (sel) show(sel);
@@ -527,6 +552,7 @@
       app.innerHTML = '<div class="card"><h2>Something went wrong</h2><p>' + esc(err.message) + '</p><a class="btn" href="#/">Home</a></div>';
     }
     window.scrollTo(0, 0);
+    I18n.localize(app);
     app.focus({ preventScroll: true });
   }
 
@@ -544,10 +570,23 @@
     var dark = document.documentElement.getAttribute('data-theme') === 'dark' || (!document.documentElement.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
     S.settings.theme = dark ? 'light' : 'dark'; saveState(); applyTheme();
   });
-  $('#btn-colors').addEventListener('click', function () { $('#colors-body').innerHTML = colorRows(true); $('#colors-dialog').showModal(); });
+  $('#btn-colors').addEventListener('click', function () { $('#colors-body').innerHTML = colorRows(true); I18n.localize($('#colors-body')); $('#colors-dialog').showModal(); });
   $('#colors-dialog').addEventListener('click', function (e) { if (e.target === this) this.close(); });
 
   loadState(); applyTheme();
+  I18n.localize(document.body);
+  var languageButton = $('#btn-language');
+  languageButton.textContent = language === 'ar' ? 'English' : 'العربية';
+  languageButton.lang = language === 'ar' ? 'en' : 'ar';
+  languageButton.dir = language === 'ar' ? 'ltr' : 'rtl';
+  languageButton.setAttribute('aria-label', languageButton.textContent);
+  languageButton.addEventListener('click', function () {
+    var nextLanguage = language === 'ar' ? 'en' : 'ar';
+    try { localStorage.setItem('tarteel.language', nextLanguage); } catch (e) { /* optional storage */ }
+    var url = new URL(location.href); url.searchParams.set('lang', nextLanguage);
+    location.href = url.href;
+  });
+  if (language === 'ar') $('meta[name="description"]').content = 'تعلم التجويد خطوة بخطوة مع مصحف المدينة والأمثلة المسموعة والبطاقات التعليمية.';
   window.addEventListener('hashchange', route);
   route();
 })();
