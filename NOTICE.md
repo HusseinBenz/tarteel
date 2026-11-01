@@ -15,6 +15,7 @@ Tarteel contains material from other sources. Please keep these notices with any
 ## Interface fonts
 
 - **DM Sans** and **DM Mono**: SIL Open Font License 1.1. Files `site/fonts/dm-sans-latin.woff2`, `dm-mono-300.woff2` and `dm-mono-400.woff2` are the Latin subsets served by Google Fonts. The Anki packages embed DM Sans and DM Mono 400.
+- **IBM Plex Sans Arabic**: SIL Open Font License 1.1. Files `site/fonts/plex-arabic-300.woff2`, `-400` and `-600` are the Arabic subsets served by Google Fonts. Used only for Arabic interface text, never for Quran text.
 
 ## Visual design
 

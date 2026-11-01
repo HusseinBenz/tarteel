@@ -5,12 +5,18 @@
   site/data/ar.js         window.TARTEEL_AR = {...} (Arabic website edition)
   site/css/tajweed.css    one CSS variable + class per tajweed rule color
 
+and stamp index.html with a content hash per asset (?v=abc123), so a browser can
+never pair a new page with a cached old script: `build_site.py --stamp` does only that.
+
 Everything else in site/ (HTML, CSS, JS, fonts, audio) is hand-written or
 produced by build_audio.py.
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import re
+import sys
 
 import quran_data as q
 from localize_site import arabic_model
@@ -42,6 +48,16 @@ def tajweed_css(legend: list[dict]) -> str:
 """
 
 
+def stamp_assets() -> None:
+    """Point index.html at the exact version of every script and stylesheet."""
+    def stamp(m: re.Match) -> str:
+        digest = hashlib.sha1((SITE / m.group(2)).read_bytes()).hexdigest()[:10]
+        return f'{m.group(1)}="{m.group(2)}?v={digest}"'
+    page = SITE / "index.html"
+    html = page.read_text("utf8")
+    page.write_text(re.sub(r'(href|src)="((?:css|js|data)/[^"?]+)(?:\?v=[^"]*)?"', stamp, html), "utf8")
+
+
 def main() -> None:
     model = json.loads((ROOT / "build" / "model.json").read_text("utf8"))
     (SITE / "data").mkdir(parents=True, exist_ok=True)
@@ -53,7 +69,8 @@ def main() -> None:
     (SITE / "css" / "tajweed.css").write_text(tajweed_css(model["legend"]), "utf8")
     kb = (SITE / "data" / "content.js").stat().st_size / 1024
     print(f"site/data/content.js {kb:.0f} KB, site/css/tajweed.css written")
+    stamp_assets()
 
 
 if __name__ == "__main__":
-    main()
+    stamp_assets() if "--stamp" in sys.argv else main()

@@ -69,6 +69,7 @@ The header, hero, lesson banner, due card and footer are always dark: `.on-dark`
 | Small label | DM Mono | 11px / 400 | Tags, card header |
 | Body | DM Sans | 16px / 400 | |
 | Quran | KFGQPC Hafs V22 | `clamp(2rem, 6.5vw, 3.4rem)` | Line-height 2.3 for the marks |
+| Arabic interface | IBM Plex Sans Arabic | As the Latin role, 300 / 400 / 600 | No tracking or uppercase; line-height 1.85. Used only in the Arabic edition and on the language switch |
 
 ### Shape, space, motion
 
@@ -86,6 +87,10 @@ The header, hero, lesson banner, due card and footer are always dark: `.on-dark`
 |---|---|---|---|
 | Button | `.btn` | default, `.soft` (outlined), `.big` | hover, focus, disabled |
 | Audio button | `.play` | `.big` | `aria-pressed` while playing |
+| Speed button | `.speed` | `.big` | Cycles 1×, 0.75×, 0.5×; saved |
+| Language switch | `.language-btn` | | Hover, focus; labeled in the language it switches to |
+| Next-up panel | `.plan`, `.plan-card` | | Hover border. Shown only once a learner has progress |
+| Search | `.search` | | Focus |
 | Toggle | `.toggle` | | `aria-pressed` |
 | Step tab | `.step` | | `aria-current`, `.done` |
 | Eyebrow | `.eyebrow` | | |

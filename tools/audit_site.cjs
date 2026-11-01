@@ -63,11 +63,11 @@ const server = http.createServer((req, res) => {
           const result = await page.evaluate(() => {
             const root = document.querySelector('#app'), walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), english = []; let n;
             while ((n = walker.nextNode())) if (/[a-z]{3}/i.test(n.textContent) && n.parentElement.getClientRects().length && !n.parentElement.closest('script,style')) english.push(n.textContent.trim());
-            const wide = [...root.querySelectorAll('*')].filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.right > innerWidth + 1 || r.left < -1) && getComputedStyle(e).position !== 'absolute'; }).map(e => e.className);
-            if (document.documentElement.scrollWidth > innerWidth + 1) wide.push('document');
+            const wide = [...root.querySelectorAll('*')].filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && (r.right > document.documentElement.clientWidth + 1 || r.left < -1) && getComputedStyle(e).position !== 'absolute'; }).map(e => e.className);
+            if (document.documentElement.scrollWidth > document.documentElement.clientWidth + 1 || window.scrollX !== 0) wide.push('document');
             return { english, wide };
           });
-          if (lang === 'ar') result.english.filter(t => /[a-z]{3}/i.test(t.replace(/Anki|Quran\.com|EveryAyah\.com|DM Sans|DM Mono|SIL Open Font License/g, ''))).forEach(t => untranslated.add(t));
+          if (lang === 'ar') result.english.filter(t => /[a-z]{3}/i.test(t.replace(/Anki|Quran\.com|EveryAyah\.com|IBM Plex Sans Arabic|DM Sans|DM Mono|SIL Open Font License/g, ''))).forEach(t => untranslated.add(t));
           if (result.wide.length) overflow.push({ lang, width, theme, route, elements: result.wide });
           pagesChecked++;
         }
@@ -123,6 +123,77 @@ const server = http.createServer((req, res) => {
         await page.screenshot({ path: path.resolve(__dirname, '../build/audit/arabic-lesson.png'), fullPage: true });
       }
       await context.close();
+    }
+    // Language switch: in place, no reload, and nothing the learner was doing is lost.
+    {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      page.on('pageerror', error => errors.push(error.message));
+      await page.goto(base + '#/practice/lesson-idhhar');
+      const unversioned = await page.evaluate(() => [...document.querySelectorAll('script[src], link[rel="stylesheet"]')].map(e => e.getAttribute('src') || e.getAttribute('href')).filter(u => !/\?v=[0-9a-f]{10}$/.test(u)));
+      assert.deepEqual(unversioned, [], 'Every script and stylesheet must carry a content hash');
+      await page.evaluate(() => { window.__sameDocument = true; });
+      const historyBefore = await page.evaluate(() => history.length);
+      await page.locator('button[data-act="flip"]').click();
+      await page.locator('[data-grade="2"]').click();
+      await page.locator('button[data-act="flip"]').click();
+      const progressBefore = await page.locator('.session-top .count').innerText();
+      await page.locator('#btn-language').click();
+      assert.equal(await page.locator('html').getAttribute('lang'), 'ar');
+      assert.equal(await page.locator('html').getAttribute('dir'), 'rtl');
+      assert.ok(await page.evaluate(() => window.__sameDocument), 'Switching must not reload the page');
+      assert.equal(await page.evaluate(() => history.length), historyBefore, 'Switching must not add history entries');
+      assert.ok(page.url().includes('lang=ar') && page.url().endsWith('#/practice/lesson-idhhar'));
+      assert.equal(await page.locator('.nav a').first().innerText(), 'الرئيسية');
+      assert.equal(await page.locator('#btn-language').innerText(), 'English');
+      assert.equal(await page.locator('.session-top .count').innerText(), progressBefore, 'Session position must survive');
+      assert.ok(await page.locator('.grades').isVisible(), 'The revealed answer must stay revealed');
+      assert.ok(await page.locator('#btn-language').evaluate(b => b === document.activeElement), 'Focus stays on the switch');
+      await page.locator('#btn-language').click();
+      assert.equal(await page.locator('html').getAttribute('lang'), 'en');
+      assert.equal((await page.locator('.nav a').first().innerText()).toLowerCase(), 'home');
+      assert.ok(/Madinah Mushaf/.test(await page.locator('.foot').innerText()), 'Footer returns to English');
+      assert.equal(await page.locator('.session-top .count').innerText(), progressBefore);
+      assert.ok(await page.title().then(t => /Tarteel/.test(t)));
+      // The choice persists, and a shared link wins and is remembered.
+      await page.locator('#btn-language').click();
+      await page.goto(base);
+      assert.equal(await page.locator('html').getAttribute('dir'), 'rtl');
+      assert.equal(await page.locator('html').getAttribute('data-booting'), null);
+      await page.goto(base + '?lang=en');
+      await page.goto(base);
+      assert.equal(await page.locator('html').getAttribute('lang'), 'en');
+      // Lesson search spans both editions.
+      await page.evaluate(() => { location.hash = '/path'; });
+      await page.locator('#lesson-search').fill('ikhfa');
+      assert.ok(await page.locator('.lesson-link:visible').count() >= 2);
+      await page.locator('#lesson-search').fill('إخفاء');
+      assert.ok(await page.locator('.lesson-link:visible').count() >= 2);
+      await page.locator('#lesson-search').fill('zzzz');
+      assert.equal(await page.locator('.lesson-link:visible').count(), 0);
+      assert.ok(await page.locator('#search-empty').isVisible());
+      // Slow playback applies to the clip and survives a language switch.
+      await page.evaluate(() => { location.hash = '/lesson/iqlab/see'; });
+      await page.locator('[data-speed]').first().click();
+      await page.locator('[data-audio]').first().click();
+      assert.equal(await page.locator('#player').evaluate(p => p.playbackRate), 0.75);
+      await page.locator('#btn-language').click();
+      assert.equal(await page.locator('[data-speed]').first().innerText(), '0.75×');
+      assert.ok(/سرعة/.test(await page.locator('[data-speed]').first().getAttribute('aria-label')));
+      await context.close();
+      // A stale page paired with this script must degrade, not crash.
+      const stale = await browser.newContext();
+      const stalePage = await stale.newPage();
+      const staleErrors = [];
+      stalePage.on('pageerror', error => staleErrors.push(error.message));
+      await stalePage.route(base, async route => {
+        const html = fs.readFileSync(path.join(site, 'index.html'), 'utf8').replace(/<button class="language-btn"[\s\S]*?<\/button>/, '').replace(/<script src="js\/i18n[^>]*><\/script>/, '').replace(/<script src="data\/ar[^>]*><\/script>/, '');
+        await route.fulfill({ contentType: 'text/html', body: html });
+      });
+      await stalePage.goto(base);
+      assert.ok(await stalePage.locator('.hero h1').isVisible());
+      assert.deepEqual(staleErrors, []);
+      await stale.close();
     }
     assert.deepEqual(errors, []);
     fs.mkdirSync(path.resolve(__dirname, '../build/audit'), { recursive: true });

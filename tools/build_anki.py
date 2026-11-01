@@ -24,6 +24,7 @@ import shutil
 
 import genanki
 
+import build_site
 import quran_data as q
 
 ROOT = q.ROOT
@@ -294,6 +295,7 @@ def build() -> None:
         shutil.copyfile(DIST / d_["file"], dl / d_["file"])
     pub = [{"title": d_["title"], "file": d_["file"], "size": d_["size"]} for d_ in downloads]
     (SITE / "data" / "downloads.js").write_text("window.TARTEEL.downloads=" + json.dumps(pub, ensure_ascii=False) + ";\n", "utf8")
+    build_site.stamp_assets()  # downloads.js just changed
 
     total_cards = counts["recite"] + counts["identify"] + counts["concept"] + counts["symbol"] * 2 + counts["color"] * 2
     notes = counts["recite"] + counts["concept"] + counts["symbol"] + counts["color"]

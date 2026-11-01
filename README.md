@@ -43,7 +43,9 @@ python -m http.server 8765 --directory site     # then visit http://localhost:87
 
 Progress and review schedules are stored only in your browser.
 
-Use `?lang=ar` or `?lang=en` before a route (for example `index.html?lang=ar#/path`) to link to a specific language. The language switch remembers your choice when browser storage is available and keeps the current route. The site works directly from disk in both languages.
+Use `?lang=ar` or `?lang=en` before a route (for example `index.html?lang=ar#/path`) to link to a specific language. The language switch changes the page in place: it keeps your route, scroll position and flashcard session, and remembers your choice when browser storage is available. The site works directly from disk in both languages.
+
+Other learning aids: slower audio (1×, 0.75×, 0.5×) next to every Listen button, a next-up panel on the home page, and a lesson search on the path page that finds lessons by their English or Arabic name.
 
 **Anki.** In Anki choose *File ▸ Import* and pick `dist/anki/Tarteel-Complete.apkg` (or just the levels you want). You get a deck tree: `Tarteel ▸ Level N ▸ one subdeck per rule`, plus `Tarteel ▸ Rule Symbols`. The font is embedded, so the Mushaf script displays correctly on desktop, AnkiDroid and AnkiMobile. The packages can also be downloaded from the website's home page.
 
@@ -58,7 +60,7 @@ python tools/build.py            # rebuild model, audio, website data and Anki d
 
 The first run downloads the source data into `build/` (git-ignored). Lessons live in [`content/`](content/) as JSON, and each example is a *reference* to a verse (`{"ref": "68:19", "at": "من ربك"}`), so no Arabic is typed by hand and a wrong example fails the build. See the [content guide](docs/CONTENT-GUIDE.md) and the [architecture](docs/ARCHITECTURE.md).
 
-Arabic prose is maintained in `content/ar.json`, interface copy in `site/js/i18n.js`. Run `python tools/build_site.py` after editing Arabic content; it generates `site/data/ar.js` from the shared model and fails if concept-card coverage is out of date. The Arabic edition uses shorter lesson explanations and general practice notes; it omits English word glosses. Quran text and recitation are never translated or rewritten by the localization build.
+Arabic prose is maintained in `content/ar.json`, interface copy in `site/js/i18n.js`. Run `python tools/build_site.py` after editing Arabic content (or `--stamp` after editing any script or stylesheet, so `index.html` points at the new version; `tools/publish_pages.sh` refuses to publish a stale page); it generates `site/data/ar.js` from the shared model and fails if concept-card coverage is out of date. The Arabic edition uses shorter lesson explanations and general practice notes; it omits English word glosses. Quran text and recitation are never translated or rewritten by the localization build.
 
 For the browser audit, install Playwright into the ignored build directory and run:
 

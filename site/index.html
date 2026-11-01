@@ -6,10 +6,25 @@
   <title>Tarteel · Learn tajweed the friendly way</title>
   <meta name="description" content="A friendly, step-by-step way to learn tajweed with the Madinah Mushaf, tajweed colors, audio and flashcards.">
   <meta name="theme-color" content="#111113">
+  <style>html[data-booting] body { visibility: hidden; }</style>
+  <script>
+    // Runs before first paint, so Arabic never flashes as English and the saved theme never flashes.
+    (function () {
+      var root = document.documentElement, lang = new URLSearchParams(location.search).get('lang'), theme;
+      try {
+        if (lang === 'ar' || lang === 'en') localStorage.setItem('tarteel.language', lang);
+        else lang = localStorage.getItem('tarteel.language');
+        theme = ((JSON.parse(localStorage.getItem('tarteel.v1')) || {}).settings || {}).theme;
+      } catch (e) { /* optional storage */ }
+      if (lang === 'ar') { root.lang = 'ar'; root.dir = 'rtl'; root.setAttribute('data-booting', ''); }
+      if (theme === 'light' || theme === 'dark') root.setAttribute('data-theme', theme);
+      addEventListener('load', function () { root.removeAttribute('data-booting'); });
+    })();
+  </script>
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/UthmanicHafs-v22.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/tajweed.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/tajweed.css?v=c2ef8b0cf9">
+  <link rel="stylesheet" href="css/style.css?v=abf8c546c8">
 </head>
 <body>
   <a class="skip" href="#app">Skip to content</a>
@@ -49,10 +64,10 @@
 
   <audio id="player" preload="none"></audio>
 
-  <script src="data/content.js"></script>
-  <script src="data/downloads.js"></script>
-  <script src="data/ar.js"></script>
-  <script src="js/i18n.js"></script>
-  <script src="js/app.js"></script>
+  <script src="data/content.js?v=601bec962b"></script>
+  <script src="data/downloads.js?v=dcd684fcda"></script>
+  <script src="data/ar.js?v=cbe4cce812"></script>
+  <script src="js/i18n.js?v=aa29f5e594"></script>
+  <script src="js/app.js?v=c31cc40349"></script>
 </body>
 </html>
