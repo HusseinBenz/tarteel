@@ -1,6 +1,6 @@
 /* Tarteel: a static, dependency-free tajweed learning app.
  *
- *   data    window.TARTEEL (data/content.js, generated)
+ *   data    window.TARTEEL, window.TARTEEL_AR (generated; both editions share ids)
  *   state   localStorage "tarteel.v1" (progress + spaced repetition), all optional
  *   views   hash router: home, path, level, lesson, practice (hub + session),
  *           symbols, colors, about
@@ -8,23 +8,12 @@
 (function () {
   'use strict';
 
-  var I18n = window.TarteelI18n;
-  var language = new URLSearchParams(location.search).get('lang');
-  if (language !== 'ar' && language !== 'en') {
-    try { language = localStorage.getItem('tarteel.language'); } catch (e) { /* optional storage */ }
-  }
-  language = language === 'ar' ? 'ar' : 'en';
-  I18n.use(language);
-  var D = language === 'ar' ? window.TARTEEL_AR : window.TARTEEL;
-  if (D && language === 'ar') {
-    D.downloads = (window.TARTEEL.downloads || []).map(function (item) {
-      var level = item.file.match(/Level-(\d+)/);
-      return Object.assign({}, item, { title: level ? 'المستوى ' + level[1] + ' · ' + D.levels[+level[1]].title + ' (Anki بالإنجليزية)' : I18n.text(item.title) });
-    });
-  }
-  document.documentElement.lang = language;
-  document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
-  if (!D) { document.getElementById('app').textContent = I18n.text(language === 'ar' ? 'Could not load Arabic content.' : 'Could not load the course data.'); return; }
+  // Tolerate a stale page paired with this script: no crash, English only.
+  var I18n = window.TarteelI18n || { use: function () {}, text: function (v) { return v; }, localize: function () {} };
+  if (!window.TARTEEL) { document.getElementById('app').textContent = 'Could not load the course data.'; return; }
+  // The inline script in index.html has already resolved the language from the URL or storage.
+  var language = document.documentElement.lang === 'ar' && window.TARTEEL_AR ? 'ar' : 'en';
+  var D, legend, cardById, deckById, symById, lessonOrder;
 
   // ---------------------------------------------------------------- helpers
   var $ = function (s, el) { return (el || document).querySelector(s); };
@@ -36,11 +25,24 @@
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : w === 'miss' ? 'es' : 's'); }
 
-  var legend = {}; D.legend.forEach(function (c) { legend[c.id] = c; });
-  var cardById = {}; D.cards.forEach(function (c) { cardById[c.id] = c; });
-  var deckById = {}; D.decks.forEach(function (d) { deckById[d.id] = d; });
-  var symById = {}; D.symbols.forEach(function (g) { g.items.forEach(function (i) { symById[i.id] = i; }); });
-  var lessonOrder = []; D.levels.forEach(function (l) { l.lessons.forEach(function (id) { lessonOrder.push(id); }); });
+  function useLanguage() {
+    I18n.use(language);
+    D = language === 'ar' ? window.TARTEEL_AR : window.TARTEEL;
+    if (language === 'ar' && !D.downloads) {
+      D.downloads = (window.TARTEEL.downloads || []).map(function (item) {
+        var level = item.file.match(/Level-(\d+)/);
+        return Object.assign({}, item, { title: level ? 'المستوى ' + level[1] + ' · ' + D.levels[+level[1]].title + ' (Anki بالإنجليزية)' : I18n.text(item.title) });
+      });
+    }
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    legend = {}; D.legend.forEach(function (c) { legend[c.id] = c; });
+    cardById = {}; D.cards.forEach(function (c) { cardById[c.id] = c; });
+    deckById = {}; D.decks.forEach(function (d) { deckById[d.id] = d; });
+    symById = {}; D.symbols.forEach(function (g) { g.items.forEach(function (i) { symById[i.id] = i; }); });
+    lessonOrder = []; D.levels.forEach(function (l) { l.lessons.forEach(function (id) { lessonOrder.push(id); }); });
+  }
+  useLanguage();
   function two(n) { return String(n).padStart(2, '0'); }
 
   // ---------------------------------------------------------------- storage
@@ -49,7 +51,7 @@
   function loadState() {
     try { var raw = localStorage.getItem(KEY); if (raw) { var parsed = JSON.parse(raw); if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) S = parsed; } } catch (e) { /* private mode: run without saving */ }
     S.cards = S.cards || {}; S.lessons = S.lessons || {}; S.days = S.days || {};
-    S.settings = Object.assign({ autoplay: false, newPerDay: 12, mode: 'smart', types: { r: true, i: true, c: true, s: true, k: true }, theme: 'auto' }, S.settings || {});
+    S.settings = Object.assign({ autoplay: false, newPerDay: 12, mode: 'smart', types: { r: true, i: true, c: true, s: true, k: true }, theme: 'auto', speed: 1 }, S.settings || {});
   }
   function saveState() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
   function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -108,6 +110,7 @@
   function playClip(src, btn) {
     if (btn && playing === btn && !player.paused) { player.pause(); setPlaying(null); return; }
     player.src = src; player.currentTime = 0;
+    player.defaultPlaybackRate = player.playbackRate = S.settings.speed;
     setPlaying(btn || null);
     var p = player.play();
     if (p && p.catch) p.catch(function () { setPlaying(null); toast('Could not play the audio'); });
@@ -115,7 +118,21 @@
   player.addEventListener('ended', function () { setPlaying(null); });
   function stopAudio() { try { player.pause(); } catch (e) { /* ignore */ } setPlaying(null); }
   var ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></svg>';
-  function playBtn(f, big) { return '<button type="button" class="play' + (big ? ' big' : '') + '" data-audio="' + esc(f.audio) + '" aria-pressed="false" aria-label="Listen to ' + esc(f.label) + '">' + ICON_PLAY + '<span class="t">Listen</span></button>'; }
+  var SPEEDS = [1, 0.75, 0.5];
+  function speedText() { return S.settings.speed + '×'; }
+  function playBtn(f, big) {
+    return '<span class="play-group"><button type="button" class="play' + (big ? ' big' : '') + '" data-audio="' + esc(f.audio) + '" aria-pressed="false" aria-label="Listen to ' + esc(f.label) + '">' + ICON_PLAY + '<span class="t">Listen</span></button>' +
+      '<button type="button" class="speed' + (big ? ' big' : '') + '" data-speed aria-label="Playback speed: ' + speedText() + '" title="Playback speed">' + speedText() + '</button></span>';
+  }
+  function cycleSpeed() {
+    S.settings.speed = SPEEDS[(SPEEDS.indexOf(S.settings.speed) + 1) % SPEEDS.length] || 1;
+    saveState();
+    player.defaultPlaybackRate = player.playbackRate = S.settings.speed;
+    $$('[data-speed]').forEach(function (b) {
+      b.textContent = speedText();
+      b.setAttribute('aria-label', I18n.text('Playback speed: ' + speedText()));
+    });
+  }
 
   var toastTimer;
   function toast(msg) {
@@ -168,6 +185,7 @@
   // ---------------------------------------------------------------- views
   var app = $('#app');
   var cleanup = null;
+  var resume = null; // flashcard session state carried across a language switch
 
   function setNav(name) { $$('.nav a').forEach(function (a) { if (a.dataset.nav === name) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); }); }
   function setTitle(t) { document.title = (t ? I18n.text(t) + ' · ' : '') + I18n.text('Tarteel'); }
@@ -181,12 +199,15 @@
     var all = deckById.all.cards, st = countStates(all);
     var learned = all.filter(function (id) { return S.cards[id] && S.cards[id].reps > 0; }).length;
     var done = lessonOrder.filter(lessonDone).length, nl = nextLesson();
+    var plan = (done || learned) && (nl || st.due) ? '<div class="plan">' +
+      (nl ? '<a class="plan-card" href="#/lesson/' + nl + '"><span class="eyebrow">Next lesson</span><b>' + esc(D.lessons[nl].title) + '</b><span class="small muted">' + esc(D.lessons[nl].meaning) + '</span></a>' : '') +
+      (st.due ? '<a class="plan-card" href="#/practice/all"><span class="eyebrow">Review</span><b>' + plural(st.due, 'card') + ' due</b><span class="small muted">A few minutes now keeps them fresh.</span></a>' : '') + '</div>' : '';
     var strip = D.legend.slice(0, 12).map(function (c) { return '<span class="chip"><span class="dot bg-' + c.id + '"></span>' + esc(c.name) + '</span>'; }).join('');
     app.innerHTML =
       '<section class="hero on-dark"><div class="hero-in"><div><div class="eyebrow">Levels 0 to ' + (D.levels.length - 1) + ' · Madinah Mushaf</div><h1>Learn tajweed,<br>one friendly step at a time</h1>' +
       '<p class="lead">Read the Madinah Mushaf in color, hear each rule recited, then practice with flashcards until it feels natural.</p>' +
       '<div class="row"><a class="btn big" href="#/' + (nl && done ? 'lesson/' + nl : 'path') + '">' + (nl ? (done ? 'Continue learning' : 'Start at Level 0') : 'Course complete — revisit the path') + ' ↗</a><a class="btn soft big" href="#/practice">Flashcards</a></div></div>' +
-      '<div>' + mascot('Noor, the Tarteel mascot, holding an open book') + '</div></div></section>' +
+      '<div>' + mascot('Noor, the Tarteel mascot, holding an open book') + '</div></div></section>' + plan +
       '<div class="section-head"><div class="eyebrow">Two ways to learn</div><h2>Choose how you like to learn</h2></div><div class="paths">' +
       '<a class="path-card" href="#/path"><span class="index">01</span><h3>Guided path</h3><p>Levels 0 to ' + (D.levels.length - 1) + ', in order. Each lesson shows the rule, what it means, examples, then flashcards.</p><span class="go">Follow the path ↗</span></a>' +
       '<a class="path-card" href="#/practice"><span class="index">02</span><h3>Repetitive practice</h3><p>Jump straight into flashcards. A fragment of a verse appears: recite it, flip, press play, and compare.</p><span class="go">Open the decks ↗</span></a></div>' +
@@ -205,7 +226,8 @@
   function viewPath() {
     setNav('path'); setTitle('Guided path');
     var nl = nextLesson();
-    var html = '<h1>Guided path</h1><p class="muted">Eight levels, from the very first marks to reading whole surahs. Follow them in order, or jump to whatever you need.</p><div class="map">';
+    var html = '<h1>Guided path</h1><p class="muted">Eight levels, from the very first marks to reading whole surahs. Follow them in order, or jump to whatever you need.</p>' +
+      '<div class="search"><input id="lesson-search" type="search" placeholder="Find a lesson or rule" aria-label="Find a lesson or rule" autocomplete="off"></div><p id="search-empty" class="muted" hidden>No lessons match your search.</p><div class="map">';
     D.levels.forEach(function (lv) {
       var done = lv.lessons.filter(lessonDone).length, hasNext = lv.lessons.indexOf(nl) >= 0;
       html += '<section class="level-card" id="level-' + lv.level + '">' + (hasNext ? '<span class="here">You are here</span>' : '') +
@@ -214,10 +236,27 @@
         '<div class="small"><b>' + done + '/' + lv.lessons.length + '</b> lessons · <a href="#/level/' + lv.level + '">Level overview</a> · <a href="#/practice/level-' + lv.level + '">Practice this level</a></div>' +
         '<ul class="lesson-list">' + lv.lessons.map(function (id) {
           var l = D.lessons[id];
-          return '<li><a class="lesson-link ' + (lessonDone(id) ? 'done' : '') + (id === nl ? ' next' : '') + '" href="#/lesson/' + id + '"><span class="dot" aria-hidden="true">' + (lessonDone(id) ? '✓' : l.n) + '</span><span>' + esc(l.title) + '</span><span class="ar-inline" lang="ar">' + esc(l.arabic) + '</span></a></li>';
+          return '<li data-q="' + esc(searchText(id)) + '"><a class="lesson-link ' + (lessonDone(id) ? 'done' : '') + (id === nl ? ' next' : '') + '" href="#/lesson/' + id + '"><span class="dot" aria-hidden="true">' + (lessonDone(id) ? '✓' : l.n) + '</span><span>' + esc(l.title) + '</span><span class="ar-inline" lang="ar">' + esc(l.arabic) + '</span></a></li>';
         }).join('') + '</ul></section>';
     });
     app.innerHTML = html + '</div>';
+    $('#lesson-search').addEventListener('input', function () {
+      var q = normalize(this.value).trim(), any = false;
+      $$('.level-card', app).forEach(function (card) {
+        var shown = 0;
+        $$('li[data-q]', card).forEach(function (li) { li.hidden = q && li.dataset.q.indexOf(q) < 0; if (!li.hidden) shown++; });
+        card.hidden = !shown; if (shown) any = true;
+      });
+      $('#search-empty').hidden = any;
+    });
+  }
+  // Search both editions, so "ikhfa" and "إخفاء" find the same lesson in either language.
+  function normalize(s) { return String(s || '').toLowerCase().replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '').replace(/[أإآٱ]/g, 'ا'); }
+  function searchText(id) {
+    return normalize([window.TARTEEL, window.TARTEEL_AR].map(function (data) {
+      var l = data && data.lessons[id];
+      return l ? [l.title, l.arabic, l.meaning].join(' ') : '';
+    }).join(' '));
   }
 
   function viewLevel(n) {
@@ -347,7 +386,7 @@
   function viewDeck(id) {
     var d = deckById[id]; if (!d) return viewPractice();
     setNav('practice'); setTitle(d.title);
-    var ids = buildQueue(d, {});
+    var ids = resume ? resume.ids : buildQueue(d, {});
     app.innerHTML = '<div class="crumbs"><a href="#/practice">Flashcards</a> › ' + esc(d.title) + '</div><div id="deck-session"></div>';
     var root = $('#deck-session');
     if (!ids.length) {
@@ -364,6 +403,12 @@
   function startSession(root, ids, opts) {
     var queue = ids.slice(), total = ids.length, done = 0, again = 0, cur = null, revealed = false, answered = false, order = null;
     var counts = [0, 0, 0, 0];
+    var resumed = resume && resume.hash === location.hash ? resume : null;
+    resume = null;
+    if (resumed) {
+      ids = resumed.ids; queue = resumed.queue; total = resumed.total; done = resumed.done; again = resumed.again;
+      counts = resumed.counts; cur = resumed.cur; revealed = resumed.revealed; answered = resumed.answered; order = resumed.order;
+    }
 
     function next() {
       stopAudio();
@@ -484,8 +529,12 @@
     }
     root.addEventListener('click', onClick);
     document.addEventListener('keydown', onKey);
-    next();
-    return function () { root.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); stopAudio(); };
+    if (!resumed) next(); else if (cur) render(); else finish();
+    var stop = function () { root.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); stopAudio(); };
+    stop.snapshot = function () {
+      return { hash: location.hash, ids: ids, queue: queue.slice(), total: total, done: done, again: again, counts: counts.slice(), cur: cur, revealed: revealed, answered: answered, order: order };
+    };
+    return stop;
   }
 
   // ----- symbols & colors
@@ -526,7 +575,7 @@
     app.innerHTML = '<h1>About Tarteel</h1><div class="card stack"><p>Tarteel (<span class="ar-inline" lang="ar">ترتيل</span>) means reciting the Quran slowly, clearly and in order. This project is a free study aid for learning tajweed: a step-by-step course, flashcards with audio, and the same content as Anki decks.</p>' +
       '<p><b>Please learn with a teacher.</b> Tajweed is learned by listening and reciting back to someone qualified. Use this as practice between lessons, not as a replacement.</p>' +
       '<h2>Counts and lengths</h2><p>Lengths of madd follow the common teaching for Hafs ʿan ʿĀṣim (Shāṭibiyyah): natural 2, connected and separated 4 to 5, necessary 6, and 2, 4 or 6 on stopping. If your teacher uses a different length, follow your teacher.</p>' +
-      '<h2>Credits</h2><ul class="list"><li>Quran text, KFGQPC Uthmanic Hafs font © King Fahd Glorious Quran Printing Complex, used unmodified under its free-use license.</li><li>Tajweed annotation, word timings and word-by-word meanings via the Quran.com API.</li><li>Recitation: Mahmoud Khalil Al-Husary (Murattal), via EveryAyah.com.</li><li>Interface fonts: DM Sans and DM Mono (SIL Open Font License).</li><li>Natural-madd coloring on unmarked letters is added by this project.</li></ul>' +
+      '<h2>Credits</h2><ul class="list"><li>Quran text, KFGQPC Uthmanic Hafs font © King Fahd Glorious Quran Printing Complex, used unmodified under its free-use license.</li><li>Tajweed annotation, word timings and word-by-word meanings via the Quran.com API.</li><li>Recitation: Mahmoud Khalil Al-Husary (Murattal), via EveryAyah.com.</li><li>Interface fonts: IBM Plex Sans Arabic, DM Sans and DM Mono (SIL Open Font License).</li><li>Natural-madd coloring on unmarked letters is added by this project.</li></ul>' +
       '<h2>Anki decks</h2><div class="row" id="dl-row"></div></div>';
     fillDownloads($('#dl-row'));
   }
@@ -560,6 +609,7 @@
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-audio]');
     if (a) { e.preventDefault(); playClip(a.dataset.audio, a); }
+    if (e.target.closest('[data-speed]')) cycleSpeed();
     if (e.target.closest('[data-close]')) $('#colors-dialog').close();
   });
   function applyTheme() {
@@ -574,19 +624,54 @@
   $('#colors-dialog').addEventListener('click', function (e) { if (e.target === this) this.close(); });
 
   loadState(); applyTheme();
-  I18n.localize(document.body);
+
+  // ---------------------------------------------------------------- language
+  // The header, footer and dialog are static English HTML. Remember the originals,
+  // so switching back to English can restore them.
   var languageButton = $('#btn-language');
-  languageButton.textContent = language === 'ar' ? 'English' : 'العربية';
-  languageButton.lang = language === 'ar' ? 'en' : 'ar';
-  languageButton.dir = language === 'ar' ? 'ltr' : 'rtl';
-  languageButton.setAttribute('aria-label', languageButton.textContent);
-  languageButton.addEventListener('click', function () {
-    var nextLanguage = language === 'ar' ? 'en' : 'ar';
-    try { localStorage.setItem('tarteel.language', nextLanguage); } catch (e) { /* optional storage */ }
-    var url = new URL(location.href); url.searchParams.set('lang', nextLanguage);
-    location.href = url.href;
+  var description = $('meta[name="description"]'), descriptionEn = description.content;
+  var chromeRoots = $$('.skip, .top, .foot, #colors-dialog'), chromeText = [], chromeAttrs = [];
+  chromeRoots.forEach(function (root) {
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), node;
+    while ((node = walker.nextNode())) chromeText.push([node, node.nodeValue]);
+    [root].concat($$('[aria-label], [title]', root)).forEach(function (el) {
+      ['aria-label', 'title'].forEach(function (attr) { if (el.hasAttribute(attr)) chromeAttrs.push([el, attr, el.getAttribute(attr)]); });
+    });
   });
-  if (language === 'ar') $('meta[name="description"]').content = 'تعلم التجويد خطوة بخطوة مع مصحف المدينة والأمثلة المسموعة والبطاقات التعليمية.';
+  function localizeChrome() {
+    chromeText.forEach(function (t) { t[0].nodeValue = t[1]; });
+    chromeAttrs.forEach(function (t) { t[0].setAttribute(t[1], t[2]); });
+    chromeRoots.forEach(function (root) { I18n.localize(root); });
+    if (!languageButton) return;
+    languageButton.textContent = language === 'ar' ? 'English' : 'العربية';
+    languageButton.lang = language === 'ar' ? 'en' : 'ar';
+    languageButton.dir = language === 'ar' ? 'ltr' : 'rtl';
+    languageButton.setAttribute('aria-label', languageButton.textContent);
+    description.content = language === 'ar' ? 'تعلم التجويد خطوة بخطوة مع مصحف المدينة والأمثلة المسموعة والبطاقات التعليمية.' : descriptionEn;
+  }
+  function setLanguage(next) {
+    var url = new URL(location.href); url.searchParams.set('lang', next);
+    try { localStorage.setItem('tarteel.language', next); } catch (e) { /* optional storage */ }
+    // Browsers may refuse to rewrite a file:// URL: fall back to loading it.
+    try { history.replaceState(history.state, '', url.href); } catch (e) { location.href = url.href; return; }
+    var session = cleanup && cleanup.snapshot ? cleanup.snapshot() : null;
+    var symbol = $('.sym[aria-pressed="true"]'), symbolId = symbol && symbol.dataset.sym, y = window.scrollY;
+    language = next;
+    useLanguage();
+    localizeChrome();
+    resume = session;
+    route();
+    resume = null;
+    if (symbolId) { var again = $('.sym[data-sym="' + symbolId + '"]'); if (again) again.click(); }
+    window.scrollTo(0, y);
+    languageButton.focus({ preventScroll: true });
+  }
+  if (languageButton) {
+    if (window.TARTEEL_AR && window.TarteelI18n) languageButton.addEventListener('click', function () { setLanguage(language === 'ar' ? 'en' : 'ar'); });
+    else languageButton.hidden = true;
+  }
+  localizeChrome();
   window.addEventListener('hashchange', route);
   route();
+  document.documentElement.removeAttribute('data-booting');
 })();

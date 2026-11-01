@@ -59,12 +59,14 @@
     'Quran text, KFGQPC Uthmanic Hafs font © King Fahd Glorious Quran Printing Complex, used unmodified under its free-use license.': 'النص وخط حفص العثماني © مجمع الملك فهد لطباعة المصحف الشريف، مستخدمان دون تعديل وفق رخصة الاستخدام المجاني.',
     'Tajweed annotation, word timings and word-by-word meanings via the Quran.com API.': 'بيانات التجويد وتوقيت الكلمات والمعاني المفردة من واجهة Quran.com. تحذف المعاني الإنجليزية من العرض العربي.',
     'Recitation: Mahmoud Khalil Al-Husary (Murattal), via EveryAyah.com.': 'التلاوة: الشيخ محمود خليل الحصري، مرتل، من EveryAyah.com.',
-    'Interface fonts: DM Sans and DM Mono (SIL Open Font License).': 'خطا الواجهة اللاتينية DM Sans وDM Mono برخصة SIL Open Font License، والعربية بخط النظام.',
+    'Interface fonts: IBM Plex Sans Arabic, DM Sans and DM Mono (SIL Open Font License).': 'خطوط الواجهة: IBM Plex Sans Arabic للعربية وDM Sans وDM Mono للاتينية، برخصة SIL Open Font License.',
     'Natural-madd coloring on unmarked letters is added by this project.': 'أضاف المشروع تلوين المد الطبيعي في المواضع غير الملونة في المصدر.',
     'Review progress': 'تقدم المراجعة', 'No cards match your filters. Enable card types to practice this lesson.': 'لا تطابق أي بطاقات اختياراتك. فعل أنواع البطاقات للتدرب على هذا الدرس.',
     'Lesson steps': 'خطوات الدرس',
     'Course complete — revisit the path': 'أكملت المنهج — راجع المسار',
-    'Could not load Arabic content.': 'تعذر تحميل المحتوى العربي.'
+    'Could not load Arabic content.': 'تعذر تحميل المحتوى العربي.',
+    'Next lesson': 'الدرس التالي', 'Review': 'المراجعة', 'A few minutes now keeps them fresh.': 'دقائق قليلة الآن تثبتها في ذاكرتك.',
+    'Find a lesson or rule': 'ابحث عن درس أو حكم', 'No lessons match your search.': 'لا توجد دروس تطابق بحثك.', 'Playback speed': 'سرعة التشغيل'
   };
   var active = false;
   function text(value) {
@@ -83,6 +85,8 @@
         .replace(/^Next: (.+) →$/, 'التالي: $1 ←')
         .replace(/^Level (\d+)$/, 'المستوى $1').replace(/^› Level (\d+)$/, '‹ المستوى $1')
         .replace(/^Level (\d+):$/, 'المستوى $1:').replace(/^Level (\d+): /, 'المستوى $1: ')
+        .replace(/^Playback speed: (.+)$/, 'سرعة التشغيل: $1')
+        .replace(/^(\d+) cards? due$/, '$1 بطاقة مستحقة')
         .replace(/^(\d+) cards?$/, '$1 بطاقة').replace(/^(\d+) miss(?:es)?$/, '$1 إجابة أعيد تدريبها')
         .replace(/^lessons ·$/, 'دروس ·').replace(/^in the whole course$/, 'في المنهج كله')
         .replace(/^due now ·$/, 'مستحقة الآن ·').replace(/^new for today$/, 'جديدة لليوم')
@@ -103,8 +107,8 @@
       if (!node.parentElement.closest('script, style, .ar, .ar-inline, .letters, .big-sign, .swatch, .sw')) nodes.push(node);
     }
     nodes.forEach(function (n) { n.nodeValue = text(n.nodeValue); });
-    [root].concat(Array.prototype.slice.call(root.querySelectorAll('[aria-label], [title]'))).forEach(function (el) {
-      ['aria-label', 'title'].forEach(function (attr) { if (el.hasAttribute(attr)) el.setAttribute(attr, text(el.getAttribute(attr))); });
+    [root].concat(Array.prototype.slice.call(root.querySelectorAll('[aria-label], [title], [placeholder]'))).forEach(function (el) {
+      ['aria-label', 'title', 'placeholder'].forEach(function (attr) { if (el.hasAttribute(attr)) el.setAttribute(attr, text(el.getAttribute(attr))); });
     });
   }
   window.TarteelI18n = { text: text, localize: localize, use: function (language) { active = language === 'ar'; }, messages: messages };
