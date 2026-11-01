@@ -154,6 +154,8 @@ def load() -> dict:
             if lid in seen_lessons:
                 errors.append(f"duplicate lesson id {lid}")
             seen_lessons.add(lid)
+            if re.search("[\u0600-\u06FF]", lesson["title"]):
+                errors.append(f"{lid}: title must not contain Arabic (headings are tracked mono, which breaks joining); use the 'arabic' field")
             for c in lesson.get("colors", []) + lesson.get("expect", []):
                 if c not in legend_ids:
                     errors.append(f"{lid}: unknown color class '{c}'")

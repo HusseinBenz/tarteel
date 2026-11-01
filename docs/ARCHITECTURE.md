@@ -166,7 +166,7 @@ tarteel/
 ├─ site/                 the deployable static website
 │  ├─ index.html, css/, js/app.js, fonts/, audio/, data/, downloads/
 ├─ dist/anki/            the Anki packages
-├─ docs/                 this document, the content guide and the handout
+├─ docs/                 this document, the content guide, the design system and the handout
 ├─ graphify-out/         code knowledge graph, report and viewer (see README)
 └─ build/                downloaded source data (git-ignored)
 ```

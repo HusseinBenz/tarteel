@@ -73,7 +73,7 @@
     },
     {
       "id": "ra-rules",
-      "title": "The Ra (ر)",
+      "title": "The Letter Ra",
       "arabic": "أحكام الراء",
       "meaning": "Heavy or light ra",
       "summary": "Ra is heavy (full) or light (thin) depending on its vowel and on the letter before it.",
@@ -136,7 +136,7 @@
     },
     {
       "id": "lam-allah",
-      "title": "The Lam of Allah (ٱللَّه)",
+      "title": "The Lam of Allah",
       "arabic": "لام لفظ الجلالة",
       "meaning": "Heavy or light lam in the name Allah",
       "summary": "The lam in the name Allah is heavy after a fathah or dammah, and light after a kasrah.",

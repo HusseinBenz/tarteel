@@ -26,7 +26,7 @@
   var deckById = {}; D.decks.forEach(function (d) { deckById[d.id] = d; });
   var symById = {}; D.symbols.forEach(function (g) { g.items.forEach(function (i) { symById[i.id] = i; }); });
   var lessonOrder = []; D.levels.forEach(function (l) { l.lessons.forEach(function (id) { lessonOrder.push(id); }); });
-  var PASTEL = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8'];
+  function two(n) { return String(n).padStart(2, '0'); }
 
   // ---------------------------------------------------------------- storage
   var KEY = 'tarteel.v1';
@@ -134,20 +134,20 @@
     return e && e.note ? '<div class="note">' + rich(e.note) + '</div>' : '';
   }
   function progressBar(p) { return '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(p * 100) + '"><i style="width:' + Math.round(p * 100) + '%"></i></div>'; }
-  function mascot(label) {
-    return '<svg class="mascot" viewBox="0 0 240 240" role="img" aria-label="' + esc(label || 'Noor, the Tarteel mascot') + '">' +
-      '<ellipse cx="120" cy="222" rx="70" ry="9" fill="#2a2340" opacity=".12"/>' +
-      '<path d="M120 28c-30 0-50 22-50 50 0 7 1 13 4 19 8-10 22-17 46-17s38 7 46 17c3-6 4-12 4-19 0-28-20-50-50-50z" fill="#4c3fa8"/>' +
-      '<path d="M141 10a23 23 0 1 0 5 42 18 18 0 1 1-5-42z" fill="#ffc933" stroke="#2a2340" stroke-width="4" stroke-linejoin="round"/>' +
-      '<circle cx="120" cy="136" r="78" fill="#ffd9a8" stroke="#2a2340" stroke-width="5"/>' +
-      '<circle cx="86" cy="150" r="13" fill="#ff9aa8" opacity=".75"/><circle cx="154" cy="150" r="13" fill="#ff9aa8" opacity=".75"/>' +
-      '<ellipse cx="92" cy="125" rx="9" ry="12" fill="#2a2340"/><ellipse cx="148" cy="125" rx="9" ry="12" fill="#2a2340"/>' +
+  function mascot(label, small) {
+    return '<svg class="mascot' + (small ? ' sm' : '') + '" viewBox="0 0 240 240" role="img" aria-label="' + esc(label || 'Noor, the Tarteel mascot') + '">' +
+      '<ellipse cx="120" cy="222" rx="70" ry="9" fill="#a355ff" opacity=".3"/>' +
+      '<path d="M120 28c-30 0-50 22-50 50 0 7 1 13 4 19 8-10 22-17 46-17s38 7 46 17c3-6 4-12 4-19 0-28-20-50-50-50z" fill="#a355ff"/>' +
+      '<path d="M141 10a23 23 0 1 0 5 42 18 18 0 1 1-5-42z" fill="#e3f26c" stroke="#111113" stroke-width="4" stroke-linejoin="round"/>' +
+      '<circle cx="120" cy="136" r="78" fill="#f1e6ff" stroke="#111113" stroke-width="5"/>' +
+      '<circle cx="86" cy="150" r="13" fill="#d6b3ff" opacity=".9"/><circle cx="154" cy="150" r="13" fill="#d6b3ff" opacity=".9"/>' +
+      '<ellipse cx="92" cy="125" rx="9" ry="12" fill="#111113"/><ellipse cx="148" cy="125" rx="9" ry="12" fill="#111113"/>' +
       '<circle cx="95" cy="120" r="3.5" fill="#fff"/><circle cx="151" cy="120" r="3.5" fill="#fff"/>' +
-      '<path d="M101 152c6 12 32 12 38 0" fill="#fff" stroke="#2a2340" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<rect x="62" y="186" width="116" height="34" rx="9" fill="#fff" stroke="#2a2340" stroke-width="5"/>' +
-      '<path d="M120 186v34" stroke="#2a2340" stroke-width="4"/>' +
-      '<path d="M76 198h32M76 207h26M132 198h32M132 207h26" stroke="#c9bfa8" stroke-width="3" stroke-linecap="round"/>' +
-      '<g class="spark" fill="#ffc933" stroke="#2a2340" stroke-width="3" stroke-linejoin="round"><path d="M200 64l5 12 12 5-12 5-5 12-5-12-12-5 12-5z"/><path d="M34 110l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/></g></svg>';
+      '<path d="M101 152c6 12 32 12 38 0" fill="#fff" stroke="#111113" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<rect x="62" y="186" width="116" height="34" rx="9" fill="#fff" stroke="#111113" stroke-width="5"/>' +
+      '<path d="M120 186v34" stroke="#111113" stroke-width="4"/>' +
+      '<path d="M76 198h32M76 207h26M132 198h32M132 207h26" stroke="#b7b7bf" stroke-width="3" stroke-linecap="round"/>' +
+      '<g class="spark" fill="#e3f26c" stroke="#111113" stroke-width="3" stroke-linejoin="round"><path d="M200 64l5 12 12 5-12 5-5 12-5-12-12-5 12-5z"/><path d="M34 110l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/></g></svg>';
   }
 
   // ---------------------------------------------------------------- views
@@ -168,22 +168,22 @@
     var done = lessonOrder.filter(lessonDone).length, nl = nextLesson();
     var strip = D.legend.slice(0, 12).map(function (c) { return '<span class="chip"><span class="dot bg-' + c.id + '"></span>' + esc(c.name) + '</span>'; }).join('');
     app.innerHTML =
-      '<section class="hero"><div class="stack"><h1>Learn tajweed,<br>one friendly step at a time</h1>' +
+      '<section class="hero on-dark"><div class="hero-in"><div><div class="eyebrow">Levels 0 to ' + (D.levels.length - 1) + ' · Madinah Mushaf</div><h1>Learn tajweed,<br>one friendly step at a time</h1>' +
       '<p class="lead">Read the Madinah Mushaf in color, hear each rule recited, then practice with flashcards until it feels natural.</p>' +
-      '<div class="row"><a class="btn big" href="#/' + (done ? 'lesson/' + nl : 'path') + '">' + (done ? 'Continue learning' : 'Start at Level 0') + '</a><a class="btn soft big" href="#/practice">Flashcards</a></div></div>' +
-      '<div>' + mascot('Noor, the Tarteel mascot, holding an open book') + '</div></section>' +
-      '<h2>Choose how you like to learn</h2><div class="paths">' +
-      '<a class="path-card a" href="#/path"><span class="big-emoji">🗺️</span><h2>Guided path</h2><p>Levels 0 to ' + (D.levels.length - 1) + ', in order. Each lesson shows the rule, what it means, examples, then flashcards.</p><span class="go">Follow the path →</span></a>' +
-      '<a class="path-card b" href="#/practice"><span class="big-emoji">🃏</span><h2>Repetitive practice</h2><p>Jump straight into flashcards. A fragment of a verse appears: recite it, flip, press play, and compare.</p><span class="go">Open the decks →</span></a></div>' +
-      '<div class="stats"><div class="stat"><b>' + done + '/' + lessonOrder.length + '</b>lessons done</div><div class="stat"><b>' + learned + '</b>cards learned</div><div class="stat"><b>' + st.due + '</b>due now</div><div class="stat"><b>' + streak() + '</b>day streak</div></div>' +
-      '<h2>The colors you will learn</h2><div class="legend-strip">' + strip + '</div><p class="small muted" style="margin-top:.8rem"><a href="#/colors">See the whole color key</a></p>' +
-      '<h2>Take it with you</h2><div class="card stack"><p>The same course is available as Anki decks: ' + D.meta.counts.cards + ' cards with audio, organized into one deck per rule.</p><div class="row" id="dl-row"></div></div>';
+      '<div class="row"><a class="btn big" href="#/' + (done ? 'lesson/' + nl : 'path') + '">' + (done ? 'Continue learning' : 'Start at Level 0') + ' ↗</a><a class="btn soft big" href="#/practice">Flashcards</a></div></div>' +
+      '<div>' + mascot('Noor, the Tarteel mascot, holding an open book') + '</div></div></section>' +
+      '<div class="section-head"><div class="eyebrow">Two ways to learn</div><h2>Choose how you like to learn</h2></div><div class="paths">' +
+      '<a class="path-card" href="#/path"><span class="index">01</span><h3>Guided path</h3><p>Levels 0 to ' + (D.levels.length - 1) + ', in order. Each lesson shows the rule, what it means, examples, then flashcards.</p><span class="go">Follow the path ↗</span></a>' +
+      '<a class="path-card" href="#/practice"><span class="index">02</span><h3>Repetitive practice</h3><p>Jump straight into flashcards. A fragment of a verse appears: recite it, flip, press play, and compare.</p><span class="go">Open the decks ↗</span></a></div>' +
+      '<div class="stats"><div class="stat"><b>' + done + '/' + lessonOrder.length + '</b><span>Lessons done</span></div><div class="stat"><b>' + learned + '</b><span>Cards learned</span></div><div class="stat"><b>' + st.due + '</b><span>Due now</span></div><div class="stat"><b>' + streak() + '</b><span>Day streak</span></div></div>' +
+      '<div class="section-head"><div class="eyebrow">Color key</div><h2>The colors you will learn</h2></div><div class="legend-strip">' + strip + '</div><p class="small muted" style="margin-top:var(--s-3)"><a href="#/colors">See the whole color key</a></p>' +
+      '<div class="section-head"><div class="eyebrow">Anki</div><h2>Take it with you</h2></div><div class="card stack"><p>The same course is available as Anki decks: ' + D.meta.counts.cards + ' cards with audio, organized into one deck per rule.</p><div class="row" id="dl-row"></div></div>';
     fillDownloads($('#dl-row'));
   }
   function fillDownloads(el) {
     var items = (D.downloads || []);
     if (!items.length) { el.innerHTML = '<span class="muted small">Anki decks are in the project’s <code>dist/anki</code> folder.</span>'; return; }
-    el.innerHTML = items.map(function (d, i) { return '<a class="btn ' + (i ? 'soft' : '') + '" href="downloads/' + esc(d.file) + '" download>⬇ ' + esc(d.title) + ' <small>(' + esc(d.size) + ')</small></a>'; }).join('');
+    el.innerHTML = items.map(function (d, i) { return '<a class="btn ' + (i ? 'soft' : '') + '" href="downloads/' + esc(d.file) + '" download>↓ ' + esc(d.title) + ' <small>(' + esc(d.size) + ')</small></a>'; }).join('');
   }
 
   // ----- path
@@ -191,11 +191,11 @@
     setNav('path'); setTitle('Guided path');
     var nl = nextLesson();
     var html = '<h1>Guided path</h1><p class="muted">Eight levels, from the very first marks to reading whole surahs. Follow them in order, or jump to whatever you need.</p><div class="map">';
-    D.levels.forEach(function (lv, i) {
+    D.levels.forEach(function (lv) {
       var done = lv.lessons.filter(lessonDone).length, hasNext = lv.lessons.indexOf(nl) >= 0;
-      html += '<section class="level-card ' + PASTEL[i % 8] + '" id="level-' + lv.level + '">' + (hasNext ? '<span class="here">You are here</span>' : '') +
-        '<header><span class="level-badge" aria-hidden="true">' + lv.emoji + '</span><div><div class="num">Level ' + lv.level + '</div><h2>' + esc(lv.title) + '</h2></div></header>' +
-        '<p>' + esc(lv.tagline) + '</p>' + progressBar(done / lv.lessons.length) +
+      html += '<section class="level-card" id="level-' + lv.level + '">' + (hasNext ? '<span class="here">You are here</span>' : '') +
+        '<header><span class="level-badge" aria-hidden="true">' + two(lv.level) + '</span><div><div class="num">Level ' + lv.level + '</div><h2>' + esc(lv.title) + '</h2></div></header>' +
+        '<p>' + rich(lv.tagline) + '</p>' + progressBar(done / lv.lessons.length) +
         '<div class="small"><b>' + done + '/' + lv.lessons.length + '</b> lessons · <a href="#/level/' + lv.level + '">Level overview</a> · <a href="#/practice/level-' + lv.level + '">Practice this level</a></div>' +
         '<ul class="lesson-list">' + lv.lessons.map(function (id) {
           var l = D.lessons[id];
@@ -210,7 +210,7 @@
     setNav('path'); setTitle('Level ' + lv.level);
     var done = lv.lessons.filter(lessonDone).length, nl = nextLesson();
     app.innerHTML = '<div class="crumbs"><a href="#/path">Guided path</a> › Level ' + lv.level + '</div>' +
-      '<div class="lesson-head ' + PASTEL[lv.level % 8] + '"><div style="font-size:3rem" aria-hidden="true">' + lv.emoji + '</div><h1>Level ' + lv.level + ': ' + esc(lv.title) + '</h1><p>' + esc(lv.intro) + '</p></div>' +
+      '<div class="lesson-head on-dark"><h1>Level ' + lv.level + ': ' + esc(lv.title) + '</h1><p>' + rich(lv.intro) + '</p></div>' +
       progressBar(done / lv.lessons.length) +
       '<ul class="lesson-list" style="margin-top:1rem">' + lv.lessons.map(function (id) {
         var l = D.lessons[id];
@@ -230,7 +230,7 @@
     rec.seen = rec.seen || {}; rec.seen[step] = true; saveState();
 
     var head = '<div class="crumbs"><a href="#/path">Guided path</a> › <a href="#/level/' + lv.level + '">Level ' + lv.level + '</a> › ' + esc(l.title) + '</div>' +
-      '<div class="lesson-head ' + PASTEL[lv.level % 8] + '"><div class="ar" lang="ar" dir="rtl">' + esc(l.arabic) + '</div><h1>' + esc(l.title) + '</h1><div class="muted"><b>' + esc(l.meaning) + '</b></div></div>' +
+      '<div class="lesson-head on-dark"><div class="ar" lang="ar" dir="rtl">' + esc(l.arabic) + '</div><h1>' + esc(l.title) + '</h1><div class="muted"><b>' + esc(l.meaning) + '</b></div></div>' +
       '<div class="steps" role="tablist">' + STEPS.map(function (s) { return '<a class="step ' + (rec.seen[s[0]] && s[0] !== step ? 'done' : '') + '" href="#/lesson/' + id + '/' + s[0] + '"' + (s[0] === step ? ' aria-current="step"' : '') + '>' + s[1] + '</a>'; }).join('') + '</div>';
 
     var body = '';
@@ -284,7 +284,7 @@
   function finishLesson(id, root, next) {
     markDone(id);
     var box = document.createElement('div'); box.className = 'done-screen card'; box.style.marginTop = '1rem';
-    box.innerHTML = '<div style="font-size:2.4rem" aria-hidden="true">🎉</div><h2>Lesson complete!</h2>' +
+    box.innerHTML = '' + mascot('Noor', true) + '<h2>Lesson complete!</h2>' +
       '<p>' + esc(D.lessons[id].title) + ' is marked as done.</p><div class="row" style="justify-content:center">' +
       (next ? '<a class="btn big" href="#/lesson/' + next + '">Next: ' + esc(D.lessons[next].title) + ' →</a>' : '<a class="btn big" href="#/path">Back to the path</a>') +
       '<a class="btn soft" href="#/path">All levels</a></div>';
@@ -292,27 +292,27 @@
   }
 
   // ----- practice hub
-  function deckCard(d, cls) {
+  function deckCard(d) {
     var ids = allowedIds(d), st = countStates(ids);
     if (!ids.length) return '';
-    return '<a class="deck ' + (cls || '') + '" href="#/practice/' + d.id + '"><span class="emoji" aria-hidden="true">' + d.emoji + '</span><h3>' + esc(d.title) + '</h3><span class="counts">' + plural(ids.length, 'card') + (st.due ? ' · ' + st.due + ' due' : '') + (st.new ? ' · ' + st.new + ' new' : '') + '</span></a>';
+    return '<a class="deck" href="#/practice/' + d.id + '"><h3>' + esc(d.title) + '</h3><span class="counts">' + plural(ids.length, 'card') + (st.due ? ' · ' + st.due + ' due' : '') + (st.new ? ' · ' + st.new + ' new' : '') + '</span></a>';
   }
   function viewPractice() {
     setNav('practice'); setTitle('Flashcards');
     var all = deckById.all, st = countStates(allowedIds(all)), T = S.settings.types;
     var names = { r: 'Recite', i: 'Identify the rule', c: 'Concepts', s: 'Symbols', k: 'Colors' };
     var html = '<h1>Flashcards</h1><p class="muted">The repetitive path. Each card shows a fragment of a verse: say it aloud, flip, press play, and compare. The cards you find hard come back sooner.</p>' +
-      '<div class="due-card"><div><b>' + st.due + '</b> due now · <b>' + Math.min(st.new, Math.max(0, S.settings.newPerDay - today().fresh)) + '</b> new for today<br><span class="small muted">' + plural(D.cards.length, 'card') + ' in the whole course</span></div>' +
+      '<div class="due-card on-dark"><div><b>' + st.due + '</b> due now · <b>' + Math.min(st.new, Math.max(0, S.settings.newPerDay - today().fresh)) + '</b> new for today<br><span class="small muted">' + plural(D.cards.length, 'card') + ' in the whole course</span></div>' +
       '<a class="btn big" href="#/practice/all">Review now</a></div>' +
       '<h2 style="margin-top:1.5rem">Settings</h2><div class="toggles" id="toggles">' +
       Object.keys(names).map(function (k) { return '<button class="toggle" type="button" data-type="' + k + '" aria-pressed="' + (!!T[k]) + '">' + names[k] + '</button>'; }).join('') + '</div>' +
       '<div class="toggles"><button class="toggle" type="button" data-mode="smart" aria-pressed="' + (S.settings.mode === 'smart') + '">Smart review</button>' +
       '<button class="toggle" type="button" data-mode="free" aria-pressed="' + (S.settings.mode === 'free') + '">Free practice (shuffle)</button>' +
       '<button class="toggle" type="button" data-autoplay aria-pressed="' + S.settings.autoplay + '">Autoplay audio after flipping</button></div>' +
-      '<h2>By level</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'level'; }).map(function (d) { return deckCard(d, PASTEL[d.level % 8]); }).join('') + '</div>' +
-      '<h2 style="margin-top:1.5rem">Rule symbols and colors</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'symbols'; }).map(function (d) { return deckCard(d, 'p3'); }).join('') + '</div>' +
+      '<h2>By level</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'level'; }).map(function (d) { return deckCard(d); }).join('') + '</div>' +
+      '<h2 style="margin-top:1.5rem">Rule symbols and colors</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'symbols'; }).map(function (d) { return deckCard(d); }).join('') + '</div>' +
       '<details class="more"><summary>One deck per lesson</summary>' + D.levels.map(function (lv) {
-        return '<h3 style="margin-top:1rem">Level ' + lv.level + ': ' + esc(lv.title) + '</h3><div class="grid">' + lv.lessons.map(function (id) { var d = deckById['lesson-' + id]; return d ? deckCard(d, 'p5') : ''; }).join('') + '</div>';
+        return '<h3 style="margin-top:1rem">Level ' + lv.level + ': ' + esc(lv.title) + '</h3><div class="grid">' + lv.lessons.map(function (id) { var d = deckById['lesson-' + id]; return d ? deckCard(d) : ''; }).join('') + '</div>';
       }).join('') + '</details>';
     app.innerHTML = html;
     $('#toggles').parentNode.addEventListener('click', function (e) {
@@ -331,7 +331,7 @@
     var root = $('#deck-session');
     if (!ids.length) {
       var total = allowedIds(d).length;
-      root.innerHTML = '<div class="done-screen card"><div style="font-size:2.4rem" aria-hidden="true">✨</div><h2>' + (total ? 'All caught up!' : 'No cards selected') + '</h2><p>' + (total ? 'Nothing is due in this deck right now. You can practice everything anyway.' : 'Turn some card types back on in the settings.') + '</p><div class="row" style="justify-content:center">' +
+      root.innerHTML = '<div class="done-screen card">' + mascot('Noor', true) + '<h2>' + (total ? 'All caught up!' : 'No cards selected') + '</h2><p>' + (total ? 'Nothing is due in this deck right now. You can practice everything anyway.' : 'Turn some card types back on in the settings.') + '</p><div class="row" style="justify-content:center">' +
         (total ? '<button class="btn" id="practice-all" type="button">Practice all ' + total + ' cards</button>' : '') + '<a class="btn soft" href="#/practice">Back to decks</a></div></div>';
       var b = $('#practice-all'); if (b) b.onclick = function () { cleanup = startSession(root, shuffle(allowedIds(d)), { title: d.title, exitHref: '#/practice' }); };
       return;
@@ -352,7 +352,7 @@
       render();
     }
     function finish() {
-      root.innerHTML = '<div class="done-screen card"><div style="font-size:2.6rem" aria-hidden="true">🌟</div><h2>Session complete</h2>' +
+      root.innerHTML = '<div class="done-screen card">' + mascot('Noor', true) + '<h2>Session complete</h2>' +
         '<p>You reviewed <b>' + plural(total, 'card') + '</b>' + (again ? ' (' + plural(again, 'miss') + ' came back and were practiced again)' : '') + '. Nice recitation!</p>' +
         '<div class="row" style="justify-content:center">' + (opts.onFinish ? '' : '<a class="btn big" href="#/practice">More decks</a>') +
         '<button class="btn soft" type="button" data-act="again-session">Practice again</button></div></div>';
@@ -378,7 +378,7 @@
       var f = c.f ? D.frags[c.f] : null;
       if (c.t === 'r') {
         if (!revealed) {
-          h += '<div class="center-col" data-act="flip"><div class="prompt">Say it out loud, then flip the card. 🎤</div>' + verseBox(f) + '</div>' +
+          h += '<div class="center-col" data-act="flip"><div class="prompt">Say it out loud, then flip the card.</div>' + verseBox(f) + '</div>' +
             '<button class="btn big" type="button" data-act="flip">Show answer <kbd>Space</kbd></button>';
         } else {
           h += '<div class="center-col">' + verseBox(f, null, { gloss: true }) + '</div><div class="answer"><div class="row">' + playBtn(f, true) + '<span class="small muted">Compare your recitation with the reciter’s.</span></div>' +
@@ -470,7 +470,7 @@
     var html = '<h1>Symbols of the Mushaf</h1><p class="muted">Every small mark has a job. Tap a sign to see its name, what it means and an example from the Quran.</p>' +
       '<div class="row" style="margin-bottom:1rem"><a class="btn" href="#/practice/symbols">Practice these as flashcards</a><a class="btn soft" href="#/colors">Color key</a></div>';
     D.symbols.forEach(function (g) {
-      html += '<h2 style="margin-top:1.5rem">' + g.emoji + ' ' + esc(g.title) + '</h2><p class="muted">' + esc(g.blurb) + '</p><div class="sym-grid">' +
+      html += '<h2 style="margin-top:1.5rem">' + esc(g.title) + '</h2><p class="muted">' + esc(g.blurb) + '</p><div class="sym-grid">' +
         g.items.map(function (i) { return '<button type="button" class="sym" data-sym="' + i.id + '" aria-pressed="' + (sel === i.id) + '"><span class="g" lang="ar">' + esc(i.glyph) + '</span><span class="n">' + esc(i.name) + '</span></button>'; }).join('') + '</div>';
     });
     html += '<div class="sym-detail" id="sym-detail" aria-live="polite"></div>';
@@ -498,10 +498,10 @@
 
   function viewAbout() {
     setNav(''); setTitle('About');
-    app.innerHTML = '<h1>About Tarteel</h1><div class="card stack"><p>Tarteel (ترتيل) means reciting the Quran slowly, clearly and in order. This project is a free study aid for learning tajweed: a step-by-step course, flashcards with audio, and the same content as Anki decks.</p>' +
+    app.innerHTML = '<h1>About Tarteel</h1><div class="card stack"><p>Tarteel (<span class="ar-inline" lang="ar">ترتيل</span>) means reciting the Quran slowly, clearly and in order. This project is a free study aid for learning tajweed: a step-by-step course, flashcards with audio, and the same content as Anki decks.</p>' +
       '<p><b>Please learn with a teacher.</b> Tajweed is learned by listening and reciting back to someone qualified. Use this as practice between lessons, not as a replacement.</p>' +
       '<h2>Counts and lengths</h2><p>Lengths of madd follow the common teaching for Hafs ʿan ʿĀṣim (Shāṭibiyyah): natural 2, connected and separated 4 to 5, necessary 6, and 2, 4 or 6 on stopping. If your teacher uses a different length, follow your teacher.</p>' +
-      '<h2>Credits</h2><ul class="list"><li>Quran text, KFGQPC Uthmanic Hafs font © King Fahd Glorious Quran Printing Complex, used unmodified under its free-use license.</li><li>Tajweed annotation, word timings and word-by-word meanings via the Quran.com API.</li><li>Recitation: Mahmoud Khalil Al-Husary (Murattal), via EveryAyah.com.</li><li>Interface fonts: Nunito and Fredoka (SIL Open Font License).</li><li>Natural-madd coloring on unmarked letters is added by this project.</li></ul>' +
+      '<h2>Credits</h2><ul class="list"><li>Quran text, KFGQPC Uthmanic Hafs font © King Fahd Glorious Quran Printing Complex, used unmodified under its free-use license.</li><li>Tajweed annotation, word timings and word-by-word meanings via the Quran.com API.</li><li>Recitation: Mahmoud Khalil Al-Husary (Murattal), via EveryAyah.com.</li><li>Interface fonts: DM Sans and DM Mono (SIL Open Font License).</li><li>Natural-madd coloring on unmarked letters is added by this project.</li></ul>' +
       '<h2>Anki decks</h2><div class="row" id="dl-row"></div></div>';
     fillDownloads($('#dl-row'));
   }

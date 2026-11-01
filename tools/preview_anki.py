@@ -37,7 +37,7 @@ def main() -> None:
         ("Tarteel Recite", "ikhafa", 0), ("Tarteel Recite", "iqlab", 1), ("Tarteel Concept", "Idhhar", 0),
         ("Tarteel Symbol", "Fathah", 0), ("Tarteel Color", "Qalqalah", 0), ("Tarteel Recite", "surah-112", 0),
     ]
-    css = next(iter(models.values()))["css"].replace("_UthmanicHafs-v22.ttf", "fonts/UthmanicHafs-v22.ttf")
+    css = next(iter(models.values()))["css"].replace("_UthmanicHafs-v22.ttf", "fonts/UthmanicHafs-v22.ttf").replace("_dm-", "fonts/dm-")
     blocks = []
     for mname, needle, ordn in wanted:
         model = next(m for m in models.values() if m["name"] == mname)

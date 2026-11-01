@@ -32,6 +32,8 @@ SITE = ROOT / "site"
 DIST = ROOT / "dist" / "anki"
 MEDIA = ROOT / "build" / "anki_media"
 FONT_FILE = "_UthmanicHafs-v22.ttf"
+UI_FONT = "_dm-sans-latin.woff2"
+MONO_FONT = "_dm-mono-400.woff2"
 
 AR_RUN = re.compile(r"(?:[؀-ۿݐ-ݿ‌]+(?:\s+(?=[؀-ۿݐ-ݿ]))?)+")
 
@@ -53,34 +55,39 @@ def css(legend: list[dict]) -> str:
     night = "\n".join(f".nightMode .tj-{c['id']} {{ color: {c['dark']}; }}\n.nightMode .bg-{c['id']} {{ background: {c['dark']}; }}" for c in legend)
     return f"""
 @font-face {{ font-family: "KFGQPC Hafs"; src: url("{FONT_FILE}"); }}
-.card {{ font-family: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif; font-size: 19px; line-height: 1.55; color: #2a2340; background: #fff7ec; text-align: center; padding: 10px; }}
-.nightMode.card, .nightMode .card {{ color: #f3efff; background: #17132a; }}
-.kind {{ font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #655e7e; font-weight: 800; margin-bottom: 6px; }}
-.nightMode .kind {{ color: #b9b0d2; }}
-.verse {{ background: #ffffff; border: 2px solid #eadfcb; border-radius: 20px; padding: 8px 8px 12px; margin: 8px auto; max-width: 640px; }}
-.nightMode .verse {{ background: #272047; border-color: #3d3463; }}
-.ar {{ font-family: "KFGQPC Hafs", "Amiri Quran", "Traditional Arabic", serif; direction: rtl; font-size: 40px; line-height: 2.3; word-spacing: .06em; }}
+@font-face {{ font-family: "DM Sans"; src: url("{UI_FONT}"); font-weight: 300 700; }}
+@font-face {{ font-family: "DM Mono"; src: url("{MONO_FONT}"); }}
+.card {{ font-family: "DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif; font-size: 18px; line-height: 1.55; color: #111113; background: #f1f1f3; text-align: center; padding: 10px; }}
+.nightMode.card, .nightMode .card {{ color: #f1f1f3; background: #111113; }}
+.kind {{ font-family: "DM Mono", ui-monospace, monospace; font-size: 11px; letter-spacing: .02em; text-transform: uppercase; color: #4d4d56; margin-bottom: 8px; }}
+.nightMode .kind {{ color: #b7b7bf; }}
+.verse {{ background: #ffffff; border: 1px solid #e4e4e7; border-radius: 24px; padding: 8px 12px 12px; margin: 8px auto; max-width: 640px; }}
+.nightMode .verse {{ background: #1f1f22; border-color: #393940; }}
+.ar {{ font-family: "KFGQPC Hafs", "Amiri Quran", "Traditional Arabic", serif; direction: rtl; font-size: 40px; line-height: 2.3; word-spacing: .06em; letter-spacing: 0; }}
 .ar.sm {{ font-size: 30px; line-height: 2.1; }}
-.ar-inline {{ font-family: "KFGQPC Hafs", "Amiri Quran", "Traditional Arabic", serif; direction: rtl; font-size: 1.3em; }}
+.ar-inline {{ font-family: "KFGQPC Hafs", "Amiri Quran", "Traditional Arabic", serif; direction: rtl; font-size: 1.3em; letter-spacing: 0; }}
 .sign {{ font-family: "KFGQPC Hafs", "Amiri Quran", serif; direction: rtl; font-size: 84px; line-height: 1.7; }}
-.label {{ font-weight: 800; font-size: 15px; margin-top: 2px; }}
-.label .sar {{ font-family: "KFGQPC Hafs", "Amiri Quran", serif; font-size: 1.25em; font-weight: 400; }}
-.tag {{ display: inline-block; background: #fff0b8; color: #2a2340; border-radius: 999px; padding: 0 9px; font-size: 12px; margin-inline-start: 4px; }}
-.prompt {{ color: #655e7e; font-weight: 700; margin: 6px 0; }}
-.nightMode .prompt {{ color: #b9b0d2; }}
-.gloss {{ color: #655e7e; font-size: 15px; }}
-.nightMode .gloss {{ color: #b9b0d2; }}
+.label {{ font-weight: 500; font-size: 14px; margin-top: 2px; }}
+.label .sar {{ font-family: "KFGQPC Hafs", "Amiri Quran", serif; font-size: 1.2em; font-weight: 400; }}
+.tag {{ display: inline-block; font-family: "DM Mono", ui-monospace, monospace; background: #f1f1f3; color: #4d4d56; border-radius: 4px; padding: 0 6px; font-size: 11px; letter-spacing: .02em; text-transform: uppercase; margin-inline-start: 4px; }}
+.nightMode .tag {{ background: #2a2a2e; color: #b7b7bf; }}
+.prompt {{ color: #4d4d56; margin: 6px 0; }}
+.nightMode .prompt {{ color: #b7b7bf; }}
+.gloss {{ color: #4d4d56; font-size: 14px; }}
+.nightMode .gloss {{ color: #b7b7bf; }}
 .answer {{ max-width: 640px; margin: 8px auto 0; }}
-.note {{ background: #fff0c2; color: #2a2340; border-radius: 14px; padding: 6px 12px; font-size: 16px; margin: 8px auto; max-width: 640px; }}
-.nightMode .note {{ background: #4a3f1c; color: #f3efff; }}
+.note {{ background: #ffffff; color: #111113; border-radius: 12px; padding: 6px 12px; font-size: 15px; margin: 8px auto; max-width: 640px; }}
+.nightMode .note {{ background: #2a2a2e; color: #f1f1f3; }}
 .chips {{ margin: 6px 0; }}
-.chip {{ display: inline-block; background: #fffaf3; border: 2px solid #eadfcb; border-radius: 999px; padding: 0 10px; font-size: 14px; font-weight: 700; margin: 2px; color: #2a2340; }}
-.nightMode .chip {{ background: #2d2652; border-color: #3d3463; color: #f3efff; }}
-.chip .dot {{ display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-inline-end: 6px; }}
-.options {{ font-weight: 800; margin: 8px 0; }}
-.swatch {{ width: 92px; height: 92px; border-radius: 28px; margin: 8px auto; color: #fff; font-family: "KFGQPC Hafs", "Amiri Quran", serif; font-size: 52px; line-height: 92px; }}
-.big {{ font-size: 24px; font-weight: 800; }}
-hr#answer {{ border: 0; border-top: 2px dashed #eadfcb; margin: 12px auto; max-width: 640px; }}
+.chip {{ display: inline-block; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 999px; padding: 0 10px; font-size: 13px; margin: 2px; color: #111113; }}
+.nightMode .chip {{ background: #1f1f22; border-color: #393940; color: #f1f1f3; }}
+.chip .dot {{ display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-inline-end: 6px; }}
+.options {{ font-weight: 500; margin: 8px 0; }}
+.swatch {{ width: 92px; height: 92px; border-radius: 24px; margin: 8px auto; color: #ffffff; font-family: "KFGQPC Hafs", "Amiri Quran", serif; font-size: 52px; line-height: 92px; }}
+.nightMode .swatch {{ color: #111113; }}
+.big {{ font-family: "DM Mono", ui-monospace, monospace; font-weight: 400; font-size: 22px; line-height: 1.3; }}
+hr#answer {{ border: 0; border-top: 1px solid #e4e4e7; margin: 12px auto; max-width: 640px; }}
+.nightMode hr#answer {{ border-top-color: #393940; }}
 {light}
 {night}
 """
@@ -102,7 +109,7 @@ def build() -> None:
         templates=[
             {
                 "name": "Recite",
-                "qfmt": '<div class="kind">🎤 Recite aloud, then flip · {{Lesson}}</div><div class="verse"><div class="ar">{{Arabic}}</div><div class="label">{{Label}}</div></div>',
+                "qfmt": '<div class="kind">Recite aloud, then flip · {{Lesson}}</div><div class="verse"><div class="ar">{{Arabic}}</div><div class="label">{{Label}}</div></div>',
                 "afmt": '{{FrontSide}}<hr id="answer"><div class="answer">{{Audio}}<div class="gloss">{{Gloss}}</div><div class="chips">{{Chips}}</div><div class="note">{{Note}}</div></div>',
             },
             {
@@ -166,7 +173,7 @@ def build() -> None:
     def deck(name: str, desc: str = "") -> genanki.Deck:
         if name not in decks:
             decks[name] = genanki.Deck(deck_id(name), name, description=desc)
-            media_for[name] = {FONT_FILE}
+            media_for[name] = {FONT_FILE, UI_FONT, MONO_FONT}
         return decks[name]
 
     def sound(fid: str, dname: str) -> str:
@@ -255,6 +262,8 @@ def build() -> None:
 
     # ---- packages ------------------------------------------------------------
     (MEDIA / FONT_FILE).write_bytes((SITE / "fonts" / "UthmanicHafs-v22.ttf").read_bytes())
+    (MEDIA / UI_FONT).write_bytes((SITE / "fonts" / "dm-sans-latin.woff2").read_bytes())
+    (MEDIA / MONO_FONT).write_bytes((SITE / "fonts" / "dm-mono-400.woff2").read_bytes())
 
     def write(fname: str, names: list[str]) -> dict:
         pkg = genanki.Package([decks[n] for n in names])

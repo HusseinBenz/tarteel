@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Tarteel · Learn tajweed the friendly way</title>
   <meta name="description" content="A friendly, step-by-step way to learn tajweed with the Madinah Mushaf, tajweed colors, audio and flashcards.">
-  <meta name="theme-color" content="#FFF7EC">
+  <meta name="theme-color" content="#111113">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/UthmanicHafs-v22.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/tajweed.css">
@@ -16,7 +16,7 @@
 
   <header class="top">
     <a class="brand" href="#/" aria-label="Tarteel home">
-      <span class="brand-mark" aria-hidden="true">☪</span>
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 3a9.5 9.5 0 1 0 0 18 8 8 0 1 1 0-18z"/><circle cx="17.5" cy="8" r="1.8"/></svg>
       <span class="brand-name">Tarteel</span>
     </a>
     <nav class="nav" aria-label="Main">
@@ -26,17 +26,17 @@
       <a href="#/symbols" data-nav="symbols">Symbols</a>
     </nav>
     <div class="top-actions">
-      <button class="icon-btn" id="btn-colors" type="button" aria-label="Open the tajweed color key" title="Color key">🎨</button>
-      <button class="icon-btn" id="btn-theme" type="button" aria-label="Switch light or dark theme" title="Theme">🌓</button>
+      <button class="icon-btn" id="btn-colors" type="button" aria-label="Open the tajweed color key" title="Color key"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3.5"/><circle cx="16" cy="8" r="3.5"/><circle cx="12" cy="15.5" r="3.5"/></svg></button>
+      <button class="icon-btn" id="btn-theme" type="button" aria-label="Switch light or dark theme" title="Theme"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg></button>
     </div>
   </header>
 
   <main id="app" tabindex="-1" aria-live="polite"></main>
 
-  <footer class="foot">
+  <footer class="foot on-dark"><div class="foot-in">
     <p>Text: Madinah Mushaf (Hafs ʿan ʿĀṣim) in the <abbr title="King Fahd Glorious Quran Printing Complex">KFGQPC</abbr> Uthmanic script. Tajweed annotation and word timings via Quran.com. Recitation: Mahmoud Khalil Al-Husary.</p>
     <p>Tarteel is a study aid. Please learn with a qualified teacher, and recite back to them. <a href="#/about">About &amp; credits</a></p>
-  </footer>
+  </div></footer>
 
   <dialog id="colors-dialog" aria-labelledby="colors-title">
     <form method="dialog" class="dlg-head">

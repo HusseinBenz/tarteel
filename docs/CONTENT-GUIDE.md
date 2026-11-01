@@ -27,7 +27,7 @@ Full verses are best for the final level; two to three words are best for a rule
 
 ## Add a lesson
 
-Add an object to a level's `lessons` array. Required: `id` (unique, lowercase), `title`, `arabic`, `meaning`, `summary`. Useful optional fields:
+Add an object to a level's `lessons` array. Required: `id` (unique, lowercase), `title` (no Arabic, which goes in `arabic`), `arabic`, `meaning`, `summary`. Useful optional fields:
 
 | Field | Purpose |
 |---|---|

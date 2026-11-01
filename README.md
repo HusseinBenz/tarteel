@@ -68,7 +68,7 @@ The graph covers code only (`tools/` and `site/js/`). Lessons in `content/` are 
 
 ## Publish
 
-The website is served by GitHub Pages from the `gh-pages` branch: <https://husseinbenz.github.io/tarteel/>. After changing `site/`, run `tools/publish_pages.sh` (it pushes the `site/` folder to that branch). A printable summary of the course is in [`docs/HANDOUT.md`](docs/HANDOUT.md).
+The website is served by GitHub Pages from the `gh-pages` branch: <https://husseinbenz.github.io/tarteel/>. After changing `site/`, run `tools/publish_pages.sh` (it pushes the `site/` folder to that branch). A printable summary of the course is in [`docs/HANDOUT.md`](docs/HANDOUT.md), and the interface's tokens and components are in [`docs/DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md).
 
 ## Important notes
 

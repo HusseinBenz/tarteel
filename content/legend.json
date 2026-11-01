@@ -6,7 +6,7 @@
     {"id": "madda_obligatory", "name": "Obligatory Madd", "arabic": "المد الواجب", "short": "Stretch 4 to 5 counts", "sample": "ا", "light": "#1D3FBF", "dark": "#8499FF", "lesson": "madd-muttasil"},
     {"id": "madda_necessary", "name": "Necessary Madd", "arabic": "المد اللازم", "short": "Stretch 6 counts", "sample": "ا", "light": "#0B1F7A", "dark": "#B6A4FF", "lesson": "madd-lazim"},
     {"id": "qalaqah", "name": "Qalqalah", "arabic": "القلقلة", "short": "A little echo or bounce", "sample": "د", "light": "#E0303F", "dark": "#FF7A85", "lesson": "qalqalah"},
-    {"id": "ghunnah", "name": "Ghunnah", "arabic": "الغنة", "short": "Nasal hum for 2 counts", "sample": "نّ", "light": "#E8790C", "dark": "#FFA64D", "lesson": "ghunnah"},
+    {"id": "ghunnah", "name": "Ghunnah", "arabic": "الغنة", "short": "Nasal hum for 2 counts", "sample": "نّ", "light": "#D96E06", "dark": "#FFA64D", "lesson": "ghunnah"},
     {"id": "ikhafa", "name": "Ikhfa", "arabic": "الإخفاء", "short": "Hide the noon, hum 2 counts", "sample": "ن", "light": "#A12BC4", "dark": "#D68CFF", "lesson": "ikhfa"},
     {"id": "ikhafa_shafawi", "name": "Ikhfa Shafawi", "arabic": "الإخفاء الشفوي", "short": "Hide the meem before ba", "sample": "م", "light": "#D91E91", "dark": "#FF8FD0", "lesson": "ikhfa-shafawi"},
     {"id": "idgham_ghunnah", "name": "Idgham with Ghunnah", "arabic": "الإدغام بغنة", "short": "Merge with a nasal hum", "sample": "ن", "light": "#0F9D87", "dark": "#4FD9C0", "lesson": "idgham-ghunnah"},
@@ -15,8 +15,8 @@
     {"id": "iqlab", "name": "Iqlab", "arabic": "الإقلاب", "short": "Flip the noon into a meem", "sample": "ن", "light": "#0A93D6", "dark": "#58C7FF", "lesson": "iqlab"},
     {"id": "idgham_mutajanisayn", "name": "Idgham Mutajanisayn", "arabic": "إدغام المتجانسين", "short": "Merge two letters from the same spot", "sample": "د", "light": "#B8860B", "dark": "#F0C24D", "lesson": "idgham-two-letters"},
     {"id": "idgham_mutaqaribayn", "name": "Idgham Mutaqaribayn", "arabic": "إدغام المتقاربين", "short": "Merge two close letters", "sample": "ل", "light": "#8A5A2B", "dark": "#E0A674", "lesson": "idgham-two-letters"},
-    {"id": "ham_wasl", "name": "Hamzat al-Wasl", "arabic": "همزة الوصل", "short": "Connecting alif: skipped when joined", "sample": "ٱ", "light": "#9A97A8", "dark": "#8C8A9C", "lesson": "hamzat-wasl"},
-    {"id": "laam_shamsiyah", "name": "Lam Shamsiyyah", "arabic": "اللام الشمسية", "short": "The lam is silent; double the next letter", "sample": "ل", "light": "#9A97A8", "dark": "#8C8A9C", "lesson": "lam-shamsiyyah"},
-    {"id": "slnt", "name": "Silent letter", "arabic": "حرف لا يُنطق", "short": "Written but not pronounced", "sample": "ا", "light": "#9A97A8", "dark": "#8C8A9C", "lesson": "silent-letters"}
+    {"id": "ham_wasl", "name": "Hamzat al-Wasl", "arabic": "همزة الوصل", "short": "Connecting alif: skipped when joined", "sample": "ٱ", "light": "#8C8C98", "dark": "#8E8E9A", "lesson": "hamzat-wasl"},
+    {"id": "laam_shamsiyah", "name": "Lam Shamsiyyah", "arabic": "اللام الشمسية", "short": "The lam is silent; double the next letter", "sample": "ل", "light": "#8C8C98", "dark": "#8E8E9A", "lesson": "lam-shamsiyyah"},
+    {"id": "slnt", "name": "Silent letter", "arabic": "حرف لا يُنطق", "short": "Written but not pronounced", "sample": "ا", "light": "#8C8C98", "dark": "#8E8E9A", "lesson": "silent-letters"}
   ]
 }

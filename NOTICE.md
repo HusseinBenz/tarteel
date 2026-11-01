@@ -14,7 +14,11 @@ Tarteel contains material from other sources. Please keep these notices with any
 
 ## Interface fonts
 
-- **Nunito** and **Fredoka**: SIL Open Font License 1.1. Files `site/fonts/nunito-latin.woff2` and `fredoka-latin.woff2` are the Latin subsets served by Google Fonts.
+- **DM Sans** and **DM Mono**: SIL Open Font License 1.1. Files `site/fonts/dm-sans-latin.woff2`, `dm-mono-300.woff2` and `dm-mono-400.woff2` are the Latin subsets served by Google Fonts. The Anki packages embed DM Sans and DM Mono 400.
+
+## Visual design
+
+- The interface's colors, spacing and component styling are derived from [xintra.org](https://www.xintra.org/). No Xintra logo, imagery, copy or font files are used, and Tarteel is not affiliated with Xintra. See `docs/DESIGN-SYSTEM.md`.
 
 ## Software
 
