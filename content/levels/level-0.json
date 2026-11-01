@@ -1,0 +1,398 @@
+{
+  "level": 0,
+  "slug": "meet-the-mushaf",
+  "title": "Meet the Mushaf",
+  "emoji": "🌱",
+  "tagline": "Colors, short vowels and the tiny marks you will see everywhere.",
+  "intro": "Welcome! Before the big tajweed rules, let's get comfortable with the page itself: what the colors mean, what the small marks above and below the letters do, and how long a vowel lasts. Everything later builds on these seven small lessons.",
+  "lessons": [
+    {
+      "id": "welcome-colors",
+      "title": "Meet the Colors",
+      "arabic": "ألوان التجويد",
+      "meaning": "The color code of the Mushaf",
+      "summary": "Tajweed colors are little signposts: each color tells you which rule is at work on that letter.",
+      "explain": [
+        "The text in this course is the Madinah Mushaf (Hafs 'an 'Asim), shown in the King Fahd Complex script. Letters that carry a tajweed rule are colored, so your eyes learn the rules before your tongue has to.",
+        "Gray letters are quiet or hidden. Blue letters are stretched (madd). Red letters echo (qalqalah). Orange, purple, pink, teal, green and sky-blue belong to the noon and meem rules. You will meet each color in its own lesson.",
+        "Do not memorize the colors now. Every lesson introduces its own color, and the Color Key flashcards train them gently."
+      ],
+      "how": [
+        "Look at a verse and notice which letters are colored.",
+        "Read the verse aloud, slowly, letting each colored letter remind you of its rule.",
+        "Open the Color Key at any time to check what a color means."
+      ],
+      "tips": [
+        "Longer madd means a deeper blue.",
+        "Gray means quiet or hidden."
+      ],
+      "identify": null,
+      "showcase": [
+        {
+          "ref": "1:1",
+          "all": true,
+          "note": "Gray: the connecting alifs and the silent lam. Blue: the long vowels."
+        },
+        {
+          "ref": "1:7",
+          "all": true,
+          "note": "Lots of blue: this verse is a madd workout, including the deep-blue necessary madd at the end."
+        },
+        {
+          "ref": "112:1",
+          "all": true,
+          "note": "Red: the echo (qalqalah) on the last letter."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What does a colored letter in a tajweed Mushaf tell you?",
+          "a": "A tajweed rule applies to that letter, and the color tells you which rule."
+        },
+        {
+          "q": "In this course, what does a gray letter usually mean?",
+          "a": "It is quiet or hidden: a connecting alif (hamzat al-wasl), the lam of a sun letter, or a silent letter."
+        },
+        {
+          "q": "Which blue is the longest madd?",
+          "a": "The deepest blue. Natural madd (2 counts) is the lightest blue; necessary madd (6 counts) is the deepest."
+        }
+      ],
+      "auto_cards": false
+    },
+    {
+      "id": "harakat",
+      "title": "Short Vowels (Harakat)",
+      "arabic": "الحركات",
+      "meaning": "The movements: fathah, kasrah, dammah",
+      "summary": "Three tiny marks tell your voice which short vowel to use: a, i or u.",
+      "explain": [
+        "Arabic letters are consonants. Short vowel marks, the harakat, give each one its sound.",
+        "Fathah is a small slanted line above a letter and makes an 'a' sound: بَ = ba.",
+        "Kasrah is a small slanted line below a letter and makes an 'i' sound: بِ = bi.",
+        "Dammah is a tiny waw-shaped mark above a letter and makes a 'u' sound: بُ = bu.",
+        "A short vowel lasts one count (one harakah): about the time it takes to open or close one finger at a calm, steady pace."
+      ],
+      "counts": "1 count",
+      "how": [
+        "Say the consonant, then the vowel that is marked on it.",
+        "Keep every short vowel quick and clean. Do not stretch it."
+      ],
+      "tips": [
+        "Fathah opens the mouth (a), kasrah relaxes the jaw into a small smile (i), dammah rounds the lips (u)."
+      ],
+      "mistakes": [
+        "Stretching a short vowel until ba sounds like baa."
+      ],
+      "identify": null,
+      "examples": [
+        {
+          "ref": "105:1",
+          "at": "فعل ربك",
+          "note": "Fa-'a-la has three fathahs: three quick 'a' sounds."
+        },
+        {
+          "ref": "1:1",
+          "at": "بسم",
+          "note": "Bi and mi both carry a kasrah; the middle letter carries a sukun (next lesson)."
+        },
+        {
+          "ref": "112:1",
+          "at": "قل هو",
+          "note": "Qul has a dammah; hu has a dammah; wa has a fathah."
+        },
+        {
+          "ref": "1:6",
+          "at": "اهدنا",
+          "note": "Ih-di-naa: a kasrah, a kasrah, a fathah."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Which short vowel is a small line BELOW a letter?",
+          "a": "Kasrah (كَسْرَة), the 'i' sound."
+        },
+        {
+          "q": "How long does a short vowel last?",
+          "a": "One count (one harakah)."
+        }
+      ]
+    },
+    {
+      "id": "sukun",
+      "title": "Sukun",
+      "arabic": "السكون",
+      "meaning": "Stillness",
+      "summary": "A letter with a sukun has no vowel of its own. It closes the sound that came before it.",
+      "explain": [
+        "In the Madinah Mushaf the sukun is a small open-headed circle (ۡ) above the letter; many printed books use a plain small circle (ْ). They mean the same thing.",
+        "A letter with sukun is pronounced together with the vowelled letter before it: بِسْمِ is bis-mi, not bi-si-mi."
+      ],
+      "how": [
+        "Say the vowelled letter, then land lightly on the sukun letter. It is a gentle stop inside the word, with no extra vowel after it."
+      ],
+      "tips": [
+        "Think of a sukun as a tiny closed door: the sound stops there for a moment."
+      ],
+      "mistakes": [
+        "Adding a hidden vowel after the sukun letter (saying bi-sa-mi)."
+      ],
+      "identify": null,
+      "examples": [
+        {
+          "ref": "112:1",
+          "at": "قل",
+          "note": "Qul: the lam carries a sukun."
+        },
+        {
+          "ref": "1:2",
+          "at": "الحمد",
+          "note": "Al-ḥamd: a sukun on the lam, and another on the meem when you stop."
+        },
+        {
+          "ref": "1:5",
+          "at": "نعبد",
+          "note": "Na'-bu-du: the ayn carries a sukun."
+        },
+        {
+          "ref": "1:6",
+          "at": "المستقيم",
+          "note": "Al-mus-ta-qeem: sukuns on the lam and the sin."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What does a sukun do to a letter?",
+          "a": "It removes the vowel: the letter is pronounced with no vowel of its own, joined to the letter before it."
+        }
+      ]
+    },
+    {
+      "id": "shaddah",
+      "title": "Shaddah (Doubled Letter)",
+      "arabic": "الشدة",
+      "meaning": "Strengthening",
+      "summary": "A tiny mark shaped like a little 'w' doubles the letter: one half closes the sound before it, the other half opens the sound after it.",
+      "explain": [
+        "A letter with a shaddah is really two identical letters in a row: the first has a sukun, the second has the vowel shown.",
+        "So لِلَّهِ is lil-lah: the first lam ends 'lil', the second lam starts 'lah'.",
+        "A shaddah makes the letter firm and a touch longer. When the letter is a noon or meem, it also carries a nasal hum, the ghunnah (Level 1)."
+      ],
+      "how": [
+        "Press the letter firmly once, then release into its vowel. Think 'hold, then open'."
+      ],
+      "tips": [
+        "Count the letter twice in your head: lam-lam."
+      ],
+      "mistakes": [
+        "Reading a doubled letter as a single, soft one."
+      ],
+      "identify": null,
+      "examples": [
+        {
+          "ref": "1:2",
+          "at": "لله",
+          "note": "Lil-lah: a doubled lam."
+        },
+        {
+          "ref": "1:5",
+          "at": "اياك نعبد",
+          "note": "Iy-yaa-ka: a doubled yaa."
+        },
+        {
+          "ref": "112:2",
+          "at": "الصمد",
+          "note": "As-sa-mad: the doubled ṣād (the lam before it is silent; see sun letters, Level 4)."
+        },
+        {
+          "ref": "111:1",
+          "at": "تبت يدا",
+          "note": "Tab-bat: a doubled ba."
+        }
+      ],
+      "cards": [
+        {
+          "q": "A letter with a shaddah is pronounced...",
+          "a": "Twice: a sukun half that closes the previous sound, then a vowelled half that opens the next one."
+        }
+      ]
+    },
+    {
+      "id": "tanween",
+      "title": "Tanween",
+      "arabic": "التنوين",
+      "meaning": "Adding a noon sound",
+      "summary": "A doubled mark at the end of a noun adds a light 'n' sound: -an, -in, -un.",
+      "explain": [
+        "Tanween appears only on the LAST letter of a noun. Fathatan (ـً) says -an, kasratan (ـٍ) says -in, dammatan (ـٌ) says -un.",
+        "Tanween is a noon sakinah (نْ) that you pronounce but never write. That is why it follows the same four rules as noon sakinah in Level 1.",
+        "When you stop on a word, tanween disappears (and fathatan becomes a long 'aa'). You will practise that in Level 6."
+      ],
+      "how": [
+        "Say the vowel, then close with a quick, light 'n'."
+      ],
+      "tips": [
+        "Tanween is just a short vowel plus an invisible noon."
+      ],
+      "mistakes": [
+        "Skipping the final 'n' sound when you continue reading."
+      ],
+      "identify": null,
+      "examples": [
+        {
+          "ref": "112:1",
+          "at": "احد",
+          "note": "A-ha-dun: dammatan, but you stop here, so you say 'aḥad'."
+        },
+        {
+          "ref": "112:4",
+          "at": "كفوا",
+          "note": "Ku-fu-wan: fathatan on the waw."
+        },
+        {
+          "ref": "103:2",
+          "at": "خسر",
+          "note": "Khus-rin: kasratan."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What sound does tanween add?",
+          "a": "A light 'n' after the short vowel: -an, -in or -un."
+        },
+        {
+          "q": "Where does tanween appear in a word?",
+          "a": "Only on the last letter of a noun."
+        }
+      ]
+    },
+    {
+      "id": "long-vowels",
+      "title": "Long Vowels (Alif, Waw, Yaa)",
+      "arabic": "حروف المد",
+      "meaning": "The letters of prolongation",
+      "summary": "Alif, waw and yaa can stretch a short vowel into a long one lasting 2 counts.",
+      "explain": [
+        "Alif stretches a fathah: بَا = baa.",
+        "An unmarked waw stretches a dammah: بُو = boo.",
+        "An unmarked yaa stretches a kasrah: بِي = bee.",
+        "This is the natural madd, shown in light blue. It is the foundation of every other kind of madd."
+      ],
+      "counts": "2 counts",
+      "colors": [
+        "madda_normal"
+      ],
+      "expect": [
+        "madda_normal"
+      ],
+      "how": [
+        "Say the short vowel, then keep the same sound going for two counts, steady and relaxed."
+      ],
+      "tips": [
+        "Match the vowel before the letter: fathah goes with alif, dammah with waw, kasrah with yaa."
+      ],
+      "mistakes": [
+        "Cutting the long vowel short, or stretching it far beyond two counts."
+      ],
+      "identify": null,
+      "examples": [
+        {
+          "ref": "114:1",
+          "all": true,
+          "note": "A-'oo-dhu (waw), bi-rab-bi (short), an-naa-si (alif)."
+        },
+        {
+          "ref": "112:3",
+          "at": "ولم يولد",
+          "note": "Yoo-lad: a waw after a dammah."
+        },
+        {
+          "ref": "1:5",
+          "at": "واياك نستعين",
+          "note": "Iy-yaa-ka (alif) and nas-ta-'een (yaa)."
+        },
+        {
+          "ref": "1:4",
+          "at": "ملك يوم الدين",
+          "note": "Maa-li-ki (dagger alif), yawm (a different sound), ad-deen (yaa)."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Which long vowel letter matches a dammah?",
+          "a": "Waw (و), e.g. بُو = boo."
+        },
+        {
+          "q": "Which long vowel letter matches a kasrah?",
+          "a": "Yaa (ي), e.g. بِي = bee."
+        },
+        {
+          "q": "How long is a natural madd?",
+          "a": "Two counts."
+        }
+      ]
+    },
+    {
+      "id": "small-letters",
+      "title": "Little Letters of the Mushaf",
+      "arabic": "الحروف الصغيرة",
+      "meaning": "Dagger alif, small waw and small yaa",
+      "summary": "To save space, the Mushaf writes some long vowels as tiny letters above or below the line.",
+      "explain": [
+        "The dagger alif (ـٰ) is a small upright stroke over a letter. It means a long 'aa' of 2 counts: ٱلرَّحْمَـٰنِ is ar-raḥ-maa-ni.",
+        "The small waw (ۥ) follows a pronoun هُ and stretches it to 'huu': لَهُۥ = lahuu.",
+        "The small yaa (ۦ) follows a pronoun هِ and stretches it to 'hee': بِهِۦ = bihee.",
+        "All three are natural madd: 2 counts, in light blue. (If a hamza comes right after, the madd gets longer; see Level 3.)"
+      ],
+      "counts": "2 counts",
+      "colors": [
+        "madda_normal"
+      ],
+      "expect": [
+        "madda_normal"
+      ],
+      "how": [
+        "Read the tiny letter as if it were a full alif, waw or yaa, and give it two counts."
+      ],
+      "tips": [
+        "If you see a tiny letter, you hear a long vowel."
+      ],
+      "mistakes": [
+        "Ignoring the tiny letters because they are small."
+      ],
+      "identify": null,
+      "examples": [
+        {
+          "ref": "1:3",
+          "all": true,
+          "note": "Ar-raḥ-maa-ni: dagger alif."
+        },
+        {
+          "ref": "1:4",
+          "at": "ملك",
+          "note": "Maa-liki: dagger alif."
+        },
+        {
+          "ref": "112:4",
+          "at": "له",
+          "note": "Lahuu: small waw."
+        },
+        {
+          "ref": "100:4",
+          "at": "فاثرن به",
+          "note": "Bihee: small yaa."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What does a dagger alif (ـٰ) mean?",
+          "a": "A long 'aa' sound lasting 2 counts."
+        },
+        {
+          "q": "What does the small waw (ۥ) after a pronoun ه do?",
+          "a": "It stretches 'hu' into 'huu' for 2 counts (between two vowelled letters)."
+        }
+      ]
+    }
+  ]
+}

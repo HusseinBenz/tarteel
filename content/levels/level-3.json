@@ -1,0 +1,596 @@
+{
+  "level": 3,
+  "slug": "madd",
+  "title": "Madd: Stretching Sounds",
+  "emoji": "🌊",
+  "tagline": "How long to hold each long vowel, and why.",
+  "intro": "Madd means stretching. Alif, waw and yaa can be held for different lengths depending on what comes after them. In this course the blues get deeper as the madd gets longer: light blue for 2 counts, deep navy for 6.",
+  "lessons": [
+    {
+      "id": "madd-overview",
+      "title": "What Is Madd?",
+      "arabic": "المد",
+      "meaning": "Prolongation",
+      "summary": "Madd stretches the sound of a long vowel for a set number of counts. The reason for the stretch decides the length.",
+      "explain": [
+        "The three madd letters are alif after a fathah, waw sakinah after a dammah, and yaa sakinah after a kasrah. A handy word that contains all three is نُوحِيهَا.",
+        "Natural madd (2 counts) is the basic stretch. The stretch becomes longer when a hamza or a sukun comes after the madd letter. These are the secondary madds.",
+        "Counts are steady and calm, about one count per finger movement. Choose one length for each kind of madd and keep it the same through your recitation."
+      ],
+      "how": [
+        "Spot the madd letter.",
+        "Look at what follows it: nothing special (2 counts), a hamza (4 to 5 counts), or a sukun/shaddah (6 counts, or 2/4/6 when you stop).",
+        "Hold the sound for the right length."
+      ],
+      "tips": [
+        "Light blue = 2, violet = 2/4/6 on stopping, royal blue = 4 to 5, deep navy = 6."
+      ],
+      "identify": null,
+      "showcase": [
+        {
+          "ref": "1:4",
+          "at": "ملك يوم الدين",
+          "note": "Natural madd in مَـٰلِكِ; permissible madd when you stop on ٱلدِّينِ."
+        },
+        {
+          "ref": "108:1",
+          "at": "انا اعطيناك",
+          "note": "إِنَّآ أَعْطَيْنَـٰكَ: obligatory madd (4 to 5) then natural madd (2)."
+        },
+        {
+          "ref": "1:7",
+          "at": "ولا الضالين",
+          "note": "ٱلضَّآلِّينَ has the necessary madd: 6 counts."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What are the three madd letters, and what vowel comes before each?",
+          "a": "Alif after a fathah, waw sakinah after a dammah, yaa sakinah after a kasrah (a word containing all three: نُوحِيهَا)."
+        },
+        {
+          "q": "What makes a madd longer than 2 counts?",
+          "a": "A hamza or a sukun/shaddah that comes after the madd letter."
+        },
+        {
+          "q": "What does 'madd' mean?",
+          "a": "Stretching (prolonging) the sound of a long vowel."
+        }
+      ],
+      "auto_cards": false
+    },
+    {
+      "id": "madd-tabeei",
+      "title": "Natural Madd",
+      "arabic": "المد الطبيعي",
+      "meaning": "The natural (basic) prolongation",
+      "summary": "A madd letter with no hamza or sukun after it is stretched exactly 2 counts.",
+      "explain": [
+        "Natural madd (madd tabee'i, also called madd asli, the original madd) is the madd that gives a word its sound. If you remove it, the word is no longer the same word.",
+        "It happens with alif after fathah, waw after dammah and yaa after kasrah, including the tiny dagger alif, small waw and small yaa.",
+        "The length is exactly 2 counts. Light blue in this course."
+      ],
+      "counts": "2 counts",
+      "colors": [
+        "madda_normal"
+      ],
+      "expect": [
+        "madda_normal"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Say the short vowel.",
+        "Hold the same sound steadily for 2 counts.",
+        "Do not add extra."
+      ],
+      "spot": "Light blue. A madd letter followed by an ordinary letter that has its own vowel.",
+      "tips": [
+        "Think 'two beats': tap twice while you hold the vowel."
+      ],
+      "mistakes": [
+        "Making it too short (it sounds like a short vowel).",
+        "Stretching it to 4 counts."
+      ],
+      "examples": [
+        {
+          "ref": "99:1",
+          "all": true,
+          "note": "إِذَا (alif) and زِلْزَالَهَا (alif)."
+        },
+        {
+          "ref": "101:1",
+          "all": true,
+          "note": "ٱلْقَارِعَةُ: alif."
+        },
+        {
+          "ref": "107:2",
+          "at": "فذلك الذي يدع اليتيم",
+          "note": "ذَٲلِكَ: dagger alif; ٱلَّذِى: yaa; ٱلْيَتِيمَ: yaa."
+        },
+        {
+          "ref": "106:3",
+          "at": "فليعبدوا رب هذا البيت",
+          "note": "فَلْيَعْبُدُوا: waw; هَـٰذَا: dagger alif."
+        },
+        {
+          "ref": "2:2",
+          "at": "ذلك الكتاب",
+          "note": "ذَٲلِكَ and ٱلْكِتَـٰبُ: dagger alifs."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How long is a natural madd?",
+          "a": "Exactly 2 counts."
+        },
+        {
+          "q": "What other names does natural madd have?",
+          "a": "Madd Tabee'i (natural) and Madd Asli (original)."
+        }
+      ]
+    },
+    {
+      "id": "madd-muttasil",
+      "title": "Connected Madd",
+      "arabic": "المد الواجب المتصل",
+      "meaning": "The obligatory connected prolongation",
+      "summary": "A madd letter followed by a hamza in the SAME word is stretched 4 to 5 counts.",
+      "explain": [
+        "Muttasil means 'connected': the madd letter and the hamza are joined in one word, as in جَآءَ, ٱلسَّمَآءِ and سُوٓءَ.",
+        "It is called wajib (obligatory) because every accepted recitation lengthens it beyond 2 counts. In Hafs 'an 'Asim it is 4 to 5 counts.",
+        "A small madd sign (ٓ) is printed over the madd letter. Royal blue in this course."
+      ],
+      "counts": "4 to 5 counts",
+      "colors": [
+        "madda_obligatory"
+      ],
+      "expect": [
+        "madda_obligatory"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Hold the madd letter for 4 or 5 counts.",
+        "Then pronounce the hamza clearly."
+      ],
+      "spot": "Royal blue, with the madd sign over the letter, and the hamza in the same word.",
+      "tips": [
+        "Pick 4 or 5 and use the same count every time."
+      ],
+      "mistakes": [
+        "Giving it only 2 counts.",
+        "Switching between 4 and 5 inside one verse."
+      ],
+      "examples": [
+        {
+          "ref": "69:11",
+          "at": "طغا الماء",
+          "note": "ٱلْمَآءُ: alif + hamza."
+        },
+        {
+          "ref": "69:16",
+          "at": "السماء",
+          "note": "ٱلسَّمَآءُ: alif + hamza."
+        },
+        {
+          "ref": "69:9",
+          "at": "وجاء فرعون",
+          "note": "وَجَآءَ: alif + hamza."
+        },
+        {
+          "ref": "70:1",
+          "at": "سائل",
+          "note": "سَآئِلُۢ: alif + hamza."
+        },
+        {
+          "ref": "70:35",
+          "at": "اولئك",
+          "note": "أُوْلَـٰٓئِكَ: dagger alif + hamza."
+        },
+        {
+          "ref": "74:37",
+          "at": "شاء",
+          "note": "شَآءَ: alif + hamza."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How can you tell a connected madd (muttasil)?",
+          "a": "The madd letter and the hamza are in the SAME word (like جَآءَ), and a madd sign is printed over the madd letter."
+        }
+      ]
+    },
+    {
+      "id": "madd-munfasil",
+      "title": "Separated Madd",
+      "arabic": "المد الجائز المنفصل",
+      "meaning": "The permissible separated prolongation",
+      "summary": "A madd letter at the END of a word followed by a hamza at the START of the next word is stretched 4 to 5 counts.",
+      "explain": [
+        "Munfasil means 'separated': the madd letter and the hamza live in two different words, as in إِنَّآ أَعْطَيْنَـٰكَ and مَآ أَنتَ.",
+        "It is called 'permissible' because some readings shorten it to 2 counts. In Hafs 'an 'Asim as printed in the Madinah Mushaf it is lengthened to 4 to 5 counts, like muttasil.",
+        "It shares the royal blue of the connected madd."
+      ],
+      "counts": "4 to 5 counts",
+      "colors": [
+        "madda_obligatory"
+      ],
+      "expect": [
+        "madda_obligatory"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Hold the madd letter at the end of the word for 4 or 5 counts.",
+        "Then start the next word with a clear hamza."
+      ],
+      "spot": "A word ending in a madd letter, and the next word beginning with a hamza.",
+      "tips": [
+        "Match the count you chose for the connected madd."
+      ],
+      "mistakes": [
+        "Reading it as 2 counts in one place and 5 in another."
+      ],
+      "examples": [
+        {
+          "ref": "108:1",
+          "at": "انا اعطيناك",
+          "note": "إِنَّآ + أَعْطَيْنَـٰكَ."
+        },
+        {
+          "ref": "68:2",
+          "at": "ما انت",
+          "note": "مَآ + أَنتَ."
+        },
+        {
+          "ref": "69:3",
+          "at": "وما ادراك",
+          "note": "وَمَآ + أَدْرَىٰكَ."
+        },
+        {
+          "ref": "69:38",
+          "at": "فلا اقسم",
+          "note": "فَلَآ + أُقْسِمُ."
+        },
+        {
+          "ref": "70:24",
+          "at": "في اموالهم",
+          "note": "فِىٓ + أَمْوَٲلِهِمْ."
+        },
+        {
+          "ref": "67:7",
+          "at": "اذا القوا",
+          "note": "إِذَآ + أُلْقُواْ."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What is the difference between connected (muttasil) and separated (munfasil) madd?",
+          "a": "Muttasil: madd letter and hamza are in the same word. Munfasil: the madd letter ends one word and the hamza starts the next. In Hafs both are 4 to 5 counts."
+        }
+      ]
+    },
+    {
+      "id": "madd-aarid",
+      "title": "Madd on Stopping",
+      "arabic": "مد العارض للسكون",
+      "meaning": "The temporary prolongation before a stop",
+      "summary": "When you stop on a word, its last letter gets a sukun, and you may stretch the madd letter before it by 2, 4 or 6 counts.",
+      "explain": [
+        "'Aarid means 'temporary': the sukun appears only because you stopped. If you keep reading, there is no extra madd.",
+        "For example in ٱلْعَـٰلَمِينَ, stopping silences the final noon, so the yaa before it can be held for 2, 4 or 6 counts. If you continue to the next word, it is just a natural madd.",
+        "Pick one length (2, 4 or 6) and use it consistently. Violet in this course, and you will see it at many verse endings."
+      ],
+      "counts": "2, 4 or 6 counts (your choice, consistent)",
+      "colors": [
+        "madda_permissible"
+      ],
+      "expect": [
+        "madda_permissible"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Stop on the last letter.",
+        "Hold the madd letter before it for 2, 4 or 6 counts.",
+        "Land softly on the silent final letter."
+      ],
+      "spot": "Violet. A madd letter right before the last letter of a verse.",
+      "tips": [
+        "The longer lengths sound calm and slow; the 2-count length sounds quick. Match the pace of your recitation."
+      ],
+      "mistakes": [
+        "Applying it while continuing to the next word.",
+        "Changing the length from verse to verse."
+      ],
+      "examples": [
+        {
+          "ref": "1:2",
+          "at": "رب العالمين",
+          "note": "Stop on ٱلْعَـٰلَمِينَ."
+        },
+        {
+          "ref": "1:3",
+          "all": true,
+          "note": "Stop on ٱلرَّحِيمِ."
+        },
+        {
+          "ref": "1:4",
+          "at": "يوم الدين",
+          "note": "Stop on ٱلدِّينِ."
+        },
+        {
+          "ref": "1:6",
+          "at": "الصراط المستقيم",
+          "note": "Stop on ٱلْمُسْتَقِيمَ."
+        },
+        {
+          "ref": "105:1",
+          "at": "باصحاب الفيل",
+          "note": "Stop on ٱلْفِيلِ."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Why is it called 'aarid' (temporary) madd?",
+          "a": "The sukun appears only because you stop. If you keep reading there is no extra madd."
+        },
+        {
+          "q": "How long can a madd 'aarid lis-sukoon be held?",
+          "a": "2, 4 or 6 counts (choose one and be consistent)."
+        }
+      ]
+    },
+    {
+      "id": "madd-leen",
+      "title": "Soft Madd",
+      "arabic": "مد اللين",
+      "meaning": "The soft prolongation",
+      "summary": "A waw or yaa with a sukun after a fathah, right before the last letter you stop on, can be stretched 2, 4 or 6 counts.",
+      "explain": [
+        "Leen means 'softness'. The letters are a waw sakinah or yaa sakinah after a fathah, as in خَوْف and بَيْت.",
+        "It only appears when you stop on the letter right after them. Otherwise they are ordinary letters.",
+        "It behaves like the madd on stopping: 2, 4 or 6 counts, and shares its violet color."
+      ],
+      "counts": "2, 4 or 6 counts",
+      "colors": [
+        "madda_permissible"
+      ],
+      "expect": [
+        "madda_permissible"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Say the fathah, glide softly into the waw or yaa, and hold gently for your chosen length.",
+        "Land on the silent last letter."
+      ],
+      "spot": "A waw or yaa with sukun after a fathah, right before the final letter of a verse.",
+      "tips": [
+        "It is a gentle glide, not a hard long vowel."
+      ],
+      "mistakes": [
+        "Turning it into a hard 'aa', 'oo' or 'ee' sound."
+      ],
+      "examples": [
+        {
+          "ref": "106:1",
+          "all": true,
+          "note": "قُرَيْشٍ: yaa sakinah after fathah; stop on ش."
+        },
+        {
+          "ref": "106:2",
+          "at": "الشتاء والصيف",
+          "note": "وَٱلصَّيْفِ: yaa sakinah after fathah; stop on ف."
+        },
+        {
+          "ref": "106:3",
+          "all": true,
+          "note": "ٱلْبَيْتِ: stop on ت."
+        },
+        {
+          "ref": "106:4",
+          "at": "من خوف",
+          "note": "خَوْفٍ: waw sakinah after fathah; stop on ف."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Which letters make a madd leen?",
+          "a": "A waw sakinah or yaa sakinah preceded by a fathah, when you stop on the letter right after them."
+        }
+      ]
+    },
+    {
+      "id": "madd-badal",
+      "title": "Substitute Madd",
+      "arabic": "مد البدل",
+      "meaning": "The substitute prolongation",
+      "summary": "When a hamza comes BEFORE the madd letter in the same word, the madd stays natural: 2 counts.",
+      "explain": [
+        "Badal means 'substitute': in the old spelling, a second hamza with a sukun was replaced by a madd letter. So ءَامَنَ comes from أَأْمَنَ.",
+        "In Hafs 'an 'Asim it is simply 2 counts, exactly like natural madd.",
+        "Examples: ءَامَنُوا, أُوتُوا, إِيمَـٰنًا. Same light blue as natural madd."
+      ],
+      "counts": "2 counts",
+      "colors": [
+        "madda_normal"
+      ],
+      "expect": [
+        "madda_normal"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Say the hamza clearly.",
+        "Hold the madd letter after it for 2 counts."
+      ],
+      "spot": "The hamza comes first, then the madd letter, in the same word.",
+      "tips": [
+        "Hamza BEFORE the madd letter = 2 counts. Hamza AFTER the madd letter = 4 to 5 counts."
+      ],
+      "mistakes": [
+        "Mixing it up with muttasil and stretching it to 4 or 5 counts."
+      ],
+      "examples": [
+        {
+          "ref": "103:3",
+          "at": "امنوا",
+          "note": "ءَامَنُواْ: hamza, then alif."
+        },
+        {
+          "ref": "106:4",
+          "at": "وامنهم",
+          "note": "وَءَامَنَهُم: hamza, then alif."
+        },
+        {
+          "ref": "98:4",
+          "at": "اوتوا الكتاب",
+          "note": "أُوتُواْ: hamza, then waw."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How do you tell Madd Badal from Madd Muttasil?",
+          "a": "Badal: the hamza comes BEFORE the madd letter (2 counts). Muttasil: the hamza comes AFTER the madd letter (4 to 5 counts)."
+        }
+      ]
+    },
+    {
+      "id": "madd-lazim",
+      "title": "Necessary Madd",
+      "arabic": "المد اللازم",
+      "meaning": "The necessary prolongation",
+      "summary": "A madd letter followed by a sukun or shaddah in the same word is always stretched 6 counts.",
+      "explain": [
+        "Lazim means 'necessary': every accepted recitation gives it the full 6 counts, and it never changes.",
+        "The most common kind is the madd letter followed by a doubled letter in the same word: ٱلضَّآلِّينَ, ٱلْحَآقَّةُ, ٱلصَّآخَّةُ.",
+        "The opening letters of some surahs have it too. In الٓمٓ, the middle of لام is held for 6 counts.",
+        "Deep navy in this course: the longest madd gets the deepest color."
+      ],
+      "counts": "6 counts",
+      "colors": [
+        "madda_necessary"
+      ],
+      "expect": [
+        "madda_necessary"
+      ],
+      "identify": "Which madd is this?",
+      "how": [
+        "Hold the madd letter for a full 6 counts.",
+        "Then say the doubled letter firmly."
+      ],
+      "spot": "Deep navy. A madd sign over the letter, followed by a letter with a shaddah.",
+      "tips": [
+        "It is the longest and the most important madd to get right: never shorten it."
+      ],
+      "mistakes": [
+        "Cutting it short to 4 counts."
+      ],
+      "examples": [
+        {
+          "ref": "1:7",
+          "at": "ولا الضالين",
+          "note": "ٱلضَّآلِّينَ: alif then a doubled lam."
+        },
+        {
+          "ref": "69:1",
+          "all": true,
+          "note": "ٱلْحَآقَّةُ: alif then a doubled qaf."
+        },
+        {
+          "ref": "80:33",
+          "at": "الصاخة",
+          "note": "ٱلصَّآخَّةُ: alif then a doubled kha."
+        },
+        {
+          "ref": "79:34",
+          "at": "الطامة الكبرى",
+          "note": "ٱلطَّآمَّةُ: alif then a doubled meem."
+        },
+        {
+          "ref": "2:1",
+          "all": true,
+          "note": "الٓمٓ: 6 counts on the lam and meem."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How long is the necessary madd (madd lazim)?",
+          "a": "Always 6 counts."
+        },
+        {
+          "q": "What follows the madd letter in a madd lazim?",
+          "a": "A sukun or a shaddah in the same word (most often a doubled letter)."
+        }
+      ]
+    },
+    {
+      "id": "madd-silah",
+      "title": "Connecting Madd (Silah)",
+      "arabic": "مد الصلة",
+      "meaning": "The madd of connection",
+      "summary": "The pronoun هُ or هِ sitting between two vowelled letters is stretched into 'huu' or 'hee'.",
+      "explain": [
+        "Silah means 'connection'. A pronoun haa ('him, his, it') between two vowelled letters gets a small waw (ۥ) or small yaa (ۦ).",
+        "Silah sughra (minor): the next letter is NOT a hamza. Stretch 2 counts, like natural madd.",
+        "Silah kubra (major): the next word begins with a hamza. Stretch 4 to 5 counts. The Mushaf adds a madd sign over the small letter (ۥٓ).",
+        "If the letter before the haa has a sukun (like مِنْهُ), there is no silah."
+      ],
+      "counts": "2 counts (minor), 4 to 5 counts (major)",
+      "colors": [
+        "madda_normal",
+        "madda_obligatory"
+      ],
+      "expect": [
+        "madda_normal",
+        "madda_obligatory"
+      ],
+      "identify": null,
+      "how": [
+        "Say هُ or هِ, then stretch it into a small waw or yaa.",
+        "Give 2 counts normally, or 4 to 5 if a hamza follows."
+      ],
+      "spot": "A small waw or yaa after the pronoun haa.",
+      "tips": [
+        "Check the letter before the haa: it must have a vowel for silah."
+      ],
+      "mistakes": [
+        "Adding silah after a letter with a sukun.",
+        "Using 2 counts before a hamza."
+      ],
+      "examples": [
+        {
+          "ref": "69:33",
+          "at": "انه كان",
+          "note": "إِنَّهُۥ كَانَ: silah sughra, 2 counts."
+        },
+        {
+          "ref": "111:2",
+          "at": "ماله وما كسب",
+          "note": "مَالُهُۥ وَمَا: silah sughra, 2 counts."
+        },
+        {
+          "ref": "92:7",
+          "at": "فسنيسره لليسرى",
+          "note": "فَسَنُيَسِّرُهُۥ لِلْيُسْرَىٰ: silah sughra."
+        },
+        {
+          "ref": "104:3",
+          "at": "ماله اخلده",
+          "note": "مَالَهُۥٓ أَخْلَدَهُۥ: silah kubra, 4 to 5 counts."
+        },
+        {
+          "ref": "69:37",
+          "at": "يأكله الا",
+          "note": "يَأْكُلُهُۥٓ إِلَّا: silah kubra, 4 to 5 counts."
+        }
+      ],
+      "cards": [
+        {
+          "q": "When is the pronoun haa (هُ / هِ) stretched into silah?",
+          "a": "When it sits between two vowelled letters. If the letter before it has a sukun, there is no silah."
+        },
+        {
+          "q": "How long is silah sughra, and silah kubra?",
+          "a": "Sughra (next letter is not a hamza): 2 counts. Kubra (next word starts with a hamza): 4 to 5 counts."
+        }
+      ]
+    }
+  ]
+}

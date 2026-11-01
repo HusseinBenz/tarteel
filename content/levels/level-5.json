@@ -1,0 +1,260 @@
+{
+  "level": 5,
+  "slug": "heavy-light",
+  "title": "Heavy, Light and Where Sounds Come From",
+  "emoji": "🎚️",
+  "tagline": "Tafkhim and tarqiq: full and thin letters, plus the map of the mouth.",
+  "intro": "Some letters are said with a full, deep sound (heavy, tafkhim) and some with a thin, light sound (tarqiq). A few letters can be either, depending on their surroundings: ra and the lam of Allah. We finish with the map of where every letter is born in the mouth.",
+  "lessons": [
+    {
+      "id": "heavy-letters",
+      "title": "Heavy Letters",
+      "arabic": "حروف الاستعلاء",
+      "meaning": "The letters of elevation",
+      "summary": "Seven letters are always heavy: the back of the tongue rises toward the roof of the mouth and the sound is full and deep.",
+      "explain": [
+        "The seven heavy letters (huroof al-isti'la) are خ ص ض غ ط ق ظ. A phrase to remember them: خُصَّ ضَغْطٍ قِظْ.",
+        "To say them heavy, raise the back of the tongue toward the soft palate, round the lips a little, and keep the sound deep. Compare ص (heavy) with س (light), or ط with ت.",
+        "They stay heavy whatever vowel they carry, and they can make a neighboring alif sound fuller as well."
+      ],
+      "letters": "خ ص ض غ ط ق ظ",
+      "letters_label": "The 7 heavy letters",
+      "colors": [],
+      "check": "heavy",
+      "identify": null,
+      "how": [
+        "Raise the back of the tongue.",
+        "Keep the sound deep and full, with no thinning, even with a kasrah."
+      ],
+      "spot": "Any of خ ص ض غ ط ق ظ. There is no color for this rule.",
+      "tips": [
+        "Say سَ then صَ to hear and feel the difference."
+      ],
+      "mistakes": [
+        "Thinning a heavy letter when it has a kasrah, such as صِ or قِ."
+      ],
+      "examples": [
+        {
+          "ref": "1:7",
+          "at": "المغضوب عليهم",
+          "note": "ٱلْمَغْضُوبِ: غ and ض are heavy."
+        },
+        {
+          "ref": "96:1",
+          "all": true,
+          "note": "ٱقْرَأْ and خَلَقَ: ق and خ are heavy."
+        },
+        {
+          "ref": "113:1",
+          "all": true,
+          "note": "قُلْ and ٱلْفَلَقِ: ق is heavy twice."
+        },
+        {
+          "ref": "105:3",
+          "all": true,
+          "note": "طَيْرًا: ط is heavy."
+        },
+        {
+          "ref": "108:2",
+          "all": true,
+          "note": "فَصَلِّ: ص is heavy."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Name the seven heavy letters.",
+          "a": "خ ص ض غ ط ق ظ (خُصَّ ضَغْطٍ قِظْ)."
+        },
+        {
+          "q": "Is a heavy letter still heavy when it has a kasrah?",
+          "a": "Yes. Heavy letters stay heavy whatever vowel they carry (for example the ص in صِرَٲطَ)."
+        }
+      ]
+    },
+    {
+      "id": "ra-rules",
+      "title": "The Ra (ر)",
+      "arabic": "أحكام الراء",
+      "meaning": "Heavy or light ra",
+      "summary": "Ra is heavy (full) or light (thin) depending on its vowel and on the letter before it.",
+      "explain": [
+        "Heavy ra (tafkhim): a ra with a fathah or dammah (رَ رُ), and a ra sakinah after a fathah or dammah, as in أَرْسَلَ and يُرْزَقُونَ.",
+        "Light ra (tarqiq): a ra with a kasrah (رِ), and a ra sakinah after a kasrah, as in فِرْعَوْنَ.",
+        "Exception: a ra sakinah after a kasrah is heavy if a heavy letter (خ ص ض غ ط ق ظ) follows it in the same word, as in قِرْطَاسٍ.",
+        "Rules for stopping on a ra have a few more details. Ask your teacher once you are comfortable with these basics."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Look at the vowel on the ra, and if it has a sukun, at the vowel before it.",
+        "Fathah or dammah means heavy. Kasrah means light."
+      ],
+      "spot": "Look at the vowel on or before the ra. There is no color for this rule.",
+      "tips": [
+        "Heavy sounds like 'raw', light sounds like 'ree' (with the tongue tip lightly tapping)."
+      ],
+      "mistakes": [
+        "Thinning a heavy ra, or making a light ra too full."
+      ],
+      "examples": [
+        {
+          "ref": "1:2",
+          "at": "رب العالمين",
+          "note": "رَبِّ: ra with fathah, heavy."
+        },
+        {
+          "ref": "105:3",
+          "at": "وارسل عليهم",
+          "note": "وَأَرْسَلَ: ra sakinah after fathah, heavy."
+        },
+        {
+          "ref": "113:2",
+          "all": true,
+          "note": "شَرِّ: ra with kasrah, light."
+        },
+        {
+          "ref": "79:17",
+          "all": true,
+          "note": "فِرْعَوْنَ: ra sakinah after kasrah, light."
+        },
+        {
+          "ref": "24:37",
+          "at": "رجال",
+          "note": "رِجَالٌ: ra with kasrah, light."
+        }
+      ],
+      "cards": [
+        {
+          "q": "When is ra heavy?",
+          "a": "When it has a fathah or dammah, or is sakin after a fathah or dammah."
+        },
+        {
+          "q": "When is ra light?",
+          "a": "When it has a kasrah, or is sakin after a kasrah (unless a heavy letter follows in the same word)."
+        }
+      ]
+    },
+    {
+      "id": "lam-allah",
+      "title": "The Lam of Allah (ٱللَّه)",
+      "arabic": "لام لفظ الجلالة",
+      "meaning": "Heavy or light lam in the name Allah",
+      "summary": "The lam in the name Allah is heavy after a fathah or dammah, and light after a kasrah.",
+      "explain": [
+        "Heavy after a fathah or dammah: قَالَ ٱللَّهُ, هُوَ ٱللَّهُ. Also when you begin on the name.",
+        "Light after a kasrah: بِسْمِ ٱللَّهِ, ٱلْحَمْدُ لِلَّهِ.",
+        "Every other lam in the Quran is light."
+      ],
+      "colors": [],
+      "check": "lam_allah",
+      "identify": null,
+      "how": [
+        "Look at the vowel before the name.",
+        "Fathah or dammah: full lam. Kasrah: thin lam."
+      ],
+      "spot": "The vowel on the letter just before the name Allah. There is no color for this rule.",
+      "tips": [
+        "Bismillah is light; qul huwallahu is heavy."
+      ],
+      "mistakes": [
+        "Making the lam heavy in Bismillah, or light in Qul huwallahu."
+      ],
+      "examples": [
+        {
+          "ref": "1:1",
+          "at": "بسم الله",
+          "note": "After a kasrah: light lam."
+        },
+        {
+          "ref": "1:2",
+          "at": "الحمد لله",
+          "note": "After a kasrah: light lam."
+        },
+        {
+          "ref": "112:1",
+          "at": "هو الله احد",
+          "note": "After a fathah: heavy lam."
+        },
+        {
+          "ref": "112:2",
+          "all": true,
+          "note": "Starting on the name: heavy lam."
+        },
+        {
+          "ref": "110:1",
+          "all": true,
+          "note": "نَصْرُ ٱللَّهِ: after a dammah, heavy lam."
+        }
+      ],
+      "cards": [
+        {
+          "q": "When is the lam of Allah heavy?",
+          "a": "After a fathah or dammah (and when starting on the name)."
+        },
+        {
+          "q": "When is the lam of Allah light?",
+          "a": "After a kasrah, as in بِسْمِ ٱللَّهِ."
+        }
+      ]
+    },
+    {
+      "id": "makharij",
+      "title": "Where Letters Come From",
+      "arabic": "مخارج الحروف",
+      "meaning": "The points of articulation",
+      "summary": "Every Arabic letter has a home in the mouth. There are 17 homes grouped into 5 areas.",
+      "explain": [
+        "1. Al-Jawf (the open space of the mouth and throat): the three long-vowel letters ا و ي.",
+        "2. Al-Halq (the throat) in 3 zones: deepest ء ه, middle ع ح, nearest غ خ.",
+        "3. Al-Lisan (the tongue) holds 18 letters in 10 spots: ق ك | ج ش ي | ض | ل | ن | ر | ط د ت | ص س ز | ظ ذ ث.",
+        "4. Ash-Shafatan (the lips): ف from the lower lip and upper teeth, ب م و from the lips.",
+        "5. Al-Khayshum (the nasal passage): the ghunnah."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Practice each letter on its own, slowly, in front of a mirror.",
+        "Add a fathah and a sukun: أَبْ أَتْ أَثْ ..."
+      ],
+      "tips": [
+        "Say each letter with a sukun after a short hamza (like أَبْ) to feel exactly where it lands."
+      ],
+      "showcase": [
+        {
+          "ref": "1:7",
+          "at": "انعمت",
+          "note": "ع from the middle of the throat."
+        },
+        {
+          "ref": "112:1",
+          "all": true,
+          "note": "ق from the back of the tongue, ه from deep in the throat."
+        },
+        {
+          "ref": "111:1",
+          "at": "تبت",
+          "note": "ب from the lips, ت from the tongue tip."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How many articulation points (makharij) are there, in how many areas?",
+          "a": "17 points in 5 areas: the open space (jawf), throat (halq), tongue (lisan), lips (shafatan) and nasal passage (khayshum)."
+        },
+        {
+          "q": "Which letters come from the throat?",
+          "a": "ء ه (deepest), ع ح (middle), غ خ (nearest)."
+        },
+        {
+          "q": "Which letters come from the lips?",
+          "a": "ف (lower lip + upper teeth), ب م و (the lips)."
+        },
+        {
+          "q": "Which letters come from the open space (al-jawf)?",
+          "a": "The three long-vowel letters: ا و ي."
+        }
+      ],
+      "auto_cards": false
+    }
+  ]
+}

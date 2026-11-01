@@ -1,0 +1,373 @@
+{
+  "title": "Rule Symbols",
+  "groups": [
+    {
+      "id": "marks",
+      "title": "Vowels & Basic Marks",
+      "emoji": "✏️",
+      "blurb": "The tiny marks that tell your voice what to do on every letter.",
+      "items": [
+        {
+          "id": "fathah",
+          "glyph": "ـَ",
+          "name": "Fathah",
+          "arabic": "الفتحة",
+          "meaning": "A small slanted stroke ABOVE a letter.",
+          "action": "Say a short 'a' for 1 count: بَ = ba.",
+          "example": {
+            "ref": "105:1",
+            "at": "فعل ربك",
+            "note": "Fa-'a-la: three fathahs."
+          }
+        },
+        {
+          "id": "kasrah",
+          "glyph": "ـِ",
+          "name": "Kasrah",
+          "arabic": "الكسرة",
+          "meaning": "A small slanted stroke BELOW a letter.",
+          "action": "Say a short 'i' for 1 count: بِ = bi.",
+          "example": {
+            "ref": "1:1",
+            "at": "بسم",
+            "note": "Bi and mi both carry a kasrah."
+          }
+        },
+        {
+          "id": "dammah",
+          "glyph": "ـُ",
+          "name": "Dammah",
+          "arabic": "الضمة",
+          "meaning": "A tiny waw-shaped mark ABOVE a letter.",
+          "action": "Say a short 'u' for 1 count: بُ = bu.",
+          "example": {
+            "ref": "112:1",
+            "at": "قل هو",
+            "note": "Qu and hu carry a dammah."
+          }
+        },
+        {
+          "id": "sukun",
+          "glyph": "ـۡ",
+          "name": "Sukun",
+          "arabic": "السكون",
+          "meaning": "A small open-headed circle above a letter. Many printed books use a plain small circle (ـْ).",
+          "action": "No vowel: join the letter to the one before it.",
+          "example": {
+            "ref": "1:5",
+            "at": "نعبد",
+            "note": "The ayn carries a sukun."
+          }
+        },
+        {
+          "id": "shaddah",
+          "glyph": "ـّ",
+          "name": "Shaddah",
+          "arabic": "الشدة",
+          "meaning": "A tiny w-shaped mark above a letter.",
+          "action": "Double the letter: press, then release into its vowel.",
+          "example": {
+            "ref": "1:2",
+            "at": "لله",
+            "note": "Lil-lah: a doubled lam."
+          }
+        },
+        {
+          "id": "fathatan",
+          "glyph": "ـً",
+          "name": "Fathatan",
+          "arabic": "تنوين الفتح",
+          "meaning": "Two fathahs on the last letter of a noun.",
+          "action": "Say '-an'. When you stop, it becomes a long 'aa'.",
+          "example": {
+            "ref": "112:4",
+            "at": "كفوا",
+            "note": "Ku-fu-wan."
+          }
+        },
+        {
+          "id": "kasratan",
+          "glyph": "ـٍ",
+          "name": "Kasratan",
+          "arabic": "تنوين الكسر",
+          "meaning": "Two kasrahs on the last letter of a noun.",
+          "action": "Say '-in'. It is dropped when you stop.",
+          "example": {
+            "ref": "103:2",
+            "at": "خسر",
+            "note": "Khus-rin."
+          }
+        },
+        {
+          "id": "dammatan",
+          "glyph": "ـٌ",
+          "name": "Dammatan",
+          "arabic": "تنوين الضم",
+          "meaning": "Two dammahs on the last letter of a noun.",
+          "action": "Say '-un'. It is dropped when you stop.",
+          "example": {
+            "ref": "112:1",
+            "at": "احد",
+            "note": "A-ha-dun, but you stop and say 'aḥad'."
+          }
+        }
+      ]
+    },
+    {
+      "id": "madd-signs",
+      "title": "Madd & Little Letters",
+      "emoji": "🌊",
+      "blurb": "Signs that stretch a sound, skip a letter, or change a noon into a meem.",
+      "items": [
+        {
+          "id": "maddah",
+          "glyph": "ـٓ",
+          "name": "Madd sign",
+          "arabic": "علامة المد",
+          "meaning": "A small wavy sign above an alif, waw or yaa.",
+          "action": "Stretch the letter beyond 2 counts. How long depends on the rule (4 to 5 or 6 counts).",
+          "example": {
+            "ref": "69:16",
+            "at": "السماء",
+            "note": "ٱلسَّمَآءُ: the sign tells you to stretch."
+          }
+        },
+        {
+          "id": "dagger-alif",
+          "glyph": "ـٰ",
+          "name": "Dagger alif",
+          "arabic": "الألف الخنجرية",
+          "meaning": "A tiny upright stroke above a letter.",
+          "action": "Read it as a long 'aa' for 2 counts.",
+          "example": {
+            "ref": "1:3",
+            "all": true,
+            "note": "Ar-raḥ-maa-ni."
+          }
+        },
+        {
+          "id": "small-waw",
+          "glyph": "ـۥ",
+          "name": "Small waw",
+          "arabic": "الواو الصغيرة",
+          "meaning": "A small waw after the pronoun هُ.",
+          "action": "Stretch 'hu' into 'huu' for 2 counts.",
+          "example": {
+            "ref": "112:4",
+            "at": "له",
+            "note": "Lahuu."
+          }
+        },
+        {
+          "id": "small-yaa",
+          "glyph": "ـۦ",
+          "name": "Small yaa",
+          "arabic": "الياء الصغيرة",
+          "meaning": "A small yaa after the pronoun هِ.",
+          "action": "Stretch 'hi' into 'hee' for 2 counts.",
+          "example": {
+            "ref": "100:4",
+            "at": "فاثرن به",
+            "note": "Bihee."
+          }
+        },
+        {
+          "id": "alif-wasl",
+          "glyph": "ٱ",
+          "name": "Alif of joining",
+          "arabic": "همزة الوصل",
+          "meaning": "An alif with a small head on top.",
+          "action": "Say it only when you START on it. Skip it when joined to the previous word.",
+          "example": {
+            "ref": "1:1",
+            "at": "بسم الله",
+            "note": "The alif of ٱللَّهِ disappears."
+          }
+        },
+        {
+          "id": "round-zero",
+          "glyph": "ـ۟",
+          "name": "Small round zero",
+          "arabic": "الصفر المستدير",
+          "meaning": "A small round zero above a letter.",
+          "action": "The letter is written but not pronounced.",
+          "example": {
+            "ref": "103:3",
+            "at": "امنوا وعملوا",
+            "note": "Two silent alifs."
+          }
+        },
+        {
+          "id": "small-meem-above",
+          "glyph": "ـۢ",
+          "name": "Small meem (above)",
+          "arabic": "الميم الصغيرة",
+          "meaning": "A tiny meem above a noon sakinah or tanween that is followed by ب.",
+          "action": "Iqlab: say a hidden meem and hum for 2 counts.",
+          "example": {
+            "ref": "67:11",
+            "at": "بذنبهم",
+            "note": "Dhambihim: the noon becomes a meem."
+          }
+        },
+        {
+          "id": "small-meem-below",
+          "glyph": "ـۭ",
+          "name": "Small meem (below)",
+          "arabic": "الميم الصغيرة السفلى",
+          "meaning": "A tiny meem under a kasratan that is followed by ب.",
+          "action": "Iqlab: say a hidden meem and hum for 2 counts.",
+          "example": {
+            "ref": "2:176",
+            "at": "شقاق بعيد",
+            "note": "Shiqaaqin ba'eed: the tanween becomes a meem."
+          }
+        }
+      ]
+    },
+    {
+      "id": "stop-signs",
+      "title": "Stop Signs",
+      "emoji": "🚦",
+      "blurb": "The little signs above words that tell you when to stop and when to go on.",
+      "items": [
+        {
+          "id": "stop-lazim",
+          "glyph": "ـۘ",
+          "name": "Must stop (meem)",
+          "arabic": "الوقف اللازم (م)",
+          "meaning": "A small meem above a word.",
+          "action": "You must stop. Continuing could change the meaning.",
+          "example": {
+            "ref": "54:6",
+            "at": "فتول عنهم",
+            "note": "Stop after عَنْهُمْ."
+          }
+        },
+        {
+          "id": "stop-laa",
+          "glyph": "ـۙ",
+          "name": "Do not stop (laa)",
+          "arabic": "لا",
+          "meaning": "The word لا (no) above a word.",
+          "action": "Do not stop here. If you must, go back a few words and restart.",
+          "example": {
+            "ref": "15:60",
+            "at": "الا امراته قدرنا",
+            "note": "Continue past قَدَّرْنَآ."
+          }
+        },
+        {
+          "id": "stop-jaiz",
+          "glyph": "ـۚ",
+          "name": "Either is fine (jeem)",
+          "arabic": "الوقف الجائز (ج)",
+          "meaning": "A small jeem above a word.",
+          "action": "Stopping and continuing are equally fine.",
+          "example": {
+            "ref": "26:11",
+            "at": "قوم فرعون",
+            "note": "Either is fine after فِرْعَوْنَ."
+          }
+        },
+        {
+          "id": "stop-qala",
+          "glyph": "ـۗ",
+          "name": "Stopping is better (qalaa)",
+          "arabic": "قلى",
+          "meaning": "The word قلى above a word.",
+          "action": "Stopping is better than continuing, but you may continue.",
+          "example": {
+            "ref": "37:138",
+            "all": true,
+            "note": "Stop after وَبِٱلَّيْلِ."
+          }
+        },
+        {
+          "id": "stop-sala",
+          "glyph": "ـۖ",
+          "name": "Continuing is better (salaa)",
+          "arabic": "صلى",
+          "meaning": "The word صلى above a word.",
+          "action": "Continuing is better than stopping, but you may stop.",
+          "example": {
+            "ref": "37:24",
+            "all": true,
+            "note": "Prefer to continue after وَقِفُوهُمْ."
+          }
+        },
+        {
+          "id": "stop-muanaqah",
+          "glyph": "ـۛ",
+          "name": "Stop at one of two (three dots)",
+          "arabic": "المعانقة",
+          "meaning": "Three dots appear in two places close to each other.",
+          "action": "Stop at one of the two places, but not both.",
+          "example": {
+            "ref": "2:2",
+            "all": true,
+            "note": "Stop after رَيْبَ or after فِيهِ, not both."
+          }
+        },
+        {
+          "id": "stop-saktah",
+          "glyph": "ـۜ",
+          "name": "Short pause (seen)",
+          "arabic": "السكتة (س)",
+          "meaning": "A small seen above a word.",
+          "action": "Pause briefly without taking a breath.",
+          "example": {
+            "ref": "75:27",
+            "all": true,
+            "note": "Pause briefly after مَنْ."
+          }
+        }
+      ]
+    },
+    {
+      "id": "other-signs",
+      "title": "Other Signs",
+      "emoji": "🌟",
+      "blurb": "Markers for the end of a verse, a prostration, and a section of the Quran.",
+      "items": [
+        {
+          "id": "ayah-end",
+          "glyph": "۝",
+          "name": "End of verse",
+          "arabic": "علامة نهاية الآية",
+          "meaning": "A circle with the verse number inside.",
+          "action": "Marks the end of a verse. It is always a safe place to stop."
+        },
+        {
+          "id": "sajdah",
+          "glyph": "۩",
+          "name": "Prostration of recitation",
+          "arabic": "علامة السجدة",
+          "meaning": "A sign after a verse that mentions prostration.",
+          "action": "Marks a verse where the prostration of recitation (sujood at-tilawah) is made.",
+          "example": {
+            "ref": "96:19",
+            "all": true,
+            "note": "The sajdah sign ends this verse."
+          }
+        },
+        {
+          "id": "hizb",
+          "glyph": "۞",
+          "name": "Quarter-hizb marker",
+          "arabic": "علامة الربع",
+          "meaning": "A decorative star at the start of a verse.",
+          "action": "Marks the start of a quarter of a hizb, one of the divisions of the Quran.",
+          "example": {
+            "ref": "3:33",
+            "words": [
+              1,
+              3
+            ],
+            "note": "The star sits before إِنَّ."
+          }
+        }
+      ]
+    }
+  ]
+}

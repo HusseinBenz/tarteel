@@ -1,0 +1,511 @@
+{
+  "level": 1,
+  "slug": "noon-sakinah-tanween",
+  "title": "Noon Sakinah & Tanween",
+  "emoji": "🌙",
+  "tagline": "Four friendly rules decided by the letter that comes next.",
+  "intro": "The silent noon (نْ) and tanween are the most common sources of tajweed rules in the Quran. The good news: there are only four behaviors, and the next letter tells you which one to use.",
+  "lessons": [
+    {
+      "id": "noon-overview",
+      "title": "The Four Rules at a Glance",
+      "arabic": "أحكام النون الساكنة والتنوين",
+      "meaning": "Rulings of the silent noon and tanween",
+      "summary": "A noon with a sukun (نْ) or a tanween behaves in one of four ways, depending only on the letter that follows it.",
+      "explain": [
+        "Noon sakinah is a noon carrying a sukun (نْ). It can sit in the middle or at the end of a word. Tanween (ـً ـٍ ـٌ) sounds like a noon sakinah at the end of a noun.",
+        "Everything depends on the NEXT letter. The Arabic alphabet splits into four groups for this purpose:",
+        "1. Idhhar (clarity) before the 6 throat letters: ء ه ع ح غ خ.",
+        "2. Idgham (merging) before 6 letters: ي ر م ل و ن, remembered as 'yarmaloon' (يرملون). Four of them (ي ن م و) merge WITH a nasal hum; two (ل ر) merge WITHOUT it.",
+        "3. Iqlab (flipping) before the letter ب.",
+        "4. Ikhfa (hiding) before the remaining 15 letters: ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك."
+      ],
+      "how": [
+        "Spot a noon sakinah or a tanween.",
+        "Look at the first letter of what comes next.",
+        "Pick the rule from the four groups above."
+      ],
+      "tips": [
+        "Memorize 'yarmaloon' (يرملون): those are the Idgham letters.",
+        "Idhhar letters all come from the throat."
+      ],
+      "identify": null,
+      "showcase": [
+        {
+          "ref": "67:14",
+          "at": "من خلق",
+          "note": "Idhhar: noon meets خ (a throat letter)."
+        },
+        {
+          "ref": "68:10",
+          "at": "حلاف مهين",
+          "note": "Idgham with ghunnah: tanween meets م."
+        },
+        {
+          "ref": "67:11",
+          "at": "بذنبهم",
+          "note": "Iqlab: noon meets ب."
+        },
+        {
+          "ref": "67:1",
+          "at": "شيء قدير",
+          "note": "Ikhfa: tanween meets ق."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How many rules do a noon sakinah and tanween have?",
+          "a": "Four: Idhhar (clarity), Idgham (merging), Iqlab (flipping) and Ikhfa (hiding)."
+        },
+        {
+          "q": "What decides which noon sakinah / tanween rule applies?",
+          "a": "The letter that comes right after it."
+        },
+        {
+          "q": "Which letters trigger Idgham?",
+          "a": "ي ر م ل و ن, remembered as 'yarmaloon' (يرملون)."
+        },
+        {
+          "q": "Which letters trigger Idhhar?",
+          "a": "The six throat letters: ء ه ع ح غ خ."
+        },
+        {
+          "q": "Which single letter triggers Iqlab?",
+          "a": "ب (ba)."
+        },
+        {
+          "q": "How many letters trigger Ikhfa?",
+          "a": "Fifteen: ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك."
+        }
+      ],
+      "auto_cards": false
+    },
+    {
+      "id": "idhhar",
+      "title": "Idhhar Halqi",
+      "arabic": "الإظهار الحلقي",
+      "meaning": "Clear pronunciation from the throat",
+      "summary": "Before a throat letter, say the noon or tanween clearly and cleanly, with no merging and no nasal hum.",
+      "explain": [
+        "Idhhar means 'making clear'. The throat letters are made deep in the throat, far from the tongue-tip where the noon is made, so the two sounds cannot blend.",
+        "You simply pronounce the noon sakinah (or the 'n' of the tanween) fully, then move on to the throat letter.",
+        "Idhhar has no color in the Mushaf: a plain noon is the clue."
+      ],
+      "letters": "ء ه ع ح غ خ",
+      "letters_label": "The 6 throat letters",
+      "counts": "No ghunnah, no merging",
+      "colors": [],
+      "check": "idhhar",
+      "identify": "What happens to the noon sakinah or tanween here?",
+      "how": [
+        "Pronounce the noon (or the tanween's 'n') fully and clearly.",
+        "Go straight into the throat letter without humming through the nose."
+      ],
+      "spot": "Find a noon with sukun or a tanween, then check whether the next letter is one of ء ه ع ح غ خ. It can also happen inside a word, as in مِنْهُ and أَنْعَمْتَ.",
+      "tips": [
+        "The throat letters in order from deepest to nearest: ء ه, then ع ح, then غ خ."
+      ],
+      "mistakes": [
+        "Humming through the nose before a throat letter.",
+        "Merging the noon into the throat letter."
+      ],
+      "examples": [
+        {
+          "ref": "67:14",
+          "at": "من خلق",
+          "note": "Noon sakinah + خ."
+        },
+        {
+          "ref": "68:4",
+          "at": "خلق عظيم",
+          "note": "Tanween + ع."
+        },
+        {
+          "ref": "69:47",
+          "at": "من احد",
+          "note": "Noon sakinah + hamza."
+        },
+        {
+          "ref": "1:7",
+          "at": "انعمت",
+          "note": "Noon sakinah + ع, inside the same word."
+        },
+        {
+          "ref": "69:45",
+          "at": "منه",
+          "note": "Noon sakinah + ه, inside the same word."
+        },
+        {
+          "ref": "93:10",
+          "at": "تنهر",
+          "note": "Noon sakinah + ه, inside the same word."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Why can't the noon merge into a throat letter?",
+          "a": "The throat letters are made far from where the noon is made (the tongue tip), so the two sounds are too far apart to blend. We pronounce the noon clearly instead."
+        }
+      ]
+    },
+    {
+      "id": "idgham-ghunnah",
+      "title": "Idgham with Ghunnah",
+      "arabic": "الإدغام بغنة",
+      "meaning": "Merging with a nasal hum",
+      "summary": "Before ي ن م و, the noon or tanween melts into the next letter while you hum through the nose for 2 counts.",
+      "explain": [
+        "Idgham means 'entering into'. The noon (or tanween) dissolves into the letter that follows, so that letter is said doubled, but you keep a nasal hum (ghunnah) while doing it.",
+        "The four letters are ي ن م و, remembered as 'yanmoo' (ينمو).",
+        "The noon and the next letter must be in TWO different words. If both sit in the same word (دُنْيَا, بُنْيَـٰن, صِنْوَان, قِنْوَان), the noon stays clear. These four words are the only exceptions."
+      ],
+      "letters": "ي ن م و",
+      "letters_label": "The 4 letters of 'yanmoo'",
+      "counts": "2 counts of ghunnah",
+      "colors": [
+        "idgham_ghunnah"
+      ],
+      "expect": [
+        "idgham_ghunnah"
+      ],
+      "identify": "What happens to the noon sakinah or tanween here?",
+      "how": [
+        "Do not pronounce the noon or the tanween's 'n' as a separate sound.",
+        "Say the next letter doubled and hum through the nose for 2 counts."
+      ],
+      "spot": "Teal in this course. In the Mushaf the noon is left bare (no sukun), because it is not pronounced.",
+      "tips": [
+        "Ghunnah lasts about as long as a natural madd: 2 counts."
+      ],
+      "mistakes": [
+        "Pronouncing the noon and then the next letter.",
+        "Forgetting the nasal hum."
+      ],
+      "examples": [
+        {
+          "ref": "68:10",
+          "at": "حلاف مهين",
+          "note": "Tanween + م."
+        },
+        {
+          "ref": "4:68",
+          "at": "صراطا مستقيما",
+          "note": "Tanween + م."
+        },
+        {
+          "ref": "7:107",
+          "at": "ثعبان مبين",
+          "note": "Tanween + م."
+        },
+        {
+          "ref": "4:1",
+          "at": "من نفس",
+          "note": "Noon sakinah + ن."
+        },
+        {
+          "ref": "67:7",
+          "at": "شهيقا وهي",
+          "note": "Tanween + و."
+        },
+        {
+          "ref": "68:30",
+          "at": "بعض يتلاومون",
+          "note": "Tanween + ي."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Why are دُنْيَا and بُنْيَـٰن read with a clear noon?",
+          "a": "The noon and the yaa/waw are in the same word. Idgham needs two separate words. (The four exceptions: دُنْيَا, بُنْيَـٰن, صِنْوَان, قِنْوَان.)"
+        }
+      ]
+    },
+    {
+      "id": "idgham-bila-ghunnah",
+      "title": "Idgham without Ghunnah",
+      "arabic": "الإدغام بغير غنة",
+      "meaning": "Merging with no nasal hum",
+      "summary": "Before ل and ر, the noon or tanween melts completely into the letter, with no nasal hum at all.",
+      "explain": [
+        "Here the merge is total. The noon disappears and the lam or ra is pronounced doubled and firm, with no sound through the nose.",
+        "In the Mushaf the lam or ra carries a shaddah (مِّن رَّبِّكَ), showing that the merging is complete."
+      ],
+      "letters": "ل ر",
+      "letters_label": "The 2 letters",
+      "counts": "No ghunnah",
+      "colors": [
+        "idgham_wo_ghunnah"
+      ],
+      "expect": [
+        "idgham_wo_ghunnah"
+      ],
+      "identify": "What happens to the noon sakinah or tanween here?",
+      "how": [
+        "Skip the noon completely.",
+        "Say the lam or ra doubled, firmly, with no hum."
+      ],
+      "spot": "Green in this course. Look for a shaddah on the ل or ر right after a noon sakinah or tanween.",
+      "tips": [
+        "The two letters are ل and ر: just remember 'lam and ra'."
+      ],
+      "mistakes": [
+        "Adding a ghunnah before lam or ra."
+      ],
+      "examples": [
+        {
+          "ref": "2:2",
+          "at": "هدى للمتقين",
+          "note": "Tanween + ل."
+        },
+        {
+          "ref": "68:19",
+          "at": "من ربك",
+          "note": "Noon sakinah + ر."
+        },
+        {
+          "ref": "69:10",
+          "at": "اخذة رابية",
+          "note": "Tanween + ر."
+        },
+        {
+          "ref": "68:52",
+          "at": "ذكر للعالمين",
+          "note": "Tanween + ل."
+        },
+        {
+          "ref": "69:21",
+          "at": "عيشة راضية",
+          "note": "Tanween + ر."
+        },
+        {
+          "ref": "67:11",
+          "at": "فسحقا لاصحاب",
+          "note": "Tanween + ل."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What is the difference between the two kinds of Idgham?",
+          "a": "With ghunnah (ي ن م و): the letter is doubled and you keep a 2-count nasal hum. Without ghunnah (ل ر): the letter is doubled with no nasal sound."
+        }
+      ]
+    },
+    {
+      "id": "iqlab",
+      "title": "Iqlab",
+      "arabic": "الإقلاب",
+      "meaning": "Flipping",
+      "summary": "Before the letter ب, the noon or tanween flips into a meem, hidden with a 2-count hum.",
+      "explain": [
+        "Iqlab means 'turning over'. The noon (or tanween) is changed into a meem sound before ba.",
+        "Say it as a hidden meem: close the lips lightly (do not press them) and hum through the nose for 2 counts, then open the lips into the ba.",
+        "A small meem is written above (ۢ) or below (ۭ) the noon or tanween as the sign. It tells you to say a meem."
+      ],
+      "letters": "ب",
+      "letters_label": "The one letter",
+      "counts": "2 counts of ghunnah",
+      "colors": [
+        "iqlab"
+      ],
+      "expect": [
+        "iqlab"
+      ],
+      "identify": "What happens to the noon sakinah or tanween here?",
+      "how": [
+        "Turn the noon into a meem sound.",
+        "Keep the lips lightly closed and hum for 2 counts.",
+        "Release into the ba."
+      ],
+      "spot": "Sky blue in this course. Look for the tiny meem written over the noon or tanween.",
+      "tips": [
+        "Light lips, soft hum: don't squeeze."
+      ],
+      "mistakes": [
+        "Pressing the lips together hard.",
+        "Saying a clear noon.",
+        "Skipping the nasal hum."
+      ],
+      "examples": [
+        {
+          "ref": "67:11",
+          "at": "بذنبهم",
+          "note": "Noon sakinah + ب, inside the same word."
+        },
+        {
+          "ref": "70:1",
+          "at": "سائل بعذاب",
+          "note": "Tanween + ب."
+        },
+        {
+          "ref": "69:4",
+          "at": "وعاد بالقارعة",
+          "note": "Tanween + ب."
+        },
+        {
+          "ref": "104:4",
+          "at": "لينبذن",
+          "note": "Noon sakinah + ب, inside the same word."
+        },
+        {
+          "ref": "67:13",
+          "at": "عليم بذات",
+          "note": "Tanween + ب."
+        },
+        {
+          "ref": "69:8",
+          "at": "من باقية",
+          "note": "Noon sakinah + ب."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What is the sign of Iqlab in the Mushaf?",
+          "a": "A small meem (ۢ or ۭ) written over or under the noon sakinah or tanween."
+        }
+      ]
+    },
+    {
+      "id": "ikhfa",
+      "title": "Ikhfa Haqiqi",
+      "arabic": "الإخفاء الحقيقي",
+      "meaning": "True hiding",
+      "summary": "Before 15 letters, the noon or tanween is neither clear nor merged: it is hidden between the two, with a 2-count hum.",
+      "explain": [
+        "Ikhfa means 'hiding'. The noon is not pronounced fully and it does not melt away either. The tongue does not touch the place of the noon; it prepares for the next letter while you hum through the nose.",
+        "The 15 letters are ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك. A classic line of poetry begins each word with them: صِفْ ذَا ثَنَا كَمْ جَادَ شَخْصٌ قَدْ سَمَا دُمْ طَيِّبًا زِدْ فِي تُقًى ضَعْ ظَالِمَا.",
+        "Before the heavy letters (ص ض ط ظ ق) the hum sounds fuller and deeper. Before the others it sounds lighter and thinner."
+      ],
+      "letters": "ت ث ج د ذ ز س ش ص ض ط ظ ف ق ك",
+      "letters_label": "The 15 letters",
+      "counts": "2 counts of ghunnah",
+      "colors": [
+        "ikhafa"
+      ],
+      "expect": [
+        "ikhafa"
+      ],
+      "identify": "What happens to the noon sakinah or tanween here?",
+      "how": [
+        "Do not touch the tongue to the noon's place.",
+        "Hum through the nose for 2 counts while the tongue gets ready for the next letter.",
+        "Release into the next letter."
+      ],
+      "spot": "Purple in this course. If the next letter is not a throat letter, not in 'yarmaloon' and not ب, it is Ikhfa.",
+      "tips": [
+        "Say the next letter silently in your mind while you hum."
+      ],
+      "mistakes": [
+        "Making a clear noon (that is Idhhar).",
+        "Humming for too long or too short."
+      ],
+      "examples": [
+        {
+          "ref": "67:1",
+          "at": "شيء قدير",
+          "note": "Tanween + ق."
+        },
+        {
+          "ref": "67:12",
+          "at": "واجر كبير",
+          "note": "Tanween + ك."
+        },
+        {
+          "ref": "67:25",
+          "at": "ان كنتم",
+          "note": "Noon sakinah + ك."
+        },
+        {
+          "ref": "68:2",
+          "at": "انت",
+          "note": "Noon sakinah + ت, inside the same word."
+        },
+        {
+          "ref": "67:26",
+          "at": "عند",
+          "note": "Noon sakinah + د, inside the same word."
+        },
+        {
+          "ref": "67:18",
+          "at": "من قبلهم",
+          "note": "Noon sakinah + ق."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How is Ikhfa different from Idhhar?",
+          "a": "Idhhar says the noon clearly. Ikhfa hides it with a 2-count nasal hum while the tongue prepares for the next letter."
+        }
+      ]
+    },
+    {
+      "id": "ghunnah",
+      "title": "Ghunnah (Noon & Meem with Shaddah)",
+      "arabic": "الغنة",
+      "meaning": "The nasal hum",
+      "summary": "Every noon or meem carrying a shaddah must hum through the nose for 2 counts.",
+      "explain": [
+        "Ghunnah is a soft, sweet sound resonating in the nasal passage. It cannot be separated from noon and meem.",
+        "It is always required on a noon or meem with a shaddah: إِنَّ, ثُمَّ, ٱلنَّاسِ. This lesson practices exactly that.",
+        "The same hum appears in Idgham with ghunnah, Iqlab, Ikhfa and Ikhfa Shafawi, which have their own lessons."
+      ],
+      "letters": "نّ مّ",
+      "letters_label": "The letters",
+      "counts": "2 counts",
+      "colors": [
+        "ghunnah"
+      ],
+      "expect": [
+        "ghunnah"
+      ],
+      "identify": null,
+      "how": [
+        "Say the doubled noon or meem firmly.",
+        "Hum through the nose for 2 counts, then release into the vowel."
+      ],
+      "spot": "Orange in this course. Look for a noon or meem with a shaddah.",
+      "tips": [
+        "Block your nose gently while you read: if the sound stops, the ghunnah was really coming from the nose."
+      ],
+      "mistakes": [
+        "Rushing the doubled noon or meem so the hum disappears."
+      ],
+      "examples": [
+        {
+          "ref": "103:2",
+          "at": "ان الانسان",
+          "note": "Inna: a doubled noon."
+        },
+        {
+          "ref": "108:1",
+          "at": "انا اعطيناك",
+          "note": "Innaa: a doubled noon."
+        },
+        {
+          "ref": "78:1",
+          "at": "عم",
+          "note": "'Amma: a doubled meem."
+        },
+        {
+          "ref": "102:4",
+          "at": "ثم كلا",
+          "note": "Thumma: a doubled meem."
+        },
+        {
+          "ref": "114:1",
+          "all": true,
+          "note": "An-naas: a doubled noon."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How long is a ghunnah?",
+          "a": "Two counts."
+        },
+        {
+          "q": "Which letters always carry ghunnah when they have a shaddah?",
+          "a": "Noon (نّ) and meem (مّ)."
+        }
+      ]
+    }
+  ]
+}

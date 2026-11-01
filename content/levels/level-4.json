@@ -1,0 +1,194 @@
+{
+  "level": 4,
+  "slug": "letter-rules",
+  "title": "Letters That Echo, Hide or Join",
+  "emoji": "🔔",
+  "tagline": "Qalqalah, the lam of ال, the connecting alif and silent letters.",
+  "intro": "This level collects the rules that belong to single letters: the five letters that bounce, the lam that is silent before some letters, the alif that disappears when you join words, and letters that are written but never said.",
+  "lessons": [
+    {
+      "id": "qalqalah",
+      "title": "Qalqalah",
+      "arabic": "القلقلة",
+      "meaning": "Echo, vibration",
+      "summary": "When one of the five letters ق ط ب ج د has a sukun, release it with a small bounce.",
+      "explain": [
+        "Qalqalah means shaking or echoing. The five letters ق ط ب ج د are made with a firm closure. When they carry a sukun (or you stop on them), the closure releases with a small, crisp bounce.",
+        "A classic way to remember them is the phrase قُطْبُ جَدٍّ (qutbu jadd).",
+        "Minor (sughra): the letter has a sukun in the middle of a word or phrase, as in يَجْعَلُونَ.",
+        "Major (kubra): you stop on the letter at the end of a verse, as in أَحَدٌ. Here the bounce is the strongest.",
+        "It is a light, quick bounce, not an extra vowel. Red in this course."
+      ],
+      "letters": "ق ط ب ج د",
+      "letters_label": "The 5 letters of 'qutbu jadd'",
+      "counts": "A quick bounce",
+      "colors": ["qalaqah"],
+      "expect": ["qalaqah"],
+      "identify": "Which rule makes this letter echo?",
+      "how": ["Close the letter firmly.", "Release with a tiny bounce, without adding a vowel."],
+      "spot": "Red. One of ق ط ب ج د with a sukun, or one of them at the end of a verse when you stop.",
+      "tips": ["Think of a tiny echo, not a bark."],
+      "mistakes": ["Adding a vowel ('duh', 'buh').", "Forgetting the bounce at a verse end."],
+      "examples": [
+        {"ref": "112:1", "all": true, "note": "أَحَدٌ: stop on the dal: major qalqalah."},
+        {"ref": "112:2", "all": true, "note": "ٱلصَّمَدُ: stop on the dal: major qalqalah."},
+        {"ref": "112:3", "all": true, "note": "يَلِدْ: dal with sukun mid-verse (minor); يُولَدْ: stop on dal (major)."},
+        {"ref": "113:1", "all": true, "note": "ٱلْفَلَقِ: stop on the qaf: major qalqalah."},
+        {"ref": "96:1", "all": true, "note": "ٱقْرَأْ: qaf with sukun (minor); خَلَقَ: stop on qaf (major)."}
+      ],
+      "cards": [
+        {"q": "Which letters have qalqalah?", "a": "ق ط ب ج د (remember: قُطْبُ جَدٍّ)."},
+        {"q": "What is the difference between minor and major qalqalah?", "a": "Minor: the sukun is in the middle of a word/phrase. Major: you stop on the letter at the end of a verse; the bounce is strongest."}
+      ]
+    },
+    {
+      "id": "lam-shamsiyyah",
+      "title": "Sun Letters (Silent Lam)",
+      "arabic": "اللام الشمسية",
+      "meaning": "The lam of the sun letters",
+      "summary": "Before 14 'sun letters', the lam of ال is not pronounced and the next letter is doubled.",
+      "explain": [
+        "The definite article ال has a lam. Before the 14 sun letters, that lam is silent and the next letter carries a shaddah: ٱلشَّمْسُ is ash-shams, not al-shams.",
+        "The 14 sun letters are ت ث د ذ ر ز س ش ص ض ط ظ ل ن.",
+        "The silent lam is gray in this course, and the sun letter after it is doubled."
+      ],
+      "letters": "ت ث د ذ ر ز س ش ص ض ط ظ ل ن",
+      "letters_label": "The 14 sun letters",
+      "counts": "—",
+      "colors": ["laam_shamsiyah"],
+      "expect": ["laam_shamsiyah"],
+      "identify": "Is the lam of ال pronounced here?",
+      "how": ["Skip the lam.", "Double the next letter, as shown by its shaddah."],
+      "spot": "Gray lam, and the next letter has a shaddah.",
+      "tips": ["Sun letters are made near the front of the mouth where the lam is made; that is why the lam melts into them."],
+      "mistakes": ["Pronouncing the lam: 'al-shams'."],
+      "examples": [
+        {"ref": "91:1", "all": true, "note": "وَٱلشَّمْسِ: the sun letter ش."},
+        {"ref": "53:1", "all": true, "note": "وَٱلنَّجْمِ: the sun letter ن."},
+        {"ref": "93:1", "all": true, "note": "وَٱلضُّحَىٰ: the sun letter ض."},
+        {"ref": "95:1", "all": true, "note": "وَٱلتِّينِ وَٱلزَّيْتُونِ: the sun letters ت and ز."}
+      ],
+      "cards": [
+        {"q": "What happens to the lam of ال before a sun letter?", "a": "It is silent, and the sun letter is doubled (shown with a shaddah)."},
+        {"q": "Name the 14 sun letters.", "a": "ت ث د ذ ر ز س ش ص ض ط ظ ل ن"}
+      ]
+    },
+    {
+      "id": "lam-qamariyyah",
+      "title": "Moon Letters (Clear Lam)",
+      "arabic": "اللام القمرية",
+      "meaning": "The lam of the moon letters",
+      "summary": "Before 14 'moon letters', the lam of ال is pronounced clearly, with a sukun.",
+      "explain": [
+        "Before the 14 moon letters, the lam is said clearly: ٱلْقَمَرُ is al-qamar.",
+        "The 14 moon letters are ا ب ج ح خ ع غ ف ق ك م ه و ي.",
+        "The lam carries a sukun and has no color, and the letter after it has no shaddah."
+      ],
+      "letters": "ا ب ج ح خ ع غ ف ق ك م ه و ي",
+      "letters_label": "The 14 moon letters",
+      "counts": "—",
+      "colors": [],
+      "check": "qamariyah",
+      "identify": "Is the lam of ال pronounced here?",
+      "how": ["Pronounce the lam clearly.", "Then say the next letter normally."],
+      "spot": "The lam has a sukun and the next letter has no shaddah.",
+      "tips": ["Every letter that is not a sun letter is a moon letter."],
+      "mistakes": ["Dropping the lam, as if it were a sun letter."],
+      "examples": [
+        {"ref": "103:1", "all": true, "note": "وَٱلْعَصْرِ: the moon letter ع."},
+        {"ref": "89:1", "all": true, "note": "وَٱلْفَجْرِ: the moon letter ف."},
+        {"ref": "108:1", "at": "اعطيناك الكوثر", "note": "ٱلْكَوْثَرَ: the moon letter ك."},
+        {"ref": "97:2", "at": "ليلة القدر", "note": "ٱلْقَدْرِ: the moon letter ق."}
+      ],
+      "cards": [
+        {"q": "How do you pronounce the lam of ال before a moon letter?", "a": "Clearly, with a sukun: ٱلْقَمَرُ = al-qamar."},
+        {"q": "Name the 14 moon letters.", "a": "ا ب ج ح خ ع غ ف ق ك م ه و ي"}
+      ]
+    },
+    {
+      "id": "hamzat-wasl",
+      "title": "Connecting Alif (Hamzat al-Wasl)",
+      "arabic": "همزة الوصل",
+      "meaning": "The hamza of joining",
+      "summary": "The alif with a small head (ٱ) is pronounced only when you START on it. When joined to the word before it, it disappears.",
+      "explain": [
+        "Hamzat al-wasl is the alif written with a small mark on top (ٱ). When you join the word to the previous one, you skip it: بِسْمِ ٱللَّهِ is bis-millah, not bismi-allah with an extra alif.",
+        "Where it appears: the article ال, commands of three-letter verbs (ٱكْتُبْ), past and command verbs of five or six letters (ٱسْتَغْفَرَ), and a few nouns like ٱسْم and ٱبْن.",
+        "It is gray in this course. How to start on it is in Level 6."
+      ],
+      "colors": ["ham_wasl"],
+      "expect": ["ham_wasl"],
+      "identify": null,
+      "how": ["When joining, glide over the alif.", "Only pronounce it when you begin reading on that word."],
+      "spot": "Gray. An alif with a small head (ٱ) in the middle of a sentence.",
+      "tips": ["If it disappears, you are correct. It is a 'bridge' that only appears when needed."],
+      "mistakes": ["Pronouncing the alif in the middle of a sentence."],
+      "examples": [
+        {"ref": "1:1", "at": "بسم الله", "note": "بِسْمِ ٱللَّهِ: the alif of ٱللَّهِ disappears."},
+        {"ref": "1:6", "at": "اهدنا الصراط", "note": "ٱلصِّرَٲطَ: the alif is skipped after ٱهْدِنَا."},
+        {"ref": "96:1", "at": "اقرا باسم ربك", "note": "بِٱسْمِ: the alif of ٱسْم is skipped."},
+        {"ref": "87:1", "all": true, "note": "ٱسْمَ: the alif is skipped after سَبِّحِ."}
+      ],
+      "cards": [
+        {"q": "When is the hamzat al-wasl (ٱ) pronounced?", "a": "Only when you START reading on it. When joined to the previous word, it is skipped."}
+      ]
+    },
+    {
+      "id": "silent-letters",
+      "title": "Silent Letters",
+      "arabic": "الحروف التي تكتب ولا تنطق",
+      "meaning": "Written but not pronounced",
+      "summary": "Some letters appear in the written text but are not pronounced. The most common is the extra alif after the waw of the plural verb.",
+      "explain": [
+        "In verbs like كَفَرُوا۟ and ءَامَنُوا۟ the final alif is only a spelling convention. You read kafaru and aamanu.",
+        "The Mushaf marks such letters with a small round zero (۟) above them.",
+        "They are gray in this course: quiet letters."
+      ],
+      "colors": ["slnt"],
+      "expect": ["slnt"],
+      "identify": null,
+      "how": ["Skip the marked letter.", "Pronounce the waw before it as a normal 2-count madd."],
+      "spot": "Gray. A letter with a small round zero (۟) above it.",
+      "tips": ["The small zero means 'nothing here'."],
+      "mistakes": ["Reading the silent alif."],
+      "examples": [
+        {"ref": "103:3", "at": "امنوا وعملوا", "note": "ءَامَنُوا۟ وَعَمِلُوا۟: two silent alifs."},
+        {"ref": "95:6", "at": "امنوا وعملوا", "note": "ءَامَنُوا۟ وَعَمِلُوا۟: two silent alifs."},
+        {"ref": "98:1", "at": "كفروا من", "note": "كَفَرُوا۟: a silent alif."}
+      ],
+      "cards": [
+        {"q": "What does a small round zero (۟) above a letter mean?", "a": "The letter is written but not pronounced."}
+      ]
+    },
+    {
+      "id": "idgham-two-letters",
+      "title": "Merging Two Letters",
+      "arabic": "إدغام المتجانسين والمتقاربين",
+      "meaning": "Idgham of similar and close letters",
+      "summary": "When a letter with a sukun is followed by a letter from the same or a nearby spot, the first merges into the second.",
+      "explain": [
+        "Mutajanisayn: two letters made at the same place but with different qualities. Examples: ت with د or ط, and ذ with ظ.",
+        "Mutaqaribayn: two letters made at nearby places. Examples: ل into ر, and ق into ك.",
+        "In both, the first letter has a sukun and the second has a vowel. The first merges into the second, and the second is doubled.",
+        "When the two letters are exactly the same (mithlayn), they also merge: for example in ٱضْرِب بِّعَصَاكَ."
+      ],
+      "colors": ["idgham_mutajanisayn", "idgham_mutaqaribayn"],
+      "expect": ["idgham_mutajanisayn", "idgham_mutaqaribayn"],
+      "identify": null,
+      "how": ["Skip the first letter's own sound.", "Say the second letter doubled."],
+      "spot": "Gold or brown. A letter with a bare sukun and a doubled letter right after it, across two words.",
+      "tips": ["The famous mutaqaribayn: قُل رَّبِّ. The lam merges into the ra."],
+      "mistakes": ["Pronouncing both letters separately."],
+      "examples": [
+        {"ref": "2:256", "at": "قد تبين", "note": "Mutajanisayn: د into ت."},
+        {"ref": "3:72", "at": "وقالت طائفة", "note": "Mutajanisayn: ت into ط."},
+        {"ref": "4:64", "at": "اذ ظلموا", "note": "Mutajanisayn: ذ into ظ."},
+        {"ref": "17:80", "at": "وقل رب", "note": "Mutaqaribayn: ل into ر."},
+        {"ref": "4:158", "at": "بل رفعه", "note": "Mutaqaribayn: ل into ر."}
+      ],
+      "cards": [
+        {"q": "What's the difference between mutajanisayn and mutaqaribayn?", "a": "Mutajanisayn: two letters from the SAME place (but different qualities), e.g. ت/د. Mutaqaribayn: two letters from NEARBY places, e.g. ل/ر."}
+      ]
+    }
+  ]
+}

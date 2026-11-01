@@ -1,0 +1,8 @@
+# downloaded source data and intermediate build output (re-created by tools/build.py)
+build/
+__pycache__/
+*.pyc
+
+# dev-only
+site/_anki-preview.html
+.claude/

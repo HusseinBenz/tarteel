@@ -1,0 +1,542 @@
+{
+  "level": 7,
+  "slug": "read-whole-surahs",
+  "title": "Read Whole Surahs",
+  "emoji": "🏆",
+  "tagline": "Put everything together, verse by verse, in twelve short surahs.",
+  "intro": "You now know the rules. This level has you read twelve complete short surahs, one verse at a time, with every color in play. These are the surahs most people memorize first, so you will be reciting them for years: this is where your tajweed becomes a habit.",
+  "lessons": [
+    {
+      "id": "surah-1",
+      "title": "Surah Al-Fatihah",
+      "arabic": "سورة الفاتحة",
+      "meaning": "The Opener · 7 verses",
+      "summary": "Read Surah Al-Fatihah one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Watch for the silent lam in ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ, the madd on stopping at several verse ends, and the deep-navy necessary madd in ٱلضَّآلِّينَ.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "1:1",
+          "all": true
+        },
+        {
+          "ref": "1:2",
+          "all": true
+        },
+        {
+          "ref": "1:3",
+          "all": true
+        },
+        {
+          "ref": "1:4",
+          "all": true
+        },
+        {
+          "ref": "1:5",
+          "all": true
+        },
+        {
+          "ref": "1:6",
+          "all": true
+        },
+        {
+          "ref": "1:7",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-112",
+      "title": "Surah Al-Ikhlas",
+      "arabic": "سورة الإخلاص",
+      "meaning": "The Sincerity · 4 verses",
+      "summary": "Read Surah Al-Ikhlas one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Every verse ends on a qalqalah letter (the dal), so finish each verse with a clean little echo.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "112:1",
+          "all": true
+        },
+        {
+          "ref": "112:2",
+          "all": true
+        },
+        {
+          "ref": "112:3",
+          "all": true
+        },
+        {
+          "ref": "112:4",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-113",
+      "title": "Surah Al-Falaq",
+      "arabic": "سورة الفلق",
+      "meaning": "The Daybreak · 5 verses",
+      "summary": "Read Surah Al-Falaq one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Every verse ends on a qalqalah letter: ٱلْفَلَقِ, خَلَقَ, وَقَبَ, ٱلْعُقَدِ, حَسَدَ. Practice the five echoes.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "113:1",
+          "all": true
+        },
+        {
+          "ref": "113:2",
+          "all": true
+        },
+        {
+          "ref": "113:3",
+          "all": true
+        },
+        {
+          "ref": "113:4",
+          "all": true
+        },
+        {
+          "ref": "113:5",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-114",
+      "title": "Surah An-Nas",
+      "arabic": "سورة الناس",
+      "meaning": "Mankind · 6 verses",
+      "summary": "Read Surah An-Nas one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Notice the doubled noon (ghunnah) in ٱلنَّاسِ and ٱلْخَنَّاسِ, and the madd on stopping at the verse ends.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "114:1",
+          "all": true
+        },
+        {
+          "ref": "114:2",
+          "all": true
+        },
+        {
+          "ref": "114:3",
+          "all": true
+        },
+        {
+          "ref": "114:4",
+          "all": true
+        },
+        {
+          "ref": "114:5",
+          "all": true
+        },
+        {
+          "ref": "114:6",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-108",
+      "title": "Surah Al-Kawthar",
+      "arabic": "سورة الكوثر",
+      "meaning": "The Abundance · 3 verses",
+      "summary": "Read Surah Al-Kawthar one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Obligatory madd in إِنَّآ أَعْطَيْنَـٰكَ, and a minor qalqalah in ٱلْأَبْتَرُ.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "108:1",
+          "all": true
+        },
+        {
+          "ref": "108:2",
+          "all": true
+        },
+        {
+          "ref": "108:3",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-103",
+      "title": "Surah Al-'Asr",
+      "arabic": "سورة العصر",
+      "meaning": "The Declining Day · 3 verses",
+      "summary": "Read Surah Al-'Asr one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Ikhfa in ٱلْإِنسَـٰنَ, silent alifs in ءَامَنُوا۟ وَعَمِلُوا۟, and the strong rhythm of a short surah.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "103:1",
+          "all": true
+        },
+        {
+          "ref": "103:2",
+          "all": true
+        },
+        {
+          "ref": "103:3",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-105",
+      "title": "Surah Al-Fil",
+      "arabic": "سورة الفيل",
+      "meaning": "The Elephant · 5 verses",
+      "summary": "Read Surah Al-Fil one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Every verse ends with a madd letter before the last letter, so practice the madd on stopping.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "105:1",
+          "all": true
+        },
+        {
+          "ref": "105:2",
+          "all": true
+        },
+        {
+          "ref": "105:3",
+          "all": true
+        },
+        {
+          "ref": "105:4",
+          "all": true
+        },
+        {
+          "ref": "105:5",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-106",
+      "title": "Surah Quraysh",
+      "arabic": "سورة قريش",
+      "meaning": "Quraysh · 4 verses",
+      "summary": "Read Surah Quraysh one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Four verse endings with madd leen when you stop: قُرَيْشٍ, ٱلصَّيْفِ, ٱلْبَيْتِ, خَوْفٍ.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "106:1",
+          "all": true
+        },
+        {
+          "ref": "106:2",
+          "all": true
+        },
+        {
+          "ref": "106:3",
+          "all": true
+        },
+        {
+          "ref": "106:4",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-107",
+      "title": "Surah Al-Ma'un",
+      "arabic": "سورة الماعون",
+      "meaning": "The Small kindnesses · 7 verses",
+      "summary": "Read Surah Al-Ma'un one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Seven verse endings with a madd letter before the last letter. Keep your stopping length consistent.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "107:1",
+          "all": true
+        },
+        {
+          "ref": "107:2",
+          "all": true
+        },
+        {
+          "ref": "107:3",
+          "all": true
+        },
+        {
+          "ref": "107:4",
+          "all": true
+        },
+        {
+          "ref": "107:5",
+          "all": true
+        },
+        {
+          "ref": "107:6",
+          "all": true
+        },
+        {
+          "ref": "107:7",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-109",
+      "title": "Surah Al-Kafirun",
+      "arabic": "سورة الكافرون",
+      "meaning": "The Disbelievers · 6 verses",
+      "summary": "Read Surah Al-Kafirun one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Obligatory madd in يَـٰٓأَيُّهَا, and the repeated rhythm of the verses.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "109:1",
+          "all": true
+        },
+        {
+          "ref": "109:2",
+          "all": true
+        },
+        {
+          "ref": "109:3",
+          "all": true
+        },
+        {
+          "ref": "109:4",
+          "all": true
+        },
+        {
+          "ref": "109:5",
+          "all": true
+        },
+        {
+          "ref": "109:6",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-110",
+      "title": "Surah An-Nasr",
+      "arabic": "سورة النصر",
+      "meaning": "The Divine Support · 3 verses",
+      "summary": "Read Surah An-Nasr one verse at a time and spot every color you have learned.",
+      "explain": [
+        "Connected madd in جَآءَ, and Idhhar and Ikhfa across the verses.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "110:1",
+          "all": true
+        },
+        {
+          "ref": "110:2",
+          "all": true
+        },
+        {
+          "ref": "110:3",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "surah-111",
+      "title": "Surah Al-Masad",
+      "arabic": "سورة المسد",
+      "meaning": "The Palm Fiber · 5 verses",
+      "summary": "Read Surah Al-Masad one verse at a time and spot every color you have learned.",
+      "explain": [
+        "All five verses end on a qalqalah letter. Give each a clean echo.",
+        "Take each verse in turn: look, say it aloud, then reveal the card and listen. Repeat until it flows."
+      ],
+      "colors": [],
+      "identify": null,
+      "how": [
+        "Read each verse slowly and aloud.",
+        "Let the colors remind you of the rule.",
+        "Flip the card and compare with the reciter."
+      ],
+      "tips": [
+        "Start slowly. Speed comes from accuracy."
+      ],
+      "examples": [
+        {
+          "ref": "111:1",
+          "all": true
+        },
+        {
+          "ref": "111:2",
+          "all": true
+        },
+        {
+          "ref": "111:3",
+          "all": true
+        },
+        {
+          "ref": "111:4",
+          "all": true
+        },
+        {
+          "ref": "111:5",
+          "all": true
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    }
+  ]
+}

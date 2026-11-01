@@ -1,0 +1,211 @@
+{
+  "level": 6,
+  "slug": "stopping-starting",
+  "title": "Stopping and Starting",
+  "emoji": "🚦",
+  "tagline": "How to pause on a word, what the Mushaf's stop signs mean, and how to begin again.",
+  "intro": "Nobody recites a long verse in one breath. This level teaches you how to stop correctly (waqf), what the little signs above the text tell you, and how to restart (ibtida) when a word begins with a connecting alif.",
+  "lessons": [
+    {
+      "id": "waqf-basics",
+      "title": "How to Stop",
+      "arabic": "الوقف",
+      "meaning": "Stopping",
+      "summary": "Stopping changes the end of a word: the last vowel drops away and the word ends on a sukun.",
+      "explain": [
+        "Rule 1: a final fathah, kasrah or dammah is replaced by a sukun. ٱلنَّاسِ becomes an-naas.",
+        "Rule 2: tanween. Fathatan becomes a long 'aa' (عَلِيمًا is 'aleemaa'). Kasratan and dammatan are simply dropped (أَحَدٌ is 'aḥad').",
+        "Rule 3: the round ta (ـة) becomes a soft haa: ٱلْقَارِعَةُ is al-qaari'ah.",
+        "Rule 4: a madd letter just before the final letter may be stretched 2, 4 or 6 counts (Level 3). A qalqalah letter at the end bounces (Level 4).",
+        "Every verse ending is a natural place to stop."
+      ],
+      "colors": [],
+      "check": "verse_end",
+      "identify": null,
+      "how": [
+        "Finish the word as usual until the last letter.",
+        "Replace the last vowel with a sukun and let your breath relax."
+      ],
+      "spot": "The end of a verse. Or any word marked with a stop sign.",
+      "tips": [
+        "Stopping is a skill: train it on verse endings first."
+      ],
+      "mistakes": [
+        "Pronouncing the final vowel or tanween when stopping."
+      ],
+      "examples": [
+        {
+          "ref": "114:1",
+          "all": true,
+          "note": "ٱلنَّاسِ: the kasrah becomes a sukun. Say 'an-naas'."
+        },
+        {
+          "ref": "112:1",
+          "all": true,
+          "note": "أَحَدٌ: dammatan is dropped. Say 'aḥad'."
+        },
+        {
+          "ref": "110:3",
+          "all": true,
+          "note": "تَوَّابَۢا: fathatan becomes a long 'aa'. Say 'tawwaabaa'."
+        },
+        {
+          "ref": "76:30",
+          "at": "عليما حكيما",
+          "note": "عَلِيمًا حَكِيمًا: fathatan becomes 'aa' twice."
+        },
+        {
+          "ref": "101:1",
+          "all": true,
+          "note": "ٱلْقَارِعَةُ: the round ta becomes haa. Say 'al-qaari'ah'."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What happens to fathatan (ـً) when you stop?",
+          "a": "It becomes a long 'aa': عَلِيمًا is 'aleemaa'."
+        },
+        {
+          "q": "What happens to kasratan and dammatan when you stop?",
+          "a": "They are dropped: أَحَدٌ is 'aḥad', خُسْرٍ is 'khusr'."
+        },
+        {
+          "q": "What happens to the round ta (ـة) when you stop?",
+          "a": "It becomes a soft haa."
+        }
+      ]
+    },
+    {
+      "id": "stop-signs",
+      "title": "The Mushaf's Stop Signs",
+      "arabic": "علامات الوقف",
+      "meaning": "Signs of stopping",
+      "summary": "The small marks above words tell you whether to stop, to continue, or that either is fine.",
+      "explain": [
+        "مـ (ۘ): you must stop. Continuing would change the meaning.",
+        "لا (ۙ): do not stop. If you must (for breath), restart a few words back.",
+        "ج (ۚ): stopping and continuing are equally fine.",
+        "قلى (ۗ): stopping is better than continuing.",
+        "صلى (ۖ): continuing is better than stopping, but you may stop.",
+        "∴ ∴ (ۛ): two dots in two places: stop at one of them but not both.",
+        "س (ۜ): a short silent pause (saktah) without taking a breath."
+      ],
+      "colors": [],
+      "identify": null,
+      "practice_link": "symbols",
+      "how": [
+        "Notice the sign after each word.",
+        "Respond: stop, continue, or pause.",
+        "Practice with the Symbols deck."
+      ],
+      "tips": [
+        "Verse ends are always safe to stop on, even without a sign."
+      ],
+      "showcase": [
+        {
+          "ref": "54:6",
+          "at": "فتول عنهم",
+          "note": "مـ: must stop."
+        },
+        {
+          "ref": "15:60",
+          "at": "الا امراته قدرنا",
+          "note": "لا: do not stop."
+        },
+        {
+          "ref": "26:11",
+          "at": "قوم فرعون",
+          "note": "ج: either is fine."
+        },
+        {
+          "ref": "37:138",
+          "all": true,
+          "note": "قلى: stopping is better."
+        },
+        {
+          "ref": "37:24",
+          "all": true,
+          "note": "صلى: continuing is better."
+        },
+        {
+          "ref": "2:2",
+          "all": true,
+          "note": "∴ ∴: stop at one of the two, not both."
+        },
+        {
+          "ref": "75:27",
+          "all": true,
+          "note": "س: pause briefly, no breath."
+        }
+      ],
+      "cards": [],
+      "auto_cards": false
+    },
+    {
+      "id": "ibtida",
+      "title": "How to Start",
+      "arabic": "الابتداء",
+      "meaning": "Beginning",
+      "summary": "When you start on a word that begins with a connecting alif (ٱ), you must add a short starting vowel.",
+      "explain": [
+        "The article ٱلْ and the name ٱللَّه start with a fathah: ٱلْحَمْدُ is al-ḥamd.",
+        "Verbs: look at the vowel of the THIRD letter (counting the alif as the first). If it is a dammah, start with a dammah: ٱنظُرْ is un-ẓur. Otherwise start with a kasrah: ٱهْدِنَا is ih-di-naa, ٱقْرَأْ is iq-ra'.",
+        "Nouns such as ٱسْم and ٱبْن start with a kasrah: ism, ibn."
+      ],
+      "colors": [
+        "ham_wasl"
+      ],
+      "check": "starts_wasl",
+      "identify": null,
+      "how": [
+        "Spot the connecting alif at the start.",
+        "Choose the starting vowel by the rule above.",
+        "Then continue normally."
+      ],
+      "spot": "A verse that begins with ٱ.",
+      "tips": [
+        "Fathah for ال and Allah, kasrah for most, dammah only when the third letter has a dammah."
+      ],
+      "mistakes": [
+        "Starting with the wrong vowel, for example a fathah on ٱهْدِنَا."
+      ],
+      "examples": [
+        {
+          "ref": "1:2",
+          "at": "الحمد",
+          "note": "ٱلْحَمْدُ: start with fathah. Say 'al-ḥamd'."
+        },
+        {
+          "ref": "1:6",
+          "at": "اهدنا",
+          "note": "ٱهْدِنَا: the third letter has a kasrah, so start with kasrah. Say 'ih-dinaa'."
+        },
+        {
+          "ref": "96:1",
+          "at": "اقرا",
+          "note": "ٱقْرَأْ: the third letter has a fathah, so start with kasrah. Say 'iq-ra''."
+        },
+        {
+          "ref": "17:21",
+          "at": "انظر كيف",
+          "note": "ٱنظُرْ: the third letter has a dammah, so start with dammah. Say 'un-ẓur'."
+        },
+        {
+          "ref": "112:2",
+          "at": "الله الصمد",
+          "note": "ٱللَّهُ: start with fathah. Say 'Allah'."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How do you start on ٱلْ (the article)?",
+          "a": "With a fathah: ٱلْحَمْدُ = al-ḥamd."
+        },
+        {
+          "q": "How do you choose the starting vowel of a verb that begins with ٱ?",
+          "a": "Look at the vowel of the third letter (the alif counts as the first). Dammah gives dammah (ٱنظُرْ = un-ẓur). Otherwise start with kasrah (ٱهْدِنَا = ih-dinaa)."
+        }
+      ]
+    }
+  ]
+}

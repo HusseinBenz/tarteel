@@ -1,0 +1,267 @@
+{
+  "level": 2,
+  "slug": "meem-sakinah",
+  "title": "Meem Sakinah",
+  "emoji": "🌸",
+  "tagline": "The silent meem and what happens at the lips.",
+  "intro": "The silent meem (مْ) usually sits at the end of words like هُمْ, لَهُمْ and عَلَيْهِمْ. It has only three behaviors, and all of them are decided at the lips, which is why they are called 'shafawi' (of the lips).",
+  "lessons": [
+    {
+      "id": "meem-overview",
+      "title": "The Three Rules at a Glance",
+      "arabic": "أحكام الميم الساكنة",
+      "meaning": "Rulings of the silent meem",
+      "summary": "A meem with a sukun (مْ) behaves in one of three ways, depending on the letter that follows.",
+      "explain": [
+        "Meem sakinah is a meem carrying a sukun. Unlike the noon, it has no tanween partner, and it is most often the ending of plural words: هُمْ, أَنتُمْ, عَلَيْهِمْ.",
+        "1. Ikhfa Shafawi (hiding at the lips) before ب.",
+        "2. Idgham Shafawi (merging) before another م.",
+        "3. Idhhar Shafawi (clarity) before every other letter."
+      ],
+      "how": [
+        "Spot a meem with sukun.",
+        "Look at the next letter: ب, م, or anything else.",
+        "Apply the matching rule."
+      ],
+      "tips": [
+        "Remember: ب = hide, م = merge, everything else = clear."
+      ],
+      "identify": null,
+      "showcase": [
+        {
+          "ref": "67:12",
+          "at": "ربهم بالغيب",
+          "note": "Ikhfa Shafawi: meem + ب."
+        },
+        {
+          "ref": "67:12",
+          "at": "لهم مغفرة",
+          "note": "Idgham Shafawi: meem + م."
+        },
+        {
+          "ref": "1:7",
+          "at": "عليهم غير",
+          "note": "Idhhar Shafawi: meem + غ."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How many rules does the meem sakinah have?",
+          "a": "Three: Ikhfa Shafawi (before ب), Idgham Shafawi (before م) and Idhhar Shafawi (before all other letters)."
+        },
+        {
+          "q": "Why are the meem sakinah rules called 'shafawi'?",
+          "a": "Shafawi means 'of the lips': the meem is made with the lips."
+        }
+      ],
+      "auto_cards": false
+    },
+    {
+      "id": "ikhfa-shafawi",
+      "title": "Ikhfa Shafawi",
+      "arabic": "الإخفاء الشفوي",
+      "meaning": "Hiding at the lips",
+      "summary": "Before ب, hide the meem sakinah: lips lightly together, 2-count hum, then release into the ba.",
+      "explain": [
+        "Ikhfa Shafawi happens only when a meem sakinah is followed by ب.",
+        "The meem is not pronounced fully. Keep the lips lightly closed (barely touching), hum through the nose for 2 counts, then open into the ba.",
+        "It is pink in this course."
+      ],
+      "letters": "ب",
+      "letters_label": "The one letter",
+      "counts": "2 counts of ghunnah",
+      "colors": [
+        "ikhafa_shafawi"
+      ],
+      "expect": [
+        "ikhafa_shafawi"
+      ],
+      "identify": "What happens to the meem sakinah here?",
+      "how": [
+        "Close the lips lightly, without pressing.",
+        "Hum for 2 counts.",
+        "Release into the ba."
+      ],
+      "spot": "A meem with sukun at the end of a word, and the next word starts with ب.",
+      "tips": [
+        "Light touch: if you can feel your lips pressing, you are doing Idhhar."
+      ],
+      "mistakes": [
+        "Pressing the lips together firmly.",
+        "Skipping the nasal hum."
+      ],
+      "examples": [
+        {
+          "ref": "67:12",
+          "at": "ربهم بالغيب",
+          "note": "Meem + ب."
+        },
+        {
+          "ref": "70:33",
+          "at": "هم بشهادتهم",
+          "note": "Meem + ب."
+        },
+        {
+          "ref": "79:14",
+          "at": "هم بالساهرة",
+          "note": "Meem + ب."
+        },
+        {
+          "ref": "81:22",
+          "at": "صاحبكم بمجنون",
+          "note": "Meem + ب."
+        },
+        {
+          "ref": "76:12",
+          "at": "وجزاهم بما",
+          "note": "Meem + ب."
+        },
+        {
+          "ref": "68:40",
+          "at": "ايهم بذلك",
+          "note": "Meem + ب."
+        }
+      ],
+      "cards": [
+        {
+          "q": "How should the lips be for Ikhfa Shafawi?",
+          "a": "Lightly closed, almost touching, not pressed. Hum for 2 counts, then release into the ba."
+        }
+      ]
+    },
+    {
+      "id": "idgham-shafawi",
+      "title": "Idgham Shafawi",
+      "arabic": "الإدغام الشفوي",
+      "meaning": "Merging at the lips",
+      "summary": "Before another م, the meem sakinah merges into it: say one doubled meem with a 2-count hum.",
+      "explain": [
+        "Also known as Idgham Mithlayn Saghir (the minor merging of two identical letters). The first meem has a sukun; the second has a vowel.",
+        "The two meems become one doubled meem, held with a ghunnah for 2 counts.",
+        "It is lime green in this course."
+      ],
+      "letters": "م",
+      "letters_label": "The one letter",
+      "counts": "2 counts of ghunnah",
+      "colors": [
+        "idgham_shafawi"
+      ],
+      "expect": [
+        "idgham_shafawi"
+      ],
+      "identify": "What happens to the meem sakinah here?",
+      "how": [
+        "Do not say two separate meems.",
+        "Say one firm, doubled meem and hum for 2 counts."
+      ],
+      "spot": "A meem with sukun at the end of a word, and the next word starts with م (which carries a shaddah).",
+      "tips": [
+        "It sounds like the ghunnah of a doubled meem: like in ثُمَّ."
+      ],
+      "mistakes": [
+        "Reading two distinct meems."
+      ],
+      "examples": [
+        {
+          "ref": "67:12",
+          "at": "لهم مغفرة",
+          "note": "Meem + م."
+        },
+        {
+          "ref": "69:49",
+          "at": "منكم مكذبين",
+          "note": "Meem + م."
+        },
+        {
+          "ref": "70:39",
+          "at": "خلقناهم مما",
+          "note": "Meem + م."
+        },
+        {
+          "ref": "71:11",
+          "at": "عليكم مدرارا",
+          "note": "Meem + م."
+        },
+        {
+          "ref": "70:27",
+          "at": "هم من",
+          "note": "Meem + م."
+        }
+      ],
+      "cards": [
+        {
+          "q": "What is another name for Idgham Shafawi?",
+          "a": "Idgham Mithlayn Saghir: the minor merging of two identical letters (meem into meem)."
+        }
+      ]
+    },
+    {
+      "id": "idhhar-shafawi",
+      "title": "Idhhar Shafawi",
+      "arabic": "الإظهار الشفوي",
+      "meaning": "Clarity at the lips",
+      "summary": "Before every letter except ب and م, pronounce the meem clearly with the lips, with no hum.",
+      "explain": [
+        "Idhhar Shafawi covers the other 26 letters. Close the lips for a clean, short meem, then move on.",
+        "Take extra care before و and ف. They are close to the meem (made at the lips too), so it is easy to hide or merge the meem by mistake. Keep it clear.",
+        "Idhhar Shafawi has no color in the Mushaf."
+      ],
+      "letters": "All letters except ب and م",
+      "letters_label": "Applies before",
+      "counts": "No ghunnah",
+      "colors": [],
+      "check": "idhhar_shafawi",
+      "identify": "What happens to the meem sakinah here?",
+      "how": [
+        "Close the lips for a short, clean meem.",
+        "Open straight into the next letter. No hum."
+      ],
+      "spot": "A meem with sukun, and the next letter is neither ب nor م.",
+      "tips": [
+        "Be extra clear before و and ف."
+      ],
+      "mistakes": [
+        "Hiding the meem before و or ف.",
+        "Adding a nasal hum."
+      ],
+      "examples": [
+        {
+          "ref": "1:7",
+          "at": "عليهم غير",
+          "note": "Meem + غ."
+        },
+        {
+          "ref": "67:6",
+          "at": "بربهم عذاب",
+          "note": "Meem + ع."
+        },
+        {
+          "ref": "67:24",
+          "at": "ذرأكم في",
+          "note": "Meem + ف: keep it clear!"
+        },
+        {
+          "ref": "67:25",
+          "at": "كنتم صادقين",
+          "note": "Meem + ص."
+        },
+        {
+          "ref": "68:19",
+          "at": "وهم نائمون",
+          "note": "Meem + ن."
+        },
+        {
+          "ref": "68:36",
+          "at": "لكم كيف",
+          "note": "Meem + ك."
+        }
+      ],
+      "cards": [
+        {
+          "q": "Before which two letters must you take extra care to keep the meem clear?",
+          "a": "و and ف, because they are close to the meem and it is easy to hide it by mistake."
+        }
+      ]
+    }
+  ]
+}
