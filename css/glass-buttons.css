@@ -1,0 +1,164 @@
+/* Hussein Benz · shared glass controls · v1
+ * Canonical source: husseinbenz-website/shared/glass-buttons.css
+ * Sync standalone copies: python tools/sync-glass.py
+ * Keeps each project's sizing, typography, colors and selected-state semantics.
+ */
+:root {
+  --hb-glass-sheen: linear-gradient(145deg, rgb(255 255 255 / .2), rgb(255 255 255 / .03) 48%, rgb(255 255 255 / .12));
+  --hb-glass-edge: rgb(255 255 255 / .65);
+  --hb-glass-rim: rgb(19 32 47 / .12);
+  --hb-glass-shadow: 0 2px 4px rgb(19 32 47 / .04), 0 6px 16px -8px rgb(19 32 47 / .2);
+  --hb-glass-focus: var(--primary, var(--vp-c-brand-1, #0e7c72));
+  --hb-glass-blur: 8px;
+  --hb-glass-speed: 180ms;
+}
+[data-theme="dark"], .dark, .sk-night, .on-dark, .top {
+  --hb-glass-edge: rgb(255 255 255 / .23);
+  --hb-glass-rim: rgb(255 255 255 / .1);
+  --hb-glass-sheen: linear-gradient(145deg, rgb(255 255 255 / .12), rgb(255 255 255 / .015) 48%, rgb(255 255 255 / .06));
+  --hb-glass-shadow: 0 2px 4px rgb(0 0 0 / .12), 0 8px 20px -10px rgb(0 0 0 / .5);
+}
+
+/* No new wrapper, filter, pseudo-element or z-index: labels stay crisp and
+ * existing switches, icon masks and status decorations retain their behavior. */
+html :is(button, input[type="button"], input[type="submit"], input[type="reset"], .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]):not([data-hb-glass="off"]) {
+  background-image: var(--glass-sheen, var(--hb-glass-sheen));
+  background-clip: padding-box;
+  box-shadow: inset 1px 1px 0 var(--glass-edge, var(--hb-glass-edge)), inset -1px -1px 0 var(--hb-glass-rim), var(--glass-shadow, var(--hb-glass-shadow));
+  -webkit-backdrop-filter: blur(var(--hb-glass-blur)) saturate(125%);
+  backdrop-filter: blur(var(--hb-glass-blur)) saturate(125%);
+  touch-action: manipulation;
+  transition-duration: var(--hb-glass-speed);
+}
+/* Translucent surfaces, with existing theme colors as opaque fallbacks. */
+html :is(.sk-btn--line, .sk-btn--ghost, .sk-icon-btn, .btn--line) {
+  background-color: var(--surface, #fff);
+  background-color: color-mix(in srgb, var(--surface, #fff) 72%, transparent);
+}
+html :is(.sk-btn--primary, .btn--primary) {
+  background-color: var(--primary, #0e7c72);
+  background-color: color-mix(in srgb, var(--primary, #0e7c72) 99%, transparent);
+}
+html .sk-btn--accent {
+  background-color: var(--accent, var(--primary));
+  background-color: color-mix(in srgb, var(--accent, var(--primary)) 99%, transparent);
+}
+html .VPButton.brand {
+  background-color: var(--vp-button-brand-bg);
+  background-color: color-mix(in srgb, var(--vp-button-brand-bg) 99%, transparent);
+}
+html .VPButton.alt {
+  background-color: var(--vp-button-alt-bg);
+  background-color: color-mix(in srgb, var(--vp-button-alt-bg) 78%, transparent);
+}
+/* High-contrast lettering on colored actions needs a quieter highlight. */
+html :is(.sk-btn--primary, .sk-btn--accent, .btn--primary, .VPButton.brand, .hb-glass-button--primary) {
+  background-image: linear-gradient(155deg, rgb(255 255 255 / .03), rgb(255 255 255 / 0) 65%);
+}
+@media (hover: hover) and (pointer: fine) {
+  html :is(button, .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]):not(:disabled, [aria-disabled="true"], [data-hb-glass="off"]):hover {
+    box-shadow: inset 1px 1px 0 var(--glass-edge, var(--hb-glass-edge)), inset -1px -1px 0 var(--hb-glass-rim), var(--glass-shadow, var(--hb-glass-shadow));
+  }
+  .hb-glass-button:hover { translate: 0 -2px; }
+  .hb-glass-button:hover .hb-glass-icon { scale: 1.06; }
+}
+html :is(button, input[type="button"], input[type="submit"], input[type="reset"], .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]):focus-visible {
+  outline: 2px solid var(--focus, var(--hb-glass-focus));
+  outline-offset: 4px;
+}
+html :is(button, .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]):not(:disabled, [aria-disabled="true"], [data-hb-glass="off"]):active {
+  box-shadow: inset 0 2px 4px rgb(0 0 0 / .16), inset 0 -1px 0 var(--hb-glass-edge);
+}
+html :is(button, .sk-btn, .btn, .VPButton, .hb-glass-button):is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+  transform: none;
+  translate: none;
+  filter: none;
+}
+
+/* Reusable version of the supplied CTA: semantic button or link, intrinsic
+ * width, wrapping label and a decorative icon circle that follows RTL. */
+.hb-glass-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(.5rem, 2vw, 1rem);
+  min-block-size: 3.25rem;
+  max-inline-size: 100%;
+  padding: .65rem 1.25rem;
+  border: 1px solid var(--line-2, rgb(19 32 47 / .18));
+  border-radius: 999px;
+  background-color: var(--surface, #fff);
+  color: var(--text, #13202f);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  cursor: pointer;
+  transition: translate var(--hb-glass-speed), box-shadow var(--hb-glass-speed);
+}
+.hb-glass-button--primary { background-color: var(--primary, #0e7c72); color: var(--primary-ink, #fff); }
+.hb-glass-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / .15);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .35);
+  transition: scale var(--hb-glass-speed);
+}
+.hb-glass-icon svg { inline-size: 1rem; block-size: 1rem; }
+[dir="rtl"] .hb-glass-icon--forward svg { transform: scaleX(-1); }
+
+/* Tarteel's existing themed appearances now use the same shared engine. */
+:where([data-hb-project="tarteel"]) :is(.btn, .play, .speed, .toggle, .step, .grade, .opt, .sym, .icon-btn, .language-btn) {
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-line);
+  transition: background-color var(--fast) var(--ease), border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+}
+:where([data-hb-project="tarteel"]) :is(.btn, .play, .speed, .toggle, .step, .grade, .sym, .icon-btn, .language-btn):hover,
+:where([data-hb-project="tarteel"]) .opt:hover:not([disabled]) { opacity: 1; background-color: var(--glass-bg); border-color: var(--glass-line-hover); }
+:where([data-hb-project="tarteel"]) .btn.soft { background-color: var(--glass-bg); color: var(--ink); }
+:where([data-hb-project="tarteel"]) :is(.btn:not(.soft), .play, .toggle[aria-pressed="true"], .step[aria-current="step"]) {
+  background-color: var(--glass-primary);
+  background-image: var(--glass-primary-sheen);
+  border-color: var(--glass-primary-line);
+  color: var(--on-primary);
+}
+:where([data-hb-project="tarteel"]) :is(.btn:not(.soft), .play, .toggle[aria-pressed="true"], .step[aria-current="step"]):hover { background-color: var(--glass-primary-hover); border-color: var(--glass-primary-line); }
+:where([data-hb-project="tarteel"]) .play[aria-pressed="true"],
+:where([data-hb-project="tarteel"]) .play[aria-pressed="true"]:hover { background-color: var(--glass-bg); background-image: var(--glass-sheen); border-color: var(--glass-line-hover); color: var(--ink); }
+:where([data-hb-project="tarteel"]) .opt.right { background-color: var(--good-soft); border-color: var(--good); background-image: none; }
+:where([data-hb-project="tarteel"]) .opt.wrong { background-color: var(--bad-soft); border-color: var(--bad); background-image: none; }
+:where([data-hb-project="tarteel"]) :is(.sym[aria-pressed="true"], .btn.soft:hover) { border-color: var(--glass-line-hover); }
+
+@media (prefers-reduced-motion: reduce) {
+  html .VPSwitch.VPSwitch, html .VPSwitch.VPSwitch *,
+  html :is(button, input[type="button"], input[type="submit"], input[type="reset"], .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]),
+  .hb-glass-icon { transition: none !important; animation: none !important; translate: none !important; scale: none !important; transform: none !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  html :is(button, input[type="button"], input[type="submit"], input[type="reset"], .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]) {
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+    background-image: none !important;
+  }
+  html :is(.sk-btn--line, .sk-btn--ghost, .sk-icon-btn, .btn--line) { background-color: var(--surface, #fff); }
+  html :is(.sk-btn--primary, .btn--primary) { background-color: var(--primary, #0e7c72); }
+  html .sk-btn--accent { background-color: var(--accent, var(--primary)); }
+  html .VPButton.brand { background-color: var(--vp-button-brand-bg); }
+  :where([data-hb-project="tarteel"]) :is(button, .btn, .step) { background-color: var(--surface); }
+  :where([data-hb-project="tarteel"]) :is(.btn:not(.soft), .play, .toggle[aria-pressed="true"], .step[aria-current="step"]) { background-color: var(--primary); }
+}
+@media (forced-colors: active) {
+  html :is(button, input[type="button"], input[type="submit"], input[type="reset"], .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]) {
+    background: ButtonFace !important; color: ButtonText !important; border: 1px solid ButtonText !important;
+    box-shadow: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+    forced-color-adjust: auto;
+  }
+  html :is(button, .sk-btn, .btn, .VPButton, .step, .hb-glass-button, [role="button"]):focus-visible { outline-color: Highlight; }
+}

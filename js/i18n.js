@@ -40,7 +40,7 @@
     'More decks': 'مجموعات أخرى', 'Practice again': 'تدرب مجددا', 'Again': 'أعدها', 'Hard': 'صعبة', 'Good': 'جيدة', 'Easy': 'سهلة',
     'Say it out loud, then flip the card.': 'اقرأ بصوت مسموع، ثم اقلب البطاقة.', 'Show answer': 'اعرض الإجابة',
     'Compare your recitation with the reciter’s.': 'قارن تلاوتك بتلاوة القارئ.', 'Lesson:': 'الدرس:', '(highlighted letters)': '(الحروف المحددة)',
-    'Correct!': 'صحيح!', 'Not quite.': 'حاول مجددا.', 'This is': 'الحكم هو', 'Continue': 'تابع',
+    'Correct! This is': 'صحيح! الحكم هو', 'Not quite. This is': 'حاول مجددا. الحكم هو', 'Continue': 'تابع',
     'What is this sign called, and what does it tell you to do?': 'ما اسم هذه العلامة، وماذا تطلب منك؟',
     'Which tajweed rule uses this color?': 'أي حكم يدل عليه هذا اللون؟', 'Keys:': 'المفاتيح:', 'Space': 'المسافة', 'flip ·': 'للقلب ·', 'grade ·': 'للتقييم ·', 'play': 'للتشغيل',
     'Symbols of the Mushaf': 'رموز المصحف', 'Every small mark has a job. Tap a sign to see its name, what it means and an example from the Quran.': 'لكل علامة معنى. اختر علامة لترى اسمها ووظيفتها ومثالا من القرآن.',

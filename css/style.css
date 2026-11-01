@@ -30,6 +30,10 @@
   --good: #14733f; --bad: #c0282e; --warn: #975700; --good-soft: #dff5e8; --bad-soft: #fde4e5;
   --hl: rgba(227, 242, 108, .85); --focus: var(--v-600); --on-swatch: var(--n-0);
   --shadow: 0 1px 2px rgba(17, 17, 19, .05); --shadow-lg: 0 20px 25px -5px rgba(17, 17, 19, .1), 0 8px 10px -6px rgba(17, 17, 19, .1);
+  --glass-bg: rgba(255, 255, 255, .5); --glass-sheen: linear-gradient(180deg, rgba(255, 255, 255, .85), rgba(255, 255, 255, .15));
+  --glass-line: rgba(17, 17, 19, .14); --glass-line-hover: rgba(17, 17, 19, .34); --glass-edge: rgba(255, 255, 255, .9);
+  --glass-shadow: 0 1px 2px rgba(17, 17, 19, .06), 0 4px 12px rgba(17, 17, 19, .06);
+  --glass-primary: rgba(122, 43, 232, .9); --glass-primary-hover: rgba(108, 33, 212, .92); --glass-primary-line: rgba(255, 255, 255, .28); --glass-primary-sheen: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, 0));
   color-scheme: light;
 }
 /* the two dark blocks must stay identical */
@@ -41,6 +45,10 @@
     --good: #5fd592; --bad: #ff7b80; --warn: #f0b35a; --good-soft: #17352a; --bad-soft: #43202a;
     --hl: rgba(227, 242, 108, .24); --focus: var(--lime); --on-swatch: var(--n-900);
     --shadow: none; --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, .45);
+    --glass-bg: rgba(255, 255, 255, .06); --glass-sheen: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .01));
+    --glass-line: rgba(255, 255, 255, .18); --glass-line-hover: rgba(255, 255, 255, .42); --glass-edge: rgba(255, 255, 255, .14);
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .24);
+    --glass-primary: rgba(192, 138, 255, .88); --glass-primary-hover: rgba(206, 160, 255, .92); --glass-primary-line: rgba(255, 255, 255, .36); --glass-primary-sheen: linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, 0));
     color-scheme: dark;
   }
 }
@@ -51,12 +59,20 @@
   --good: #5fd592; --bad: #ff7b80; --warn: #f0b35a; --good-soft: #17352a; --bad-soft: #43202a;
   --hl: rgba(227, 242, 108, .24); --focus: var(--lime); --on-swatch: var(--n-900);
   --shadow: none; --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, .45);
+  --glass-bg: rgba(255, 255, 255, .06); --glass-sheen: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .01));
+  --glass-line: rgba(255, 255, 255, .18); --glass-line-hover: rgba(255, 255, 255, .42); --glass-edge: rgba(255, 255, 255, .14);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .24);
+  --glass-primary: rgba(192, 138, 255, .88); --glass-primary-hover: rgba(206, 160, 255, .92); --glass-primary-line: rgba(255, 255, 255, .36); --glass-primary-sheen: linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, 0));
   color-scheme: dark;
 }
 /* always-dark regions (header, hero, footer) in either theme */
 .on-dark, .top {
   --ink: var(--n-50); --muted: var(--n-300); --line: var(--n-700); --line-strong: var(--n-500);
   --primary: var(--v-500); --on-primary: var(--n-900); --link: var(--v-400); --focus: var(--lime); --surface: var(--n-800);
+  --glass-bg: rgba(255, 255, 255, .06); --glass-sheen: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .01));
+  --glass-line: rgba(255, 255, 255, .18); --glass-line-hover: rgba(255, 255, 255, .42); --glass-edge: rgba(255, 255, 255, .14);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 12px rgba(0, 0, 0, .24);
+  --glass-primary: rgba(192, 138, 255, .88); --glass-primary-hover: rgba(206, 160, 255, .92); --glass-primary-line: rgba(255, 255, 255, .36); --glass-primary-sheen: linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, 0));
   color: var(--ink);
 }
 
@@ -325,3 +341,6 @@ dialog::backdrop { background: rgba(17, 17, 19, .6); backdrop-filter: blur(4px);
   .lesson-list { grid-template-columns: minmax(0, 1fr); }
   .facts { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Shared glass appearances: css/glass-buttons.css.
+   Project-specific theme tints stay in the tokens above. */
