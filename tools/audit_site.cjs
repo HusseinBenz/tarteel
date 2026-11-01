@@ -129,6 +129,42 @@ const server = http.createServer((req, res) => {
       const context = await browser.newContext();
       const page = await context.newPage();
       page.on('pageerror', error => errors.push(error.message));
+      // Every settings click must act exactly once, however often the page was visited.
+      const checkSettings = async () => {
+        for (let visit = 0; visit < 3; visit++) {
+          await page.evaluate(() => { location.hash = '/path'; });
+          await page.locator('#lesson-search').waitFor();
+          await page.evaluate(() => { location.hash = '/practice'; });
+          await page.locator('#practice-settings').waitFor();
+        }
+        const toggle = page.locator('.toggle[data-type="c"]');
+        await page.locator('details.more summary').click();
+        const counts = await page.locator('.deck .counts').first().innerText();
+        for (const expected of ['false', 'true', 'false', 'true', 'false', 'true']) {
+          await toggle.click();
+          assert.equal(await toggle.getAttribute('aria-pressed'), expected, 'A settings click must flip exactly once');
+          assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('tarteel.v1')).settings.types.c), expected === 'true');
+        }
+        assert.equal(await page.locator('.deck .counts').first().innerText(), counts);
+        assert.ok(await toggle.evaluate(b => b === document.activeElement), 'Focus stays on the setting');
+        assert.ok(await page.locator('details.more').evaluate(d => d.open), 'An open section stays open');
+        await toggle.click();
+        assert.notEqual(await page.locator('.deck .counts').first().innerText(), counts, 'Turning off a card type updates the counts');
+        await toggle.click();
+        const mode = page.locator('.toggle[data-mode="free"]'), smart = page.locator('.toggle[data-mode="smart"]');
+        await mode.click();
+        assert.equal(await mode.getAttribute('aria-pressed'), 'true');
+        assert.equal(await smart.getAttribute('aria-pressed'), 'false');
+        await smart.click();
+        assert.equal(await smart.getAttribute('aria-pressed'), 'true');
+        const autoplay = page.locator('.toggle[data-autoplay]');
+        for (const expected of ['true', 'false', 'true', 'false']) {
+          await autoplay.click();
+          assert.equal(await autoplay.getAttribute('aria-pressed'), expected);
+        }
+        const elapsed = await toggle.evaluate(b => { const t = performance.now(); for (let i = 0; i < 20; i++) b.click(); return performance.now() - t; });
+        assert.ok(elapsed < 2000, `20 settings clicks took ${Math.round(elapsed)}ms`);
+      };
       await page.goto(base + '#/practice/lesson-idhhar');
       const unversioned = await page.evaluate(() => [...document.querySelectorAll('script[src], link[rel="stylesheet"]')].map(e => e.getAttribute('src') || e.getAttribute('href')).filter(u => !/\?v=[0-9a-f]{10}$/.test(u)));
       assert.deepEqual(unversioned, [], 'Every script and stylesheet must carry a content hash');
@@ -172,6 +208,7 @@ const server = http.createServer((req, res) => {
       await page.locator('#lesson-search').fill('zzzz');
       assert.equal(await page.locator('.lesson-link:visible').count(), 0);
       assert.ok(await page.locator('#search-empty').isVisible());
+      await checkSettings();
       // Slow playback applies to the clip and survives a language switch.
       await page.evaluate(() => { location.hash = '/lesson/iqlab/see'; });
       await page.locator('[data-speed]').first().click();
@@ -180,6 +217,7 @@ const server = http.createServer((req, res) => {
       await page.locator('#btn-language').click();
       assert.equal(await page.locator('[data-speed]').first().innerText(), '0.75×');
       assert.ok(/سرعة/.test(await page.locator('[data-speed]').first().getAttribute('aria-label')));
+      await checkSettings();
       await context.close();
       // A stale page paired with this script must degrade, not crash.
       const stale = await browser.newContext();
