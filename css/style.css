@@ -229,7 +229,7 @@ a.chip:hover { border-color: var(--line-strong); }
 .deck h3 { margin: 0; font-size: 1.05rem; }
 .deck .counts { font-size: .6875rem; color: var(--muted); }
 .toggles { display: flex; gap: var(--s-2); flex-wrap: wrap; margin: var(--s-2) 0 var(--s-4); }
-.toggle { border: 1px solid var(--line-strong); background: transparent; color: var(--ink); border-radius: var(--r-md); padding: var(--s-1) var(--s-3); cursor: pointer; }
+.toggle { min-height: 2.75rem; border: 1px solid var(--line-strong); background: transparent; color: var(--ink); border-radius: var(--r-md); padding: var(--s-1) var(--s-3); cursor: pointer; touch-action: manipulation; }
 .toggle[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
 details.more { margin-top: var(--s-5); }
 details.more summary { cursor: pointer; font-family: var(--font-mono); padding: var(--s-2) 0; }

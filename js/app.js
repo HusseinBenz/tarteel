@@ -356,31 +356,53 @@
     if (!ids.length) return '';
     return '<a class="deck" href="#/practice/' + d.id + '"><h3>' + esc(d.title) + '</h3><span class="counts">' + plural(ids.length, 'card') + (st.due ? ' · ' + st.due + ' due' : '') + (st.new ? ' · ' + st.new + ' new' : '') + '</span></a>';
   }
-  function viewPractice() {
-    setNav('practice'); setTitle('Flashcards');
-    var all = deckById.all, st = countStates(allowedIds(all)), T = S.settings.types;
-    var names = { r: 'Recite', i: 'Identify the rule', c: 'Concepts', s: 'Symbols', k: 'Colors' };
-    var html = '<h1>Flashcards</h1><p class="muted">The repetitive path. Each card shows a fragment of a verse: say it aloud, flip, press play, and compare. The cards you find hard come back sooner.</p>' +
-      '<div class="due-card on-dark"><div><b>' + st.due + '</b> due now · <b>' + Math.min(st.new, Math.max(0, S.settings.newPerDay - today().fresh)) + '</b> new for today<br><span class="small muted">' + plural(D.cards.length, 'card') + ' in the whole course</span></div>' +
-      '<a class="btn big" href="#/practice/all">Review now</a></div>' +
-      '<h2 style="margin-top:1.5rem">Settings</h2><div class="toggles" id="toggles">' +
-      Object.keys(names).map(function (k) { return '<button class="toggle" type="button" data-type="' + k + '" aria-pressed="' + (!!T[k]) + '">' + names[k] + '</button>'; }).join('') + '</div>' +
-      '<div class="toggles"><button class="toggle" type="button" data-mode="smart" aria-pressed="' + (S.settings.mode === 'smart') + '">Smart review</button>' +
-      '<button class="toggle" type="button" data-mode="free" aria-pressed="' + (S.settings.mode === 'free') + '">Free practice (shuffle)</button>' +
-      '<button class="toggle" type="button" data-autoplay aria-pressed="' + S.settings.autoplay + '">Autoplay audio after flipping</button></div>' +
-      '<h2>By level</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'level'; }).map(function (d) { return deckCard(d); }).join('') + '</div>' +
+  function practiceDue() {
+    var st = countStates(allowedIds(deckById.all));
+    return '<div class="due-card on-dark"><div><b>' + st.due + '</b> due now · <b>' + Math.min(st.new, Math.max(0, S.settings.newPerDay - today().fresh)) + '</b> new for today<br><span class="small muted">' + plural(D.cards.length, 'card') + ' in the whole course</span></div>' +
+      '<a class="btn big" href="#/practice/all">Review now</a></div>';
+  }
+  function practiceDecks() {
+    return '<h2>By level</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'level'; }).map(function (d) { return deckCard(d); }).join('') + '</div>' +
       '<h2 style="margin-top:1.5rem">Rule symbols and colors</h2><div class="grid">' + D.decks.filter(function (d) { return d.kind === 'symbols'; }).map(function (d) { return deckCard(d); }).join('') + '</div>' +
       '<details class="more"><summary>One deck per lesson</summary>' + D.levels.map(function (lv) {
         return '<h3 style="margin-top:1rem">Level ' + lv.level + ': ' + esc(lv.title) + '</h3><div class="grid">' + lv.lessons.map(function (id) { var d = deckById['lesson-' + id]; return d ? deckCard(d) : ''; }).join('') + '</div>';
       }).join('') + '</details>';
-    app.innerHTML = html;
-    I18n.localize(app);
-    $('#toggles').parentNode.addEventListener('click', function (e) {
+  }
+  function viewPractice() {
+    setNav('practice'); setTitle('Flashcards');
+    var names = { r: 'Recite', i: 'Identify the rule', c: 'Concepts', s: 'Symbols', k: 'Colors' };
+    app.innerHTML = '<h1>Flashcards</h1><p class="muted">The repetitive path. Each card shows a fragment of a verse: say it aloud, flip, press play, and compare. The cards you find hard come back sooner.</p>' +
+      '<div id="practice-due">' + practiceDue() + '</div>' +
+      '<h2 style="margin-top:1.5rem">Settings</h2><div id="practice-settings"><div class="toggles">' +
+      Object.keys(names).map(function (k) { return '<button class="toggle" type="button" data-type="' + k + '">' + names[k] + '</button>'; }).join('') + '</div>' +
+      '<div class="toggles"><button class="toggle" type="button" data-mode="smart">Smart review</button>' +
+      '<button class="toggle" type="button" data-mode="free">Free practice (shuffle)</button>' +
+      '<button class="toggle" type="button" data-autoplay>Autoplay audio after flipping</button></div></div>' +
+      '<div id="practice-decks" aria-live="off">' + practiceDecks() + '</div>';
+    var settings = $('#practice-settings');
+    function syncToggles() {
+      $$('.toggle', settings).forEach(function (b) {
+        var on = b.dataset.type ? S.settings.types[b.dataset.type] : b.dataset.mode ? S.settings.mode === b.dataset.mode : S.settings.autoplay;
+        b.setAttribute('aria-pressed', String(!!on));
+      });
+    }
+    syncToggles();
+    // The listener lives on an element replaced by every render, so there is only ever one.
+    settings.addEventListener('click', function (e) {
       var b = e.target.closest('.toggle'); if (!b) return;
       if (b.dataset.type) S.settings.types[b.dataset.type] = !S.settings.types[b.dataset.type];
       else if (b.dataset.mode) S.settings.mode = b.dataset.mode;
-      else if ('autoplay' in b.dataset) S.settings.autoplay = !S.settings.autoplay;
-      saveState(); viewPractice();
+      else S.settings.autoplay = !S.settings.autoplay;
+      saveState();
+      syncToggles();
+      if (!b.dataset.type) return;
+      // Only card types change the counts. The buttons stay in place, so focus and scroll do too.
+      var due = $('#practice-due'), decks = $('#practice-decks'), open = $('details.more', decks).open;
+      due.innerHTML = practiceDue();
+      decks.innerHTML = practiceDecks();
+      $('details.more', decks).open = open;
+      I18n.localize(due);
+      I18n.localize(decks);
     });
   }
   function viewDeck(id) {
