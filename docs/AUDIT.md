@@ -46,6 +46,12 @@ Reported: the Arabic switch did not work. It worked on a clean load, but it fail
 
 Latest run after these changes: **1,360 configurations passed**, with zero untranslated strings, overflows or runtime errors.
 
+## Later fixes
+
+- **Flashcard settings:** the handler was attached to an element that is never replaced, on every render, so listeners doubled with each click. Toggles stopped flipping and the work grew exponentially. There is now one listener per render and buttons update in place. The audit clicks each setting repeatedly in both languages.
+- **Arabic answer feedback:** identify cards showed "Correct! This is" in English, because the translations were keyed on smaller pieces than the rendered text. It only surfaced when the shuffled first option happened to be right, so the audit passed by chance before. The audit now checks both outcomes.
+- **Button contrast:** the audit measures button text against the blended glass color in both themes (186 checks, minimum 4.5:1).
+
 ## Remaining gaps
 
 | Priority | Finding | Next step |

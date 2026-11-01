@@ -93,7 +93,7 @@ const server = http.createServer((req, res) => {
         if (type === 'i') await page.locator('[data-opt]').first().click(); else await page.locator('button[data-act="flip"]').click();
         if (lang === 'ar') {
           const answer = await page.locator('#app').innerText();
-          assert.ok(!/Show answer|Listen|Correct!|Which|What is|Lesson:/.test(answer), answer);
+          assert.ok(!/Show answer|Listen|Correct!|Not quite|This is|Which|What is|Lesson:/.test(answer), answer);
         }
         const audio = page.locator('[data-audio]').first();
         if (await audio.count()) { await audio.click(); await page.waitForTimeout(30); assert.ok(await page.locator('#player').evaluate(p => !!p.currentSrc)); }
@@ -209,6 +209,51 @@ const server = http.createServer((req, res) => {
       assert.equal(await page.locator('.lesson-link:visible').count(), 0);
       assert.ok(await page.locator('#search-empty').isVisible());
       await checkSettings();
+      // Button text stays readable through the glass, in both themes, on every kind of surface.
+      const contrast = await (async () => {
+        const failures = {};
+        let checked = 0;
+        for (const theme of ['light', 'dark']) {
+          await page.evaluate(t => { document.documentElement.dataset.theme = t; }, theme);
+          for (const route of ['/', '/practice', '/lesson/iqlab', '/lesson/iqlab/see', '/lesson/iqlab/try', '/symbols']) {
+            await page.evaluate(h => { location.hash = h; }, route);
+            await page.waitForTimeout(60);
+            for (let side = 0; side < 2; side++) {
+              const result = await page.evaluate(() => {
+                const parse = c => { const m = c.match(/[\d.]+/g).map(Number); return { r: m[0], g: m[1], b: m[2], a: m[3] === undefined ? 1 : m[3] }; };
+                const over = (t, b) => ({ r: t.r * t.a + b.r * (1 - t.a), g: t.g * t.a + b.g * (1 - t.a), b: t.b * t.a + b.b * (1 - t.a), a: 1 });
+                const lum = c => { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }; return .2126 * f(c.r) + .7152 * f(c.g) + .0722 * f(c.b); };
+                const backdrop = e => {
+                  const layers = [];
+                  for (let x = e; x; x = x.parentElement) {
+                    if (x.matches('.hero, .lesson-head, .due-card')) { layers.push({ r: 61, g: 36, b: 102, a: 1 }); break; }
+                    const c = parse(getComputedStyle(x).backgroundColor);
+                    if (c.a > 0) { layers.push(c); if (c.a === 1) break; }
+                  }
+                  return layers.reverse().reduce((b, t) => over(t, b), { r: 255, g: 255, b: 255, a: 1 });
+                };
+                const out = [];
+                document.querySelectorAll('.btn, .play, .speed, .toggle, .step, .grade, .grade small, .opt, .sym .n, .icon-btn, .language-btn').forEach(e => {
+                  if (!e.getClientRects().length || !e.textContent.trim()) return;
+                  const bg = backdrop(e), fg = over(parse(getComputedStyle(e).color), bg);
+                  const a = lum(fg), b = lum(bg), ratio = (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+                  out.push({ name: e.className || e.tagName, text: e.textContent.trim().slice(0, 18), ratio: Math.round(ratio * 100) / 100 });
+                });
+                return out;
+              });
+              checked += result.length;
+              result.filter(r => r.ratio < 4.5).forEach(r => { failures[theme + ' ' + route + ' .' + r.name] = r; });
+              const flip = page.locator('button[data-act="flip"]');
+              if (route.endsWith('/try') && await flip.count()) await flip.first().click(); else break;
+            }
+          }
+        }
+        return { checked, failures };
+      })();
+      assert.deepEqual(contrast.failures, {}, 'Button text must reach 4.5:1 through the glass');
+      assert.ok(contrast.checked > 100, 'Contrast check saw too few buttons');
+      console.log(`Button contrast: ${contrast.checked} checks passed`);
+      await page.evaluate(() => { delete document.documentElement.dataset.theme; });
       // Slow playback applies to the clip and survives a language switch.
       await page.evaluate(() => { location.hash = '/lesson/iqlab/see'; });
       await page.locator('[data-speed]').first().click();
