@@ -54,6 +54,10 @@ python tools/build.py            # rebuild model, audio, website data and Anki d
 
 The first run downloads the source data into `build/` (git-ignored). Lessons live in [`content/`](content/) as JSON, and each example is a *reference* to a verse (`{"ref": "68:19", "at": "من ربك"}`), so no Arabic is typed by hand and a wrong example fails the build. See the [content guide](docs/CONTENT-GUIDE.md) and the [architecture](docs/ARCHITECTURE.md).
 
+## Publish
+
+The website is served by GitHub Pages from the `gh-pages` branch: <https://husseinbenz.github.io/tarteel/>. After changing `site/`, run `tools/publish_pages.sh` (it pushes the `site/` folder to that branch). A printable summary of the course is in [`docs/HANDOUT.md`](docs/HANDOUT.md).
+
 ## Important notes
 
 - **Learn with a teacher.** Tajweed is transmitted by listening and reciting back to a qualified teacher. Tarteel is a study aid for practice between lessons. Lengths of madd follow the common teaching for Hafs ʿan ʿĀṣim (natural 2, connected and separated 4–5, necessary 6, and 2/4/6 on stopping). If your teacher teaches otherwise, follow your teacher.
