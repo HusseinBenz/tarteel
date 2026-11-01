@@ -5,7 +5,7 @@
   --tj-madda_obligatory: #1D3FBF;
   --tj-madda_necessary: #0B1F7A;
   --tj-qalaqah: #E0303F;
-  --tj-ghunnah: #E8790C;
+  --tj-ghunnah: #D96E06;
   --tj-ikhafa: #A12BC4;
   --tj-ikhafa_shafawi: #D91E91;
   --tj-idgham_ghunnah: #0F9D87;
@@ -14,9 +14,9 @@
   --tj-iqlab: #0A93D6;
   --tj-idgham_mutajanisayn: #B8860B;
   --tj-idgham_mutaqaribayn: #8A5A2B;
-  --tj-ham_wasl: #9A97A8;
-  --tj-laam_shamsiyah: #9A97A8;
-  --tj-slnt: #9A97A8;
+  --tj-ham_wasl: #8C8C98;
+  --tj-laam_shamsiyah: #8C8C98;
+  --tj-slnt: #8C8C98;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -34,9 +34,9 @@
     --tj-iqlab: #58C7FF;
     --tj-idgham_mutajanisayn: #F0C24D;
     --tj-idgham_mutaqaribayn: #E0A674;
-    --tj-ham_wasl: #8C8A9C;
-    --tj-laam_shamsiyah: #8C8A9C;
-    --tj-slnt: #8C8A9C;
+    --tj-ham_wasl: #8E8E9A;
+    --tj-laam_shamsiyah: #8E8E9A;
+    --tj-slnt: #8E8E9A;
   }
 }
 :root[data-theme="dark"] {
@@ -54,9 +54,9 @@
   --tj-iqlab: #58C7FF;
   --tj-idgham_mutajanisayn: #F0C24D;
   --tj-idgham_mutaqaribayn: #E0A674;
-  --tj-ham_wasl: #8C8A9C;
-  --tj-laam_shamsiyah: #8C8A9C;
-  --tj-slnt: #8C8A9C;
+  --tj-ham_wasl: #8E8E9A;
+  --tj-laam_shamsiyah: #8E8E9A;
+  --tj-slnt: #8E8E9A;
 }
 .tj-madda_normal { color: var(--tj-madda_normal); }
 .tj-madda_permissible { color: var(--tj-madda_permissible); }
