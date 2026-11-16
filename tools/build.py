@@ -40,6 +40,8 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    if subprocess.run(["ffmpeg", "-version"], capture_output=True).returncode != 0:
-        raise SystemExit("ffmpeg is required (https://ffmpeg.org)")
+    if "--check" not in sys.argv:
+        import quran_data
+        if subprocess.run([quran_data.ffmpeg(), "-version"], capture_output=True).returncode != 0:
+            raise SystemExit("ffmpeg is required (https://ffmpeg.org)")
     main()

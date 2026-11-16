@@ -1,100 +1,115 @@
-# Graph Report - tarteel  (2026-11-01)
+# Graph Report - tarteel  (2026-11-16)
 
 ## Corpus Check
-- 34 files · ~44,124 words
+- 38 files · ~54,760 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 5 file(s) not represented in the graph (top: (none) 3, .css 2)
+- Unclassified: 7 file(s) not represented in the graph (top: (none) 3, .css 3, .webmanifest 1)
 
 ## Summary
-- 278 nodes · 554 edges · 14 communities (9 shown, 5 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.86)
+- 332 nodes · 701 edges · 17 communities (12 shown, 5 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 40 edges (avg confidence: 0.88)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3cad5189`
+- Built from commit: `124e0781`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - quran_data.py
 - curriculum.py
-- render
+- startSession
 - Tarteel Handout: Tajweed at a Glance
 - build_anki.py
 - Architecture
 - Design system
 - app.js
-- preview_anki.py
+- audio.js
 - CLAUDE.md
 - publish_pages.sh
 - .claude/CLAUDE.md
 - audit_site.cjs
 - i18n.js
+- Website audit — 1 November 2026
+- icon
+- sw.js
 
 ## God Nodes (most connected - your core abstractions)
-1. `esc()` - 23 edges
-2. `render()` - 15 edges
-3. `viewPath()` - 14 edges
-4. `startSession()` - 14 edges
-5. `viewLesson()` - 13 edges
-6. `route()` - 13 edges
-7. `viewHome()` - 12 edges
-8. `viewDeck()` - 11 edges
-9. `build()` - 11 edges
-10. `Tarteel Handout: Tajweed at a Glance` - 11 edges
+1. `esc()` - 27 edges
+2. `startSession()` - 19 edges
+3. `viewHome()` - 18 edges
+4. `render()` - 16 edges
+5. `viewPath()` - 15 edges
+6. `viewLesson()` - 14 edges
+7. `route()` - 13 edges
+8. `How Tarteel teaches` - 12 edges
+9. `viewDeck()` - 11 edges
+10. `viewAbout()` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `The Quran text and font` --references--> `align_markup()`  [INFERRED]
   docs/ARCHITECTURE.md → tools/quran_data.py
-- `main()` --calls--> `build()`  [EXTRACTED]
-  tools/build.py → tools/build_model.py
-- `main()` --calls--> `load()`  [EXTRACTED]
-  tools/build.py → tools/curriculum.py
-- `cut()` --calls--> `segments()`  [EXTRACTED]
-  tools/build_audio.py → tools/quran_data.py
-- `cut()` --calls--> `verse_audio_path()`  [EXTRACTED]
-  tools/build_audio.py → tools/quran_data.py
+- `How Tarteel teaches` --references--> `recall()`  [INFERRED]
+  docs/LEARNING.md → site/js/app.js
+- `How Tarteel teaches` --references--> `grade()`  [INFERRED]
+  docs/LEARNING.md → site/js/app.js
+- `How Tarteel teaches` --references--> `buildQueue()`  [INFERRED]
+  docs/LEARNING.md → site/js/app.js
+- `How Tarteel teaches` --references--> `goalPanel()`  [INFERRED]
+  docs/LEARNING.md → site/js/app.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (14 total, 5 thin omitted)
+## Communities (17 total, 5 thin omitted)
 
 ### Community 0 - "quran_data.py"
-Cohesion: 0.10
-Nodes (22): align_markup(), chapters(), display_tajweed(), enrich_natural_madd(), _explode(), fragment(), full_tajweed(), _get() (+14 more)
+Cohesion: 0.08
+Nodes (27): cut(), main(), align_markup(), chapters(), clip_timing(), clip_window(), display_tajweed(), enrich_natural_madd() (+19 more)
 
 ### Community 1 - "curriculum.py"
-Cohesion: 0.15
-Nodes (14): build(), _strip(), check_heavy(), check_idhhar(), check_idhhar_shafawi(), check_lam_allah(), check_qamariyah(), ContentError (+6 more)
+Cohesion: 0.12
+Nodes (15): _strip(), check_heavy(), check_idhhar(), check_idhhar_shafawi(), check_lam_allah(), check_qamariyah(), ContentError, _first_letter() (+7 more)
 
-### Community 2 - "render"
-Cohesion: 0.24
-Nodes (17): fmtInterval(), playClip(), setPlaying(), shuffle(), startSession(), doGrade(), finish(), gradesHTML() (+9 more)
+### Community 2 - "startSession"
+Cohesion: 0.19
+Nodes (19): How Tarteel teaches, References, What the scheduler does not do, fmtInterval(), nextInterval(), shuffle(), startSession(), doGrade() (+11 more)
 
 ### Community 3 - "Tarteel Handout: Tajweed at a Glance"
-Cohesion: 0.05
-Nodes (38): Implemented, Language switch fix, Later fixes, Remaining gaps, Verification, Website audit — 1 November 2026, Add a lesson, Add an example to a lesson (+30 more)
+Cohesion: 0.06
+Nodes (31): Add a lesson, Colors, Content guide: adding or changing lessons, Keep examples honest: `expect` and `check`, Known limitation, Symbols, 10. Your 8 levels, 1. How to study (+23 more)
 
 ### Community 4 - "build_anki.py"
 Cohesion: 0.09
-Nodes (15): build(), chips(), deck(), label(), css(), deck_id(), esc(), rich() (+7 more)
+Nodes (16): build(), chips(), deck(), label(), css(), deck_id(), esc(), rich() (+8 more)
 
 ### Community 5 - "Architecture"
-Cohesion: 0.22
-Nodes (9): Accessibility and robustness, Anki deck tree, Architecture, Content model, Curriculum (Levels 0 to 7), Folder layout, The Quran text and font, Website routes (+1 more)
+Cohesion: 0.18
+Nodes (11): Accessibility and robustness, Anki deck tree, Architecture, Content model, Curriculum (Levels 0 to 7), Folder layout, Offline and installation, Sound and text in step (+3 more)
 
 ### Community 6 - "Design system"
 Cohesion: 0.15
 Nodes (12): Audit, Color: primitives, Color: semantic, Components, Design system, Glass buttons, Known gap, Rules that override the system (+4 more)
 
 ### Community 7 - "app.js"
-Cohesion: 0.11
-Nodes (52): allowedIds(), buildQueue(), chipFor(), chips(), colorRows(), countStates(), cycleSpeed(), dayKey() (+44 more)
+Cohesion: 0.10
+Nodes (66): adopt(), allowedIds(), applyTheme(), buildQueue(), chipFor(), chips(), colorRows(), countStates() (+58 more)
+
+### Community 8 - "audio.js"
+Cohesion: 0.22
+Nodes (21): Add an example to a lesson, blobFor(), clearMarks(), describe(), echo(), emit(), finish(), frame() (+13 more)
 
 ### Community 12 - "audit_site.cjs"
-Cohesion: 0.11
-Nodes (10): ar, assert, data, en, fs, http, path, server (+2 more)
+Cohesion: 0.15
+Nodes (5): ar, data, en, server, site
+
+### Community 14 - "Website audit — 1 November 2026"
+Cohesion: 0.22
+Nodes (9): Implemented, Language switch fix, Later fixes, Product pass — 16 November 2026, Remaining gaps, Verification, Verification, Website audit — 1 November 2026 (+1 more)
+
+### Community 15 - "icon"
+Cohesion: 0.28
+Nodes (4): icon(), disc(), u(), main()
 
 ## Knowledge Gaps
 - **5 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
@@ -102,17 +117,17 @@ Nodes (10): ar, assert, data, en, fs, http, path, server (+2 more)
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Architecture` connect `Architecture` to `Tarteel Handout: Tajweed at a Glance`?**
-  _High betweenness centrality (0.200) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `startSession()` (e.g. with `onClick()` and `onKey()`) actually correct?**
-  _`startSession()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `How Tarteel teaches` connect `startSession` to `audio.js`, `Tarteel Handout: Tajweed at a Glance`, `app.js`?**
+  _High betweenness centrality (0.372) - this node is a cross-community bridge._
+- **Are the 3 inferred relationships involving `startSession()` (e.g. with `How Tarteel teaches` and `onClick()`) actually correct?**
+  _`startSession()` has 3 INFERRED edges - model-reasoned connections that need verification._
 - **Should `quran_data.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.0975609756097561 - nodes in this community are weakly interconnected._
-- **Why does `align_markup()` connect `quran_data.py` to `Architecture`?**
-  _High betweenness centrality (0.195) - this node is a cross-community bridge._
+  _Cohesion score 0.07767722473604827 - nodes in this community are weakly interconnected._
+- **Why does `Sound and text in step` connect `Architecture` to `audio.js`, `quran_data.py`?**
+  _High betweenness centrality (0.351) - this node is a cross-community bridge._
 - **Should `curriculum.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.14666666666666667 - nodes in this community are weakly interconnected._
-- **Why does `The Quran text and font` connect `Architecture` to `quran_data.py`?**
-  _High betweenness centrality (0.190) - this node is a cross-community bridge._
+  _Cohesion score 0.12183908045977011 - nodes in this community are weakly interconnected._
+- **Why does `clip_window()` connect `quran_data.py` to `Architecture`?**
+  _High betweenness centrality (0.340) - this node is a cross-community bridge._
 - **Should `Tarteel Handout: Tajweed at a Glance` be split into smaller, more focused modules?**
-  _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05689900426742532 - nodes in this community are weakly interconnected._

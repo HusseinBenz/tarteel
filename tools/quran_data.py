@@ -24,6 +24,8 @@ ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "build" / "cache"
 VERSE_CACHE = CACHE / "verses"
 AUDIO_CACHE = CACHE / "verse_audio"
+for _dir in (VERSE_CACHE, AUDIO_CACHE):  # a fresh clone has no build/ folder yet
+    _dir.mkdir(parents=True, exist_ok=True)
 
 API = "https://api.quran.com/api/v4"
 RECITER_ID = 6  # Husary (Murattal) - segments match everyayah "Husary_128kbps"
@@ -32,6 +34,20 @@ UA = {"User-Agent": "tarteel-builder/1.0 (educational project)"}
 
 TAG_RE = re.compile(r"<tajweed class=([a-z_]+)>(.*?)</tajweed>", re.S)
 ANY_TAG_RE = re.compile(r"<[^>]+>")
+
+
+@lru_cache(maxsize=1)
+def ffmpeg() -> str:
+    """The ffmpeg to run: the one on PATH, else the binary bundled with imageio-ffmpeg."""
+    import shutil
+    found = shutil.which("ffmpeg")
+    if found:
+        return found
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        raise SystemExit("ffmpeg is required: install it (https://ffmpeg.org) or `pip install imageio-ffmpeg`")
 
 
 def _get(url: str, binary: bool = False):
@@ -316,6 +332,52 @@ def segments(key: str) -> dict[int, tuple[int, int]]:
     return {int(s[1]): (int(s[2]), int(s[3])) for s in seg if len(s) >= 4}
 
 
+# Silence kept around a clip, in ms: more at the edges of a verse, where the
+# reciter breathes, and almost none inside it, where the words run together.
+PAD_VERSE_START, PAD_VERSE_END, PAD_INNER_START, PAD_INNER_END = 150, 250, 20, 40
+
+
+def clip_window(key: str, first: int, last: int) -> tuple[int, int]:
+    """(start_ms, end_ms) of words first..last in the verse recording.
+
+    The one definition of where a clip begins and ends: build_audio cuts with
+    it and clip_timing measures against it, so sound and highlight cannot drift.
+    """
+    seg = segments(key)
+    if not seg:
+        raise SystemExit(f"{key}: no segment timings")
+    a, b = first, last
+    while a not in seg and a < max(seg):
+        a += 1
+    while b not in seg and b > min(seg):
+        b -= 1
+    start = max(0, seg[a][0] - (PAD_VERSE_START if first == 1 else PAD_INNER_START))
+    end = seg[b][1] + (PAD_VERSE_END if last == word_count(key) else PAD_INNER_END)
+    return start, max(end, start + 400)
+
+
+def clip_timing(key: str, first: int, last: int) -> dict:
+    """When each word sounds inside its clip: {"dur": ms, "words": [[start_ms, end_ms], ...]}.
+
+    One entry per word, in order. A word the source has no timing for shares
+    the span between its neighbours, so the list never has holes.
+    """
+    seg = segments(key)
+    start, end = clip_window(key, first, last)
+    dur = end - start
+    spans: list[list[int] | None] = [
+        [seg[p][0] - start, seg[p][1] - start] if p in seg else None for p in range(first, last + 1)
+    ]
+    for i, span in enumerate(spans):
+        if span is None:
+            before = next((s[1] for s in reversed(spans[:i]) if s), 0)
+            after = next((s[0] for s in spans[i + 1:] if s), dur)
+            spans[i] = [before, max(before, after)]
+    words = [[max(0, min(dur, s)), max(0, min(dur, e))] for s, e in spans]
+    assert all(a <= b for a, b in words) and all(x[0] <= y[0] for x, y in zip(words, words[1:])), f"{key}: word timings out of order"
+    return {"dur": dur, "words": words}
+
+
 def fragment(key: str, first: int, last: int, colored: bool = True) -> dict:
     """Everything a card needs about words first..last (1-based, inclusive) of a verse."""
     words = words_of(key, display=True)
@@ -352,4 +414,5 @@ def fragment(key: str, first: int, last: int, colored: bool = True) -> dict:
         "plain_q": " ".join(plain(w) for w in src[first - 1 : last]),
         "classes": sorted({c for w in chosen for c, _ in TAG_RE.findall(w)}),
         "gloss": " · ".join(g for g in glosses if g),
+        "timing": clip_timing(key, first, last),
     }

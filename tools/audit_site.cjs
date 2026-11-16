@@ -27,6 +27,14 @@ for (const card of ar.cards.filter(c => c.t === 'c')) {
   assert.ok(/[\u0600-\u06ff]/.test(card.a));
 }
 for (const deck of en.decks) for (const id of deck.cards) assert.ok(en.cards.some(c => c.id === id));
+// Word timings: one span per word, in order, inside the clip, and the same in both editions.
+for (const [id, frag] of Object.entries(en.frags)) {
+  const t = frag.timing;
+  assert.ok(t && t.dur > 0, `No timing: ${id}`);
+  assert.equal(t.words.length, frag.words[1] - frag.words[0] + 1, `Timing count: ${id}`);
+  t.words.forEach((w, i) => assert.ok(w[0] >= 0 && w[0] <= w[1] && w[1] <= t.dur && (!i || t.words[i - 1][0] <= w[0]), `Timing order: ${id}`));
+  assert.deepEqual(ar.frags[id].timing, t);
+}
 const server = http.createServer((req, res) => {
   const file = path.join(site, decodeURIComponent(new URL(req.url, 'http://localhost').pathname).replace(/^\//, '') || 'index.html');
   if (!file.startsWith(site + path.sep)) { res.writeHead(403).end(); return; }
@@ -39,7 +47,8 @@ const server = http.createServer((req, res) => {
 (async () => {
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   const base = `http://127.0.0.1:${server.address().port}/`;
-  const browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : {}) });
+  // Audio may start without a click, and the microphone is a generated tone: both only for these checks.
+  const browser = await chromium.launch({ headless: true, args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'], ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } : {}) });
   const errors = [], untranslated = new Set(), overflow = [];
   let pagesChecked = 0;
   try {
@@ -270,13 +279,158 @@ const server = http.createServer((req, res) => {
       const staleErrors = [];
       stalePage.on('pageerror', error => staleErrors.push(error.message));
       await stalePage.route(base, async route => {
-        const html = fs.readFileSync(path.join(site, 'index.html'), 'utf8').replace(/<button class="language-btn"[\s\S]*?<\/button>/, '').replace(/<script src="js\/i18n[^>]*><\/script>/, '').replace(/<script src="data\/ar[^>]*><\/script>/, '');
+        const html = fs.readFileSync(path.join(site, 'index.html'), 'utf8').replace(/<button class="language-btn"[\s\S]*?<\/button>/, '').replace(/<script src="js\/i18n[^>]*><\/script>/, '').replace(/<script src="js\/audio[^>]*><\/script>/, '').replace(/<script src="data\/ar[^>]*><\/script>/, '');
         await route.fulfill({ contentType: 'text/html', body: html });
       });
       await stalePage.goto(base);
       assert.ok(await stalePage.locator('.hero h1').isVisible());
+      await stalePage.locator('.hero .play').click();
+      assert.ok(await stalePage.locator('#player').evaluate(p => !!p.currentSrc), 'Without audio.js a clip still plays');
       assert.deepEqual(staleErrors, []);
       await stale.close();
+    }
+    // Sound and text stay together: the highlight is read against the player's own clock.
+    {
+      const context = await browser.newContext({ permissions: ['microphone'] });
+      const page = await context.newPage();
+      page.on('pageerror', error => errors.push(error.message));
+      await page.goto(base + '?lang=en#/lesson/surah-1/see');
+      // The page splits every fragment into exactly the words the timings describe.
+      const shape = await page.evaluate(() => Object.values(window.TARTEEL.frags).filter(f => window.TarteelAudio.splitWords(f.html).length !== f.timing.words.length).map(f => f.id));
+      assert.deepEqual(shape, [], 'Every fragment must split into its timed words');
+      const marks = await page.evaluate(() => window.TARTEEL.cards.filter(c => c.t === 'i' && window.TarteelAudio.splitWords(c.m).length !== window.TARTEEL.frags[c.f].timing.words.length).map(c => c.id));
+      assert.deepEqual(marks, [], 'Identify cards must split the same way');
+      // Every clip is as long as its timings say (within an MP3 frame or two).
+      const lengths = await page.evaluate(async () => {
+        const bad = [];
+        for (const f of Object.values(window.TARTEEL.frags)) {
+          const a = new Audio(); a.preload = 'metadata'; a.src = f.audio;
+          await new Promise(r => { a.onloadedmetadata = r; a.onerror = r; });
+          if (!(Math.abs(a.duration * 1000 - f.timing.dur) < 80)) bad.push([f.id, a.duration, f.timing.dur]);
+        }
+        return bad;
+      });
+      assert.deepEqual(lengths, [], 'Clip length must match its word timings');
+      for (const speed of ['1×', '0.5×']) {
+        const result = await page.evaluate(async speed => {
+          const sp = document.querySelector('[data-speed]');
+          for (let i = 0; i < 3 && sp.textContent !== speed; i++) sp.click();
+          const verse = document.querySelectorAll('.example .verse')[2], btn = verse.querySelector('.play'), p = document.getElementById('player');
+          const f = window.TARTEEL.frags[verse.dataset.frag];
+          btn.click();
+          let frames = 0, wrong = 0, progress = 0;
+          const lit = new Set(), t0 = performance.now();
+          // right for this instant, or for the frame just drawn (the clock runs on between the two)
+          const want = t => { let e = -1; f.timing.words.forEach((w, i) => { if (w[0] <= t + 40) e = i; }); return e; };
+          while (performance.now() - t0 < 20000) {
+            await new Promise(r => requestAnimationFrame(r));
+            if (p.ended || (frames > 10 && p.paused)) break;
+            if (p.paused) continue;
+            const now = verse.querySelector('.w.now'), at = now ? +now.dataset.w : -1, ms = p.currentTime * 1000;
+            if (at !== want(ms) && at !== want(ms - 34)) wrong++;
+            if (at >= 0) lit.add(at);
+            progress = Math.max(progress, +btn.style.getPropertyValue('--p') || 0);
+            frames++;
+          }
+          await new Promise(r => setTimeout(r, 50));
+          return { frames, wrong, lit: lit.size, words: f.timing.words.length, progress, rate: p.playbackRate, clean: !verse.querySelector('.w.now') && btn.getAttribute('aria-pressed') === 'false' };
+        }, speed);
+        assert.ok(result.frames > 30, 'The clip must actually play');
+        assert.equal(result.wrong, 0, 'Highlight out of step at ' + speed + ': ' + JSON.stringify(result));
+        assert.equal(result.lit, result.words, 'Every word lights up in turn');
+        assert.ok(result.progress > 0.9 && result.clean, 'The button shows progress and resets: ' + JSON.stringify(result));
+        assert.equal(result.rate, speed === '1×' ? 1 : 0.5);
+        console.log('Word highlight at ' + speed + ': ' + result.frames + ' frames, none out of step');
+      }
+      // One word alone: starts at the word and stops after it, though this server cannot serve byte ranges.
+      const word = await page.evaluate(async () => {
+        const verse = document.querySelectorAll('.example .verse')[2], p = document.getElementById('player'), f = window.TARTEEL.frags[verse.dataset.frag];
+        const sp = document.querySelector('[data-speed]');
+        for (let i = 0; i < 3 && sp.textContent !== '1×'; i++) sp.click();
+        verse.querySelectorAll('.w')[1].click();
+        const seen = [], t0 = performance.now();
+        while (performance.now() - t0 < 8000) { await new Promise(r => requestAnimationFrame(r)); if (!p.paused) seen.push(p.currentTime * 1000); else if (seen.length) break; }
+        return { span: f.timing.words[1], from: seen[0], to: seen[seen.length - 1] };
+      });
+      assert.ok(Math.abs(word.from - (word.span[0] - 30)) < 120 && word.to >= word.span[1] - 60 && word.to < word.span[1] + 200, 'A tapped word plays alone: ' + JSON.stringify(word));
+      // Listen and repeat: the reciter, then a silent turn for the learner; a second click ends it.
+      const echo = page.locator('.example [data-echo]').nth(2);
+      await echo.click();
+      assert.ok(/1\/3/.test(await echo.innerText()));
+      await page.locator('.verse.is-turn').waitFor({ timeout: 15000 });
+      assert.ok(await page.locator('#player').evaluate(p => p.paused), 'The learner recites into silence');
+      await echo.click();
+      assert.equal(await echo.getAttribute('aria-pressed'), 'false');
+      assert.equal(await page.locator('.verse.is-turn').count(), 0);
+      // Play all moves through the verses in order.
+      await page.locator('#play-all').click();
+      await page.locator('.example:nth-child(1) .verse.is-playing').waitFor();
+      await page.locator('.example:nth-child(2) .verse.is-playing').waitFor({ timeout: 15000 });
+      await page.locator('#play-all').click();
+      assert.equal(await page.locator('.verse.is-playing').count(), 0);
+      // A question side never gives the answer away: its words cannot be tapped.
+      await page.evaluate(() => { localStorage.setItem('tarteel.v1', JSON.stringify({ settings: { mode: 'free', types: { r: true, i: false, c: false, s: false, k: false } } })); location.hash = '/practice/lesson-surah-112'; });
+      await page.reload();
+      assert.equal(await page.locator('.flash .verse.can-tap').count(), 0);
+      // Recording: start, flip (which ends the take), then the learner's own recitation is on offer.
+      await page.locator('[data-act="rec-start"]').click();
+      await page.locator('[data-act="rec-stop"]').waitFor();
+      await page.waitForTimeout(700);
+      await page.locator('button[data-act="flip"]').click();
+      await page.locator('[data-act="rec-play"]').waitFor();
+      assert.equal(await page.locator('.flash .verse.can-tap').count(), 1);
+      await page.locator('[data-act="rec-play"]').click();
+      await page.locator('[data-grade="2"]').click();
+      assert.equal(await page.locator('[data-act="rec-play"]').count(), 0, 'A take belongs to one card');
+      // Sittings are capped, and the rest of the queue is offered afterwards.
+      await page.evaluate(() => { localStorage.setItem('tarteel.v1', JSON.stringify({ settings: { newPerDay: 20, sessionSize: 2, types: { c: true, r: false, i: false, s: false, k: false } } })); location.hash = '/practice/level-0'; });
+      await page.reload();
+      assert.equal(await page.locator('.session-top .count').innerText(), '0/2');
+      for (let i = 0; i < 2; i++) { await page.locator('button[data-act="flip"]').click(); await page.locator('[data-grade="2"]').click(); }
+      assert.ok(/100%/.test(await page.locator('.summary').innerText()));
+      await page.locator('[data-act="more"]').click();
+      assert.equal(await page.locator('.session-top .count').innerText(), '0/2');
+      // Daily settings, and the backup round trip.
+      await page.evaluate(() => { location.hash = '/practice'; });
+      await page.locator('.toggle[data-goal="40"]').click();
+      await page.locator('.toggle[data-new="5"]').click();
+      assert.deepEqual(await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('tarteel.v1')).settings; return [s.goal, s.newPerDay]; }), [40, 5]);
+      assert.ok(/\/40/.test(await page.locator('#practice-due').innerText()));
+      await page.evaluate(() => { location.hash = '/about'; });
+      const [download] = await Promise.all([page.waitForEvent('download'), page.locator('#backup-export').click()]);
+      const backup = path.resolve(__dirname, '../build/audit/backup.json');
+      fs.mkdirSync(path.dirname(backup), { recursive: true });
+      await download.saveAs(backup);
+      await page.evaluate(() => localStorage.removeItem('tarteel.v1'));
+      await page.locator('#backup-file').setInputFiles(backup);
+      await page.waitForFunction(() => { const s = JSON.parse(localStorage.getItem('tarteel.v1') || '{}'); return s.settings && s.settings.goal === 40 && Object.keys(s.cards).length === 2; });
+      fs.writeFileSync(backup, '{"not":"a backup"}');
+      await page.locator('#backup-file').setInputFiles(backup);
+      await page.locator('.toast').waitFor();
+      assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('tarteel.v1')).settings.goal), 40, 'A bad file changes nothing');
+      await context.close();
+    }
+    // Offline: once the worker has the course, it runs with no network at all.
+    {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      page.on('pageerror', error => errors.push(error.message));
+      await page.goto(base);
+      await page.evaluate(() => localStorage.setItem('tarteel.sw', '1'));
+      await page.reload();
+      await page.waitForFunction(() => navigator.serviceWorker.controller, null, { timeout: 20000 });
+      await page.evaluate(() => { location.hash = '/about'; });
+      await page.locator('#offline-save').click();
+      await page.waitForFunction(() => localStorage.getItem('tarteel.offline') === '1', null, { timeout: 60000 });
+      await page.evaluate(() => { location.hash = '/'; });
+      await context.setOffline(true);
+      await page.reload();
+      assert.ok(await page.locator('.hero h1').isVisible(), 'The page opens offline');
+      await page.evaluate(() => { location.hash = '/lesson/madd-lazim/see'; });
+      await page.locator('.example .play').first().click();
+      await page.locator('.verse.is-playing .w.now').first().waitFor({ timeout: 10000 });
+      assert.ok(await page.evaluate(() => document.fonts.check('2rem "KFGQPC Hafs"')), 'The Mushaf font is available offline');
+      await context.close();
     }
     assert.deepEqual(errors, []);
     fs.mkdirSync(path.resolve(__dirname, '../build/audit'), { recursive: true });

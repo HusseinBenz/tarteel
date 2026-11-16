@@ -51,6 +51,7 @@ flowchart LR
 | **Static site, no framework** | No server, no build step for the front end, works from `file://` and GitHub Pages. Course data ships as a `<script>` (`data/content.js`), not a `fetch`, so opening `index.html` directly works. |
 | **Progress lives in the browser** | `localStorage` only. No accounts, no tracking. The site also works with storage disabled. |
 | **Audio cut per fragment** | Each card plays exactly its words, not the whole verse. Clips are cut with ffmpeg using per-word timings and are shared by the site and Anki. |
+| **Word timings ship with the text** | Each fragment carries when every word sounds inside its clip, so the site can highlight the word being recited. See "Sound and text in step" below. |
 
 ## The Quran text and font
 
@@ -64,6 +65,38 @@ Other source-data issues handled in `quran_data.py`:
 - Cross-word rules (idgham, ikhfa, iqlab) are tagged as one span that *includes the space*. Words are split per character and the tag is re-opened on each side.
 - The hizb/sajdah signs ۞ ۩ are not words in the audio timings, so they are attached to the neighboring word to keep word numbers aligned.
 - Quran.com colors a madd only where the Mushaf prints a madd sign. Unmarked natural madd (the alif of قَالَ) is colored by a small, conservative supplementary pass, so that natural madd is colored consistently.
+
+## Sound and text in step
+
+The highlight follows the recitation because both come from one definition and one clock.
+
+```mermaid
+flowchart LR
+    SEG["Quran.com word segments<br/>(ms in the verse recording)"] --> WIN["quran_data.clip_window()<br/>where a clip starts and ends"]
+    WIN --> CUT["build_audio.cut()<br/>ffmpeg clip"]
+    WIN --> TIM["quran_data.clip_timing()<br/>frag.timing = dur + [start, end] per word"]
+    CUT --> MP3["site/audio/*.mp3"]
+    TIM --> DATA["site/data/content.js"]
+    MP3 --> PLAYER["&lt;audio&gt; player"]
+    DATA --> AUDIO["js/audio.js<br/>reads player.currentTime every frame"]
+    PLAYER --> AUDIO --> HL["the current word gets .now"]
+```
+
+- **One window.** `clip_window()` is the only place that decides where a clip begins and ends. The cutter and the timings both call it, so a change to the padding cannot move one without the other.
+- **One clock.** `audio.js` never runs its own timer. On every animation frame it reads `player.currentTime` and lights the last word whose start has passed. Slowing playback, seeking or a stalled network therefore cannot make the highlight drift. It leads the sound by 40 ms, because a highlight that lands exactly on the sound reads as late.
+- **Words in the page.** `TarteelAudio.words()` splits a fragment's HTML at the spaces between words and wraps each in `<span class="w">`. Hizb and sajdah signs stay with their neighbour, as in the build. If the count ever differs from the timings, the fragment is shown unwrapped and plays without highlighting.
+- **Clips in memory.** A clip is fetched once and played from a blob, so one word can be played alone (`playWord`) on hosts that cannot serve byte ranges, and replays need no network.
+
+What was measured (16 November 2026, all 202 clips and the 148 verses they come from):
+
+| Check | Result |
+|---|---|
+| Clip length against its timings | Equal to within 1 ms on all 202 clips |
+| First word of a verse: where the sound starts against where the timing says | Median 10 ms early, 80% within −40 to +10 ms (114 clips) |
+| Word boundaries across 665 boundaries | Energy dips cluster 50 to 100 ms after the timed boundary, which is where a word's opening consonant sits. No overall offset |
+| Highlight against the player clock, in a browser | 0 frames out of step, at 1× and 0.5× (`tools/audit_site.cjs`) |
+
+The timings themselves come from Quran.com and were not corrected by hand. Nobody has listened to all 202 clips against the highlight; the checks above are instrumental.
 
 ## Content model
 
@@ -143,8 +176,22 @@ flowchart LR
 
 **Two ways to learn**
 
-- **Guided path** (progressive): each lesson is *meet the rule → see examples → try it*. Finishing the practice marks the lesson done, and the path map shows "you are here".
-- **Flashcards** (repetitive): jump straight into any deck. A simplified SM-2 spaced-repetition scheduler (Again / Hard / Good / Easy) brings hard cards back sooner. Options: choose card types, smart review or free shuffle, autoplay on flip.
+- **Guided path** (progressive): each lesson is *meet the rule → see examples → try it*. The first example plays beside the explanation. Finishing the practice marks the lesson done, and the path map shows "you are here".
+- **Flashcards** (repetitive): jump straight into any deck. A simplified SM-2 spaced-repetition scheduler (Again / Hard / Good / Easy) brings hard cards back sooner. A sitting holds at most 20 cards and offers the rest afterwards. Options: card types, smart review or free shuffle, autoplay on flip, new cards per day, daily goal.
+
+The home page has two states. A new visitor gets the pitch and a live verse to play. A returning learner gets what is due, the next lesson, today's goal and the streak. The reasons behind each practice feature are in [`LEARNING.md`](LEARNING.md).
+
+## Offline and installation
+
+`site/sw.js` is a service worker, registered over https only (or on localhost after `localStorage.setItem('tarteel.sw', '1')`).
+
+| Request | Strategy |
+|---|---|
+| The page | Network first, so a release is seen at once; the saved copy when offline |
+| `?v=` scripts, styles, data | Saved on first use, then served from the device. The hash changes with the file, so they cannot go stale |
+| Audio, fonts, images | Saved on first use. *About ▸ Use offline* fetches all 202 clips |
+
+`build_site.py --stamp` writes two versions into `sw.js`: one from the stamped page, one from the list of media files. A new version retires the old cache. `manifest.webmanifest` and the PNG icons from `tools/build_icons.py` make the site installable.
 
 ## Folder layout
 
@@ -160,11 +207,14 @@ tarteel/
 │  ├─ curriculum.py      resolve + validate content
 │  ├─ build_model.py     cards and decks
 │  ├─ build_audio.py     ffmpeg clip cutting
-│  ├─ build_site.py      data.js + color css
+│  ├─ build_site.py      data.js + color css + asset and worker versions
 │  ├─ build_anki.py      .apkg packages
+│  ├─ build_icons.py     app icons (run only when the mark changes)
+│  ├─ audit_site.cjs     browser audit: every route, sync, recording, offline
 │  └─ preview_anki.py    dev: render Anki templates as HTML
 ├─ site/                 the deployable static website
-│  ├─ index.html, css/, js/app.js, fonts/, audio/, data/, downloads/
+│  ├─ index.html, sw.js, manifest.webmanifest, css/, fonts/, audio/, data/, downloads/
+│  └─ js/                app.js (views, scheduler), audio.js (player, highlight, recorder), i18n.js
 ├─ dist/anki/            the Anki packages
 ├─ docs/                 this document, the content guide, the design system and the handout
 ├─ graphify-out/         code knowledge graph, report and viewer (see README)
@@ -177,3 +227,5 @@ tarteel/
 - Keyboard flow in flashcards (Space, 1–4, P); visible focus; semantic buttons and links; progress bars have ARIA values.
 - Every rule color has a name, so color is never the only signal, and "identify" cards deliberately remove color.
 - Works with `localStorage` blocked (progress simply isn't saved).
+- The highlighted word is marked with a neutral outline, never by changing a letter's color. Tapping a word is a pointer shortcut; the Listen button gives keyboard users the whole clip.
+- Without a microphone, a secure context or `MediaRecorder`, the recording controls are not shown. A recording is held in memory for one card and is never stored or sent.

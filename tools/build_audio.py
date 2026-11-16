@@ -19,31 +19,14 @@ OUT = ROOT / "site" / "audio"
 def cut(fid: str, frag: dict) -> str:
     key = f"{frag['surah']}:{frag['ayah']}"
     first, last = frag["words"]
-    seg = q.segments(key)
-    if not seg:
-        raise SystemExit(f"{fid}: no segment timings for {key}")
-
-    def start_of(pos: int) -> int:
-        while pos not in seg and pos < max(seg):
-            pos += 1
-        return seg[pos][0]
-
-    def end_of(pos: int) -> int:
-        while pos not in seg and pos > min(seg):
-            pos -= 1
-        return seg[pos][1]
-
-    n_words = q.word_count(key)
-    start = start_of(first)
-    end = end_of(last)
-    start = max(0, start - (150 if first == 1 else 20))
-    end = end + (250 if last == n_words else 40)
-    dur = max(0.4, (end - start) / 1000)
+    # The same window the word timings are measured against (quran_data.clip_timing).
+    start, end = q.clip_window(key, first, last)
+    dur = (end - start) / 1000
 
     src = q.verse_audio_path(key)
     dst = OUT / f"{fid}.mp3"
     cmd = [
-        "ffmpeg", "-y", "-loglevel", "error",
+        q.ffmpeg(), "-y", "-loglevel", "error",
         "-ss", f"{start / 1000:.3f}", "-i", str(src), "-t", f"{dur:.3f}",
         "-af", f"afade=t=in:d=0.02,afade=t=out:st={max(0, dur - 0.06):.3f}:d=0.06",
         "-ac", "1", "-ar", "44100", "-b:a", "64k", str(dst),

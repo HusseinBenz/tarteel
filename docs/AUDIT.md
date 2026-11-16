@@ -52,6 +52,49 @@ Latest run after these changes: **1,360 configurations passed**, with zero untra
 - **Arabic answer feedback:** identify cards showed "Correct! This is" in English, because the translations were keyed on smaller pieces than the rendered text. It only surfaced when the shuffled first option happened to be right, so the audit passed by chance before. The audit now checks both outcomes.
 - **Button contrast:** the audit measures button text against the blended glass color in both themes (186 checks, minimum 4.5:1).
 
+## Product pass — 16 November 2026
+
+Scope: a study of the interface, the flows and the audio, followed by the changes it called for. The learning rationale is in [`LEARNING.md`](LEARNING.md), the sync design and its measurements in [`ARCHITECTURE.md`](ARCHITECTURE.md).
+
+### What the study found
+
+| Area | Finding | Change |
+|---|---|---|
+| Audio | Clips played, but nothing on screen moved with them. The per-word timings used to cut each clip were thrown away after the build | Timings ship with every fragment. The word being recited is outlined, driven by the player's clock on every frame |
+| Audio | A learner could only replay a whole clip | Tap a word to hear it alone; *Listen and repeat* (reciter, then a silent turn, three times); *Play all* for a lesson's verses in order |
+| Audio | The first play of a clip waited on the network | The current card's clip and the next one's are fetched ahead and played from memory |
+| Feedback | "Compare with the reciter" relied on memory of what one had just said | Record on the card, then play it next to the reciter. Kept in memory for that card only |
+| Feedback | A wrong identify answer showed only the right rule | It also shows the rule that was chosen, so the two can be told apart |
+| Practice | A review session ran until the whole queue was empty | Sittings of 20, with the rest offered after. A daily goal, a streak and a seven-day strip |
+| Home | Returning learners saw the same marketing page as newcomers | Two states: a pitch with a live verse to play, or what is due today |
+| Lesson | On a phone the lesson banner and step tabs pushed the flashcard below the fold | The banner collapses to one line after the first step. The first example plays beside the explanation |
+| Navigation | On a phone the four links wrapped onto a second header row | A tab bar at the bottom, hidden during a flashcard session |
+| Flashcards | Grades sat in a 2×2 block below a long answer | One row of four that stays in view while the answer scrolls |
+| Symbols | A tapped sign's explanation opened at the foot of a long page | It opens under the group that was tapped |
+| Settings | Seven unlabeled toggles in two rows | Labeled groups; new cards per day and the daily goal can be set |
+| Robustness | Progress lived in one browser with no way out (listed as a gap above) | Export and import a backup on the About page |
+| Robustness | No offline use | A service worker, an install manifest, and *Use offline* to save every clip |
+| Pipeline | A fresh clone could not build: the cache folders were never created, and ffmpeg had to be on PATH even for `--check` | Folders are created on import; ffmpeg falls back to `imageio-ffmpeg`; `--check` needs neither |
+| Pipeline | Asset hashes depended on the checkout's line endings | Hashes are taken over normalized line endings |
+| Copy | "1 miss came back and were practiced again" | "came back for another try" |
+
+### Verification
+
+`node tools/audit_site.cjs` in headless Edge, after the last change:
+
+- **1,360 page configurations** (170 routes, two languages, 390px and 1280px, light and dark): zero runtime or resource errors, zero horizontal overflow, zero untranslated Arabic interface strings.
+- **Button contrast:** 218 checks, all at least 4.5:1.
+- **Timings:** every one of the 202 fragments splits into exactly the words its timings describe, in both the colored and the identify markup; every clip's length matches its timings.
+- **Highlight:** a clip is played at 1× and at 0.5×, and on every frame the outlined word is compared with the player's clock. No frame was out of step, every word lit in turn, and the highlight cleared at the end.
+- **One word:** playback starts at the word and stops after it, on a server that cannot serve byte ranges.
+- **Listen and repeat, Play all:** the silent turn is silent; verses play in order; a second click stops both.
+- **Recording:** with a generated microphone signal, a take is made, ended by flipping the card, offered for playback, and gone on the next card. The question side of a card has no tappable words.
+- **Sittings, settings, backup:** a capped sitting offers the rest; daily settings save; an exported backup restores cards and settings; a file that is not a backup changes nothing.
+- **Offline:** with the network off, the page opens, a clip plays with its highlight, and the Mushaf font is available.
+- **Stale page:** a page without `audio.js` still plays a clip.
+
+Not verified: nobody listened to the clips against the highlight, so its accuracy rests on the Quran.com timings and the measurements in `ARCHITECTURE.md`. Recording and offline use ran only in headless Edge with a generated microphone signal, not with a real microphone or on Safari, Firefox or a phone. Installing the app was not tested. The service worker runs only over https, so its first real exercise is the published site.
+
 ## Remaining gaps
 
 | Priority | Finding | Next step |
@@ -60,7 +103,10 @@ Latest run after these changes: **1,360 configurations passed**, with zero untra
 | Medium | Downloadable Anki decks are English only. They are labeled explicitly in the Arabic interface. | Build separately identified Arabic Anki decks if requested, so imports do not overwrite English notes. |
 | Medium | Some English teaching rules are simplified, particularly the treatment of silah exceptions, starting verbs with hamzat al-wasl, and detailed ra cases. Arabic adds qualifications, but this audit does not rewrite the English curriculum. | Review these lessons with a qualified teacher and align the two editions' detail. |
 | Low | Dark-theme madd colors do not form a reliable light-to-deep sequence. This pre-existing design gap is recorded in `DESIGN-SYSTEM.md`. | Review the teaching palette together with contrast and color-distinction checks. Arabic color guidance avoids relying on depth alone. |
-| Low | Progress is local to one browser; there is no export/import or cross-device sync. | Consider a backup/export feature if learners need to migrate devices. |
+| Low | Progress is local to one browser. A backup can now be exported and imported by hand; there is no automatic cross-device sync. | Sync would need accounts and a server, which the project has avoided. |
+| Medium | Tarteel does not listen to the learner. Recording lets them compare by ear, but nothing scores pronunciation. | Keep directing learners to a teacher. Automatic assessment would need a speech model and a privacy review. |
+| Low | Tapping a word is pointer-only. Keyboard users get the whole clip from the Listen button. | Make words focusable if single-word playback proves important for keyboard users. |
+| Low | The Anki decks were not rebuilt in this pass and carry no word timings. | Rebuild with `python tools/build.py` when the decks next change. |
 | Owner decision | `NOTICE.md` records unresolved recording-use terms and the absence of a chosen project license. | Confirm source permissions and choose the project's license. No license was assumed or changed during this work. |
 
 The first audit pass above made no publishing or remote repository changes.

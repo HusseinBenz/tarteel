@@ -58,6 +58,26 @@
   --tj-laam_shamsiyah: #8E8E9A;
   --tj-slnt: #8E8E9A;
 }
+/* regions that are dark in either theme (the hero, the header) */
+.on-dark, .top {
+  --tj-madda_normal: #7CB3FF;
+  --tj-madda_permissible: #A99BFF;
+  --tj-madda_obligatory: #8499FF;
+  --tj-madda_necessary: #B6A4FF;
+  --tj-qalaqah: #FF7A85;
+  --tj-ghunnah: #FFA64D;
+  --tj-ikhafa: #D68CFF;
+  --tj-ikhafa_shafawi: #FF8FD0;
+  --tj-idgham_ghunnah: #4FD9C0;
+  --tj-idgham_wo_ghunnah: #7FDC7F;
+  --tj-idgham_shafawi: #B5E64D;
+  --tj-iqlab: #58C7FF;
+  --tj-idgham_mutajanisayn: #F0C24D;
+  --tj-idgham_mutaqaribayn: #E0A674;
+  --tj-ham_wasl: #8E8E9A;
+  --tj-laam_shamsiyah: #8E8E9A;
+  --tj-slnt: #8E8E9A;
+}
 .tj-madda_normal { color: var(--tj-madda_normal); }
 .tj-madda_permissible { color: var(--tj-madda_permissible); }
 .tj-madda_obligatory { color: var(--tj-madda_obligatory); }

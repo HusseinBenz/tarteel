@@ -22,6 +22,8 @@ The original brief asked for a friendly, cute course, and this language is much 
 1. **Purple is for the interface, never for Arabic.** The brand purple (hue 268°) sits only 15° to 18° from the Permissible Madd and Ikhfa rule colors. Quran text uses only the neutral ink and rule colors, so a color on a letter always means a rule.
 2. **Arabic never inherits tracking or the mono font.** `letter-spacing` breaks cursive joining. Arabic always uses KFGQPC Hafs with `letter-spacing: 0`. For the same reason, titles must not contain Arabic (the build rejects it); use the lesson's `arabic` field.
 3. **Interface text goes through `rich()`** when it might contain Arabic, so Arabic words get the Mushaf font.
+4. **The word being recited is marked behind the letters, never on them.** `.w.now` is a neutral outline (`--word-ring`), with a 10% white tint (`--word-now`) on dark surfaces only. On light there is no fill, because a tint would take the weakest rule color (Idgham Shafawi, 3.04:1 on white) below 3:1; on dark the weakest stays at 3.75:1. A letter's color still means only its rule.
+5. **Always-dark regions use the dark rule colors.** A verse inside `.on-dark` (the home page's live demo) takes the dark-theme rule colors in either theme. `build_site.py` generates that block in `tajweed.css`.
 
 ## Tokens
 
@@ -79,7 +81,8 @@ The header, hero, lesson banner, due card and footer are always dark: `.on-dark`
 | Space | 4, 8, 12, 16, 24, 32, 48, 72 px (`--s-1` to `--s-8`) |
 | Border | 1px. The site's computed `0.8px` is 1px at 125% display scaling |
 | Elevation | Hairline first. Only the flashcard and dialogs use `--shadow-lg` |
-| Motion | 120ms color and border changes; 200ms flashcard rise; all off under `prefers-reduced-motion` |
+| Motion | 120ms color and border changes; 80ms word highlight; 200ms flashcard rise; 260ms view entrance; all off under `prefers-reduced-motion` |
+| Layers | Header and tab bar `z-index: 30`; sticky grades `2`; toast `20`. The header's blur is on `.top::before`, so the tab bar inside it can stay fixed to the viewport |
 
 ## Glass buttons
 
@@ -98,8 +101,17 @@ Every button is glass: a translucent fill, a top-to-bottom sheen, a lit top edge
 | Button | `.btn` | default (filled glass), `.soft` (neutral glass), `.big` | hover, active, focus, disabled |
 | Audio button | `.play` | `.big` | `aria-pressed` while playing |
 | Speed button | `.speed` | `.big` | Cycles 1×, 0.75×, 0.5×; saved |
+| Action button | `.btn.soft.act` | `.big`, `.rec-on` | An icon and a label: Listen and repeat, Play all, Record. `aria-pressed` while running |
+| Word | `.w` | inside `.verse.can-tap` | `.now` while recited; hover and pointer cursor only where tapping plays the word |
 | Language switch | `.language-btn` | | Hover, focus; labeled in the language it switches to |
-| Next-up panel | `.plan`, `.plan-card` | | Hover border. Shown only once a learner has progress |
+| Main navigation | `.nav` | header links from 761px; a fixed tab bar with icons below | `aria-current="page"`. Hidden during a flashcard session on phones, where the session's own ✕ leads back |
+| Live demo | `.demo` | | Home page, new visitors only: a playable verse inside the hero |
+| Today panel | `.goal`, `.ring`, `.week` | | Home page, returning learners: goal ring, streak, seven-day strip |
+| Method | `.method` | | Three numbered cards |
+| Settings | `.settings`, `.set-row`, `.set-label` | `.num-toggle` | Labeled groups of toggles |
+| Meter | `.meter` | | A 3px share bar: cards learned in a deck, today's goal |
+| Session summary | `.summary` | | Three `.stat` tiles after a sitting |
+| Contrast note | `.contrast` | | After a wrong identify answer: the rule that was chosen, beside the right one |
 | Search | `.search` | | Focus |
 | Toggle | `.toggle` | | `aria-pressed` |
 | Step tab | `.step` | | `aria-current`, `.done` |

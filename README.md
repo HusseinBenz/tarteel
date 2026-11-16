@@ -45,13 +45,17 @@ Progress and review schedules are stored only in your browser.
 
 Use `?lang=ar` or `?lang=en` before a route (for example `index.html?lang=ar#/path`) to link to a specific language. The language switch changes the page in place: it keeps your route, scroll position and flashcard session, and remembers your choice when browser storage is available. The site works directly from disk in both languages.
 
-Other learning aids: slower audio (1×, 0.75×, 0.5×) next to every Listen button, a next-up panel on the home page, and a lesson search on the path page that finds lessons by their English or Arabic name.
+**Sound and text move together.** Every clip carries the timing of each word, so the word being recited is highlighted as it sounds, at any speed (1×, 0.75×, 0.5×). Tap a word to hear it alone, use *Listen and repeat* to alternate the reciter with a silent turn for yourself, or *Play all* to hear a lesson's verses in order.
+
+Other learning aids: record your own recitation on a card and play it next to the reciter's (the recording never leaves the browser), a daily goal with a streak, short sittings of 20 cards, a lesson search that finds lessons by their English or Arabic name, and a backup you can export and import on the About page. Each one is tied to a learning technique in [`docs/LEARNING.md`](docs/LEARNING.md).
+
+Over https the site installs as an app and keeps working offline. *About ▸ Use offline* saves every clip on the device.
 
 **Anki.** In Anki choose *File ▸ Import* and pick `dist/anki/Tarteel-Complete.apkg` (or just the levels you want). You get a deck tree: `Tarteel ▸ Level N ▸ one subdeck per rule`, plus `Tarteel ▸ Rule Symbols`. The font is embedded, so the Mushaf script displays correctly on desktop, AnkiDroid and AnkiMobile. The packages can also be downloaded from the website's home page.
 
 ## Rebuild or extend
 
-Requires Python 3.10+, `ffmpeg` on your PATH and `pip install -r requirements.txt`.
+Requires Python 3.10+, `pip install -r requirements.txt`, and ffmpeg: either on your PATH or from `pip install imageio-ffmpeg`.
 
 ```bash
 python tools/build.py --check    # validate every example against the Quran text
@@ -69,6 +73,8 @@ npm install --prefix build/browser-check playwright
 npx --prefix build/browser-check playwright install chromium
 node tools/audit_site.cjs
 ```
+
+To skip the browser download, point `PLAYWRIGHT_CHROMIUM_EXECUTABLE` at an installed Chrome or Edge. The audit plays real clips and checks, frame by frame, that the highlighted word matches the player's clock.
 
 See [`docs/AUDIT.md`](docs/AUDIT.md) for findings and remaining gaps.
 

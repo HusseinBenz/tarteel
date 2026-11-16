@@ -6,6 +6,15 @@
   <title>Tarteel · Learn tajweed the friendly way</title>
   <meta name="description" content="A friendly, step-by-step way to learn tajweed with the Madinah Mushaf, tajweed colors, audio and flashcards.">
   <meta name="theme-color" content="#111113">
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tarteel · Learn tajweed the friendly way">
+  <meta property="og:description" content="A step-by-step tajweed course with the Madinah Mushaf in color, word-by-word recitation and spaced flashcards.">
+  <meta property="og:image" content="img/icon-512.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tarteel">
   <style>html[data-booting] body { visibility: hidden; }</style>
   <script>
     // Runs before first paint, so Arabic never flashes as English and the saved theme never flashes.
@@ -23,8 +32,8 @@
   </script>
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/UthmanicHafs-v22.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/tajweed.css?v=c2ef8b0cf9">
-  <link rel="stylesheet" href="css/style.css?v=5d9b35a30d">
+  <link rel="stylesheet" href="css/tajweed.css?v=090cb5d3c6">
+  <link rel="stylesheet" href="css/style.css?v=663a929cce">
 <link rel="stylesheet" href="css/glass-buttons.css?v=20fcc4a640" data-hb-glass>
 </head>
 <body data-hb-project="tarteel">
@@ -36,10 +45,10 @@
       <span class="brand-name">Tarteel</span>
     </a>
     <nav class="nav" aria-label="Main">
-      <a href="#/" data-nav="home">Home</a>
-      <a href="#/path" data-nav="path">Guided path</a>
-      <a href="#/practice" data-nav="practice">Flashcards</a>
-      <a href="#/symbols" data-nav="symbols">Symbols</a>
+      <a href="#/" data-nav="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10.4V20a1 1 0 0 0 1 1h5.5v-6.5h5V21H20a1 1 0 0 0 1-1v-9.6z"/></svg><span>Home</span></a>
+      <a href="#/path" data-nav="path"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2.5a3 3 0 0 1 1 5.83V14a2 2 0 0 0 2 2h6.17a3 3 0 1 1 0 2H9a4 4 0 0 1-4-4V8.33A3 3 0 0 1 6 2.5z"/></svg><span>Guided path</span></a>
+      <a href="#/practice" data-nav="practice"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 4h9A2.500 2.500 0 0 1 17 6.5v9a2.500 2.500 0 0 1-2.500 2.500h-9A2.500 2.500 0 0 1 3 15.5v-9A2.500 2.500 0 0 1 5.5 4zM19 8.200a2.500 2.500 0 0 1 2 2.450v8.850a2.500 2.500 0 0 1-2.500 2.500H9.650a2.500 2.500 0 0 1-2.450-2h9.300a2.500 2.500 0 0 0 2.500-2.500z"/></svg><span>Flashcards</span></a>
+      <a href="#/symbols" data-nav="symbols"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.300 7.700L22 12l-7.700 2.300L12 22l-2.300-7.700L2 12l7.700-2.300z"/></svg><span>Symbols</span></a>
     </nav>
     <div class="top-actions">
       <button class="language-btn" id="btn-language" type="button" lang="ar" dir="rtl" aria-label="العربية">العربية</button>
@@ -49,6 +58,7 @@
   </header>
 
   <main id="app" tabindex="-1" aria-live="polite"></main>
+  <noscript><p style="max-width:40rem;margin:3rem auto;padding:0 1rem;font-family:system-ui,sans-serif">Tarteel needs JavaScript to show the lessons and play the recitation. Please enable it and reload the page.</p></noscript>
 
   <footer class="foot on-dark"><div class="foot-in">
     <p>Text: Madinah Mushaf (Hafs ʿan ʿĀṣim) in the <abbr title="King Fahd Glorious Quran Printing Complex">KFGQPC</abbr> Uthmanic script. Tajweed annotation and word timings via Quran.com. Recitation: Mahmoud Khalil Al-Husary.</p>
@@ -65,10 +75,11 @@
 
   <audio id="player" preload="none"></audio>
 
-  <script src="data/content.js?v=601bec962b"></script>
-  <script src="data/downloads.js?v=dcd684fcda"></script>
-  <script src="data/ar.js?v=cbe4cce812"></script>
-  <script src="js/i18n.js?v=bdb7692993"></script>
-  <script src="js/app.js?v=5cedd9534f"></script>
+  <script src="data/content.js?v=f3847f9677"></script>
+  <script src="data/downloads.js?v=4c5941070f"></script>
+  <script src="data/ar.js?v=9ee090b2d9"></script>
+  <script src="js/i18n.js?v=d4488f3c54"></script>
+  <script src="js/audio.js?v=050b6b45bb"></script>
+  <script src="js/app.js?v=d209abaf5a"></script>
 </body>
 </html>
