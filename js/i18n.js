@@ -66,7 +66,50 @@
     'Course complete — revisit the path': 'أكملت المنهج — راجع المسار',
     'Could not load Arabic content.': 'تعذر تحميل المحتوى العربي.',
     'Next lesson': 'الدرس التالي', 'Review': 'المراجعة', 'A few minutes now keeps them fresh.': 'دقائق قليلة الآن تثبتها في ذاكرتك.',
-    'Find a lesson or rule': 'ابحث عن درس أو حكم', 'No lessons match your search.': 'لا توجد دروس تطابق بحثك.', 'Playback speed': 'سرعة التشغيل'
+    'Find a lesson or rule': 'ابحث عن درس أو حكم', 'No lessons match your search.': 'لا توجد دروس تطابق بحثك.', 'Playback speed': 'سرعة التشغيل',
+    // home
+    'See the whole path': 'اعرض المسار كاملا', 'Try it now': 'جرب الآن',
+    'Press Listen. Each word lights up exactly as it is recited, and every color is a rule you will learn.': 'اضغط «استمع»: تضيء كل كلمة لحظة تلاوتها، وكل لون يدل على حكم ستتعلمه.',
+    'Method': 'المنهج', 'How Tarteel teaches': 'كيف يعلمك ترتيل', 'Meet the rule': 'تعرف على الحكم',
+    'One idea at a time: what it means, which letters trigger it, and how long it lasts.': 'فكرة واحدة في كل درس: معنى الحكم وحروفه ومقداره.',
+    'Hear it in the Quran': 'اسمعه في القرآن',
+    'Real verses with the reciter. Each word lights up as it is recited, and you can tap a word to hear it alone.': 'آيات بصوت القارئ، تضيء فيها كل كلمة عند تلاوتها، ويمكنك الضغط على أي كلمة لسماعها وحدها.',
+    'Recite, then review': 'اتل ثم راجع',
+    'Say it from memory before you listen. Cards come back just before you would forget them.': 'اقرأ من حفظك قبل أن تستمع، وتعود إليك البطاقات قبيل أن تنساها.',
+    'Welcome back': 'مرحبا بعودتك', '{n} card is ready for review': '{n} بطاقة جاهزة للمراجعة', '{n} cards are ready for review': '{n} بطاقة جاهزة للمراجعة',
+    'Ready for your next lesson': 'درسك التالي في انتظارك', 'You are all caught up': 'أتممت مراجعات اليوم',
+    'A short session every day does more than a long one once a week.': 'جلسة قصيرة كل يوم أنفع من جلسة طويلة مرة في الأسبوع.',
+    'Next lesson: {t}': 'الدرس التالي: {t}', 'Today’s goal': 'هدف اليوم', '{n} day in a row': 'أيام متتالية: {n}', '{n} days in a row': 'أيام متتالية: {n}',
+    'Last 7 days': 'آخر 7 أيام', 'Recall this week': 'نسبة التذكر هذا الأسبوع', 'cards learned ·': 'بطاقة متعلمة ·',
+    // lessons and audio
+    'Hear it first': 'استمع أولا', 'Listen and repeat': 'استمع وردد', 'Your turn': 'دورك', 'Tap any word to hear it on its own.': 'اضغط على أي كلمة لسماعها وحدها.',
+    'Play all': 'شغل الكل', 'Stop': 'إيقاف',
+    // flashcards
+    'End session': 'إنهاء الجلسة', 'Recordings stay on this device.': 'يبقى التسجيل على جهازك فقط.', 'Stop recording': 'أوقف التسجيل',
+    'My recitation': 'تلاوتي', 'Record again': 'سجل مجددا', 'Record yourself': 'سجل تلاوتك',
+    'How well did you know it?': 'ما مدى معرفتك بالإجابة؟', 'How close was your recitation?': 'ما مدى قرب تلاوتك من تلاوة القارئ؟',
+    'You chose': 'اخترت', 'Right first time': 'صحيحة من أول مرة', 'Continue with {n} more': 'تابع مع {n} بطاقة أخرى',
+    'The microphone is not available. Allow it in your browser to record.': 'تعذر الوصول إلى الميكروفون. اسمح به في المتصفح لتسجيل تلاوتك.',
+    'Card types': 'أنواع البطاقات', 'Order': 'الترتيب', 'Audio': 'الصوت', 'New cards per day': 'البطاقات الجديدة يوميا', 'Daily goal': 'الهدف اليومي',
+    // about
+    'Recall before you listen.': 'استرجع قبل أن تستمع.',
+    'You recite each fragment from memory first, then check it. Retrieving an answer strengthens memory more than rereading it.': 'تقرأ كل مقطع من حفظك أولا ثم تتحقق. استرجاع الإجابة يثبتها في الذاكرة أكثر من إعادة قراءتها.',
+    'Spaced reviews.': 'مراجعة متباعدة.',
+    'Each card returns after a growing interval, timed for just before you would forget it.': 'تعود كل بطاقة بعد مدة تطول تدريجيا، قبيل الوقت الذي تكاد تنساها فيه.',
+    'Mixed practice.': 'تدريب متنوع.',
+    'Reviews mix rules from different lessons, and the identify cards make you tell similar rules apart.': 'تجمع المراجعات أحكاما من دروس مختلفة، وبطاقات «حدد الحكم» تدربك على التمييز بين الأحكام المتشابهة.',
+    'Listen, then echo.': 'استمع ثم ردد.',
+    'Listen and repeat alternates the reciter with a silent turn for you, at full or reduced speed.': 'خاصية «استمع وردد» تتناوب بين تلاوة القارئ وفترة صمت تردد فيها، بالسرعة العادية أو بسرعة أبطأ.',
+    'Feedback you can see and hear.': 'تقويم تراه وتسمعه.',
+    'Words light up as they are recited, and your own recording plays next to the reciter’s, so you can hear what to adjust.': 'تضيء الكلمات عند تلاوتها، وتسمع تسجيلك بجانب تلاوة القارئ لتعرف ما تحتاج إلى تصحيحه.',
+    'Your progress': 'تقدمك',
+    'Progress is saved only in this browser. Export a backup to keep it safe or to move it to another device.': 'يحفظ تقدمك في هذا المتصفح فقط. صدر نسخة احتياطية لحفظه أو لنقله إلى جهاز آخر.',
+    'Export backup': 'تصدير نسخة احتياطية', 'Import backup': 'استيراد نسخة احتياطية',
+    'That file is not a Tarteel backup': 'هذا الملف ليس نسخة احتياطية من ترتيل', 'Backup imported': 'تم استيراد النسخة الاحتياطية',
+    'Use offline': 'الاستخدام دون اتصال',
+    'Save every recitation clip on this device, so the whole course works without a connection.': 'احفظ جميع المقاطع الصوتية على جهازك ليعمل المنهج كله دون اتصال بالإنترنت.',
+    'Save audio for offline use': 'احفظ الصوت للاستخدام دون اتصال', 'All audio is saved on this device.': 'جميع المقاطع الصوتية محفوظة على هذا الجهاز.',
+    'Some clips could not be saved. Check your connection and try again.': 'تعذر حفظ بعض المقاطع. تحقق من الاتصال ثم حاول مجددا.', 'Saving… {n}%': 'جار الحفظ… {n}%'
   };
   var active = false;
   function text(value) {
@@ -95,7 +138,7 @@
         .replace(/^Practice all (\d+) cards$/, 'تدرب على البطاقات كلها ($1)')
         .replace(/^Surah /, 'سورة ').replace(/^· Verse /, '· الآية ').replace(/^Mushaf p\. /, 'صفحة المصحف ')
         .replace(/^Listen to /, 'استمع إلى ').replace(/^Next:$/, 'التالي:')
-        .replace(/^\((\d+) misses? came back and were practiced again\)\. Nice recitation!$/, '(أعدت تدريب $1 من الإجابات). بارك الله في تلاوتك!')
+        .replace(/^\((\d+) misses? came back for another try\)\. Nice recitation!$/, '(أعدت تدريب $1 من الإجابات). بارك الله في تلاوتك!')
         .replace(/^<10m(?= ·|$)/, 'أقل من 10 د').replace(/^(\d+)d(?= ·|$)/, '$1 ي').replace(/^(\d+)w(?= ·|$)/, '$1 أ').replace(/^(\d+)mo(?= ·|$)/, '$1 ش');
     }
     return s.slice(0, s.indexOf(key)) + out + s.slice(s.indexOf(key) + key.length);

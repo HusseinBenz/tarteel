@@ -1,0 +1,19 @@
+{
+  "name": "Tarteel · Learn tajweed",
+  "short_name": "Tarteel",
+  "description": "A step-by-step tajweed course with the Madinah Mushaf in color, word-by-word recitation and spaced flashcards.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111113",
+  "theme_color": "#111113",
+  "lang": "en",
+  "dir": "auto",
+  "categories": ["education"],
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "img/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

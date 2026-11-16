@@ -2,6 +2,7 @@
  *
  *   data    window.TARTEEL, window.TARTEEL_AR (generated; both editions share ids)
  *   state   localStorage "tarteel.v1" (progress + spaced repetition), all optional
+ *   audio   window.TarteelAudio (js/audio.js): playback, word highlighting, recording
  *   views   hash router: home, path, level, lesson, practice (hub + session),
  *           symbols, colors, about
  */
@@ -13,6 +14,17 @@
   if (!window.TARTEEL) { document.getElementById('app').textContent = 'Could not load the course data.'; return; }
   // The inline script in index.html has already resolved the language from the URL or storage.
   var language = document.documentElement.lang === 'ar' && window.TARTEEL_AR ? 'ar' : 'en';
+  // A stale page without js/audio.js still plays clips, just without highlighting or recording.
+  var A = window.TarteelAudio || (function () {
+    var el = document.getElementById('player'), none = function () {};
+    var play = function (btn) { el.src = btn.getAttribute('data-audio'); var p = el.play(); if (p && p.catch) p.catch(none); };
+    return {
+      words: function (h) { return h; }, play: play, echo: none, playAll: none, playWord: none, preload: none, on: none,
+      stop: function () { try { el.pause(); } catch (e) { /* ignore */ } },
+      setRate: function (r) { el.defaultPlaybackRate = el.playbackRate = r; },
+      recorder: { supported: false, has: function () { return false; }, recording: function () { return false; }, clear: none, stop: none }
+    };
+  })();
   var D, legend, cardById, deckById, symById, lessonOrder;
 
   // ---------------------------------------------------------------- helpers
@@ -24,6 +36,8 @@
   function rich(s) { return language === 'ar' ? esc(s) : esc(s).replace(AR_RUN, function (m) { return '<span class="ar-inline" lang="ar">' + m + '</span>'; }); }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : w === 'miss' ? 'es' : 's'); }
+  // Translate a template now, then fill in its values: Tx('Continue with {n} more', { n: 4 }).
+  function Tx(s, vars) { s = I18n.text(s); Object.keys(vars || {}).forEach(function (k) { s = s.replace('{' + k + '}', vars[k]); }); return s; }
 
   function useLanguage() {
     I18n.use(language);
@@ -48,20 +62,39 @@
   // ---------------------------------------------------------------- storage
   var KEY = 'tarteel.v1';
   var S = { cards: {}, lessons: {}, days: {}, settings: {} };
+  function adopt(parsed) {
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) S = parsed;
+    var obj = function (v) { return v && typeof v === 'object' && !Array.isArray(v) ? v : {}; };
+    S.cards = obj(S.cards); S.lessons = obj(S.lessons); S.days = obj(S.days);
+    S.settings = Object.assign({ autoplay: false, newPerDay: 12, goal: 20, sessionSize: 20, mode: 'smart', types: { r: true, i: true, c: true, s: true, k: true }, theme: 'auto', speed: 1 }, obj(S.settings));
+  }
   function loadState() {
-    try { var raw = localStorage.getItem(KEY); if (raw) { var parsed = JSON.parse(raw); if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) S = parsed; } } catch (e) { /* private mode: run without saving */ }
-    S.cards = S.cards || {}; S.lessons = S.lessons || {}; S.days = S.days || {};
-    S.settings = Object.assign({ autoplay: false, newPerDay: 12, mode: 'smart', types: { r: true, i: true, c: true, s: true, k: true }, theme: 'auto', speed: 1 }, S.settings || {});
+    var parsed = null;
+    try { var raw = localStorage.getItem(KEY); if (raw) parsed = JSON.parse(raw); } catch (e) { /* private mode: run without saving */ }
+    adopt(parsed);
   }
   function saveState() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
   function dayKey(d) { d = d || new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   function today() { return (S.days[dayKey()] = S.days[dayKey()] || { reviews: 0, fresh: 0 }); }
+  function reviewsToday() { var d = S.days[dayKey()]; return d ? d.reviews || 0 : 0; }
+  function lastDays(n) {
+    var out = [], d = new Date();
+    for (var i = 0; i < n; i++) { out.unshift(S.days[dayKey(d)] || { reviews: 0, fresh: 0 }); d.setDate(d.getDate() - 1); }
+    return out;
+  }
   function streak() {
     var n = 0, d = new Date();
     if (!(S.days[dayKey(d)] && S.days[dayKey(d)].reviews)) d.setDate(d.getDate() - 1);
     while (S.days[dayKey(d)] && S.days[dayKey(d)].reviews) { n++; d.setDate(d.getDate() - 1); }
     return n;
   }
+  // The share of this week's reviews that were remembered: the learner's own retention figure.
+  function recall() {
+    var r = 0, a = 0;
+    lastDays(7).forEach(function (d) { r += d.reviews || 0; a += d.again || 0; });
+    return r >= 5 ? Math.round(100 * (r - a) / r) + '%' : '—';
+  }
+  function learnedIn(ids) { return ids.filter(function (id) { return S.cards[id] && S.cards[id].reps > 0; }).length; }
 
   // ---------------------------------------------------------------- spaced repetition (simplified SM-2)
   var DAY = 86400000;
@@ -78,10 +111,12 @@
     var c = S.cards[id], fresh = !c;
     c = c || { ef: 2.5, iv: 0, reps: 0, lapses: 0 };
     var iv = nextInterval(c, g);
+    // Nudge longer intervals by a few percent, so cards learned together do not all fall due on one day.
+    if (iv >= 4) iv = Math.max(c.iv + 1, Math.round(iv * (0.95 + Math.random() * 0.1)));
     if (g === 0) { c.lapses++; c.reps = 0; c.iv = 0; c.due = Date.now() + 10 * 60000; }
     else { c.reps++; c.iv = iv; c.ef = Math.max(1.3, c.ef + (g === 1 ? -0.15 : g === 3 ? 0.15 : 0)); c.due = Date.now() + iv * DAY; }
     S.cards[id] = c;
-    var t = today(); t.reviews++; if (fresh) t.fresh++;
+    var t = today(); t.reviews++; if (fresh) t.fresh++; if (g === 0) t.again = (t.again || 0) + 1;
     saveState();
   }
   function countStates(ids) {
@@ -97,48 +132,51 @@
     var due = ids.filter(function (id) { return state(id) === 'due'; }).sort(function (a, b) { return S.cards[a].due - S.cards[b].due; });
     var fresh = ids.filter(function (id) { return state(id) === 'new'; });
     var left = Math.max(0, S.settings.newPerDay - today().fresh);
-    return due.concat(fresh.slice(0, left));
+    // Short sittings: a long queue is served in parts the learner can finish.
+    return due.concat(fresh.slice(0, left)).slice(0, S.settings.sessionSize || 20);
   }
 
   // ---------------------------------------------------------------- audio
-  var player = $('#player'), playing = null;
-  function setPlaying(btn) {
-    if (playing) { playing.setAttribute('aria-pressed', 'false'); var t = $('.t', playing); if (t) t.textContent = I18n.text('Listen'); }
-    playing = btn;
-    if (btn) { btn.setAttribute('aria-pressed', 'true'); var t2 = $('.t', btn); if (t2) t2.textContent = I18n.text('Playing…'); }
-  }
-  function playClip(src, btn) {
-    if (btn && playing === btn && !player.paused) { player.pause(); setPlaying(null); return; }
-    player.src = src; player.currentTime = 0;
-    player.defaultPlaybackRate = player.playbackRate = S.settings.speed;
-    setPlaying(btn || null);
-    var p = player.play();
-    if (p && p.catch) p.catch(function () { setPlaying(null); toast('Could not play the audio'); });
-  }
-  player.addEventListener('ended', function () { setPlaying(null); });
-  function stopAudio() { try { player.pause(); } catch (e) { /* ignore */ } setPlaying(null); }
-  var ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></svg>';
+  var ICON = {
+    play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10.4-6.5a1 1 0 0 0 0-1.8L9.5 4.6A1 1 0 0 0 8 5.5z"/></svg>',
+    echo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4.5 4.5L17 11V8H8a3 3 0 0 0-3 3v1H3v-1a5 5 0 0 1 5-5h9zM7 22l-4.5-4.5L7 13v3h9a3 3 0 0 0 3-3v-1h2v1a5 5 0 0 1-5 5H7z"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3.5 3.5 0 0 0 3.5-3.5v-5a3.5 3.5 0 0 0-7 0v5A3.5 3.5 0 0 0 12 15zm7-3.5h-2a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-2.6a7 7 0 0 0 6-6.9z"/></svg>',
+    stop: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+    list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5v6l5-3zM11 7h10v2H11zM3 13v6l5-3zM11 15h10v2H11z"/></svg>',
+    flame: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.5 2c.5 3.5-1.5 5-3 7C8.100 10.800 7 12.600 7 15a5 5 0 0 0 10 0c0-2.200-1-4.200-2.200-5.600-.300 1.400-1 2.300-2 2.800.600-3.400-.300-7.200-.300-10.200z"/></svg>'
+  };
   var SPEEDS = [1, 0.75, 0.5];
   function speedText() { return S.settings.speed + '×'; }
-  function playBtn(f, big) {
-    return '<span class="play-group"><button type="button" class="play' + (big ? ' big' : '') + '" data-audio="' + esc(f.audio) + '" aria-pressed="false" aria-label="Listen to ' + esc(f.label) + '">' + ICON_PLAY + '<span class="t">Listen</span></button>' +
-      '<button type="button" class="speed' + (big ? ' big' : '') + '" data-speed aria-label="Playback speed: ' + speedText() + '" title="Playback speed">' + speedText() + '</button></span>';
+  function playBtn(f, big, echo) {
+    return '<span class="play-group"><button type="button" class="play' + (big ? ' big' : '') + '" data-audio="' + esc(f.audio) + '" data-frag="' + esc(f.id) + '" aria-pressed="false" aria-label="Listen to ' + esc(f.label) + '">' + ICON.play + '<span class="t">Listen</span></button>' +
+      '<button type="button" class="speed' + (big ? ' big' : '') + '" data-speed aria-label="Playback speed: ' + speedText() + '" title="Playback speed">' + speedText() + '</button></span>' + (echo ? echoBtn(f, big) : '');
+  }
+  // Listen, then recite in the silence that follows: three rounds.
+  function echoBtn(f, big) {
+    return '<button type="button" class="btn soft act' + (big ? ' big' : '') + '" data-echo data-idle="Listen and repeat" data-frag="' + esc(f.id) + '" aria-pressed="false">' + ICON.echo + '<span class="t">Listen and repeat</span></button>';
   }
   function cycleSpeed() {
     S.settings.speed = SPEEDS[(SPEEDS.indexOf(S.settings.speed) + 1) % SPEEDS.length] || 1;
     saveState();
-    player.defaultPlaybackRate = player.playbackRate = S.settings.speed;
+    A.setRate(S.settings.speed);
     $$('[data-speed]').forEach(function (b) {
       b.textContent = speedText();
       b.setAttribute('aria-label', I18n.text('Playback speed: ' + speedText()));
     });
   }
+  function stopAudio() { A.stop(); }
+  var onRecorder = null; // the active flashcard session, when it wants recorder events
+  A.on(function (name, detail) {
+    if (name === 'error') toast('Could not play the audio');
+    else if (name === 'mic-denied') toast('The microphone is not available. Allow it in your browser to record.');
+    if (onRecorder && (name === 'recording' || name === 'recorded' || name === 'mic-denied')) onRecorder(name, detail);
+  });
 
   var toastTimer;
   function toast(msg) {
     var t = $('.toast'); if (t) t.remove();
     t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = I18n.text(msg); document.body.appendChild(t);
-    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.remove(); }, 2200);
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.remove(); }, 3200);
   }
 
   // ---------------------------------------------------------------- shared renderers
@@ -150,8 +188,10 @@
   }
   function verseBox(f, html, opts) {
     opts = opts || {};
-    return '<div class="verse"' + (opts.attrs || '') + '><div class="ar ' + (opts.size || '') + '" lang="ar" dir="rtl">' + (html || f.html) + '</div>' +
-      '<div class="verse-foot">' + labelHTML(f) + (opts.play ? playBtn(f, false) : '') + '</div>' +
+    // Words can be tapped only where the audio is already on offer: never on the question side of a card.
+    var tap = opts.play || opts.tap;
+    return '<div class="verse' + (tap ? ' can-tap' : '') + '" data-frag="' + esc(f.id) + '"><div class="ar ' + (opts.size || '') + '" lang="ar" dir="rtl">' + A.words(html || f.html, f.timing ? f.timing.words.length : null) + '</div>' +
+      '<div class="verse-foot">' + labelHTML(f) + (opts.play ? '<span class="verse-actions">' + playBtn(f, false, opts.echo) + '</span>' : '') + '</div>' +
       (opts.gloss && f.gloss ? '<div class="gloss">' + esc(f.gloss) + '</div>' : '') + '</div>';
   }
   function chipFor(id) {
@@ -166,6 +206,20 @@
     return e && e.note ? '<div class="note">' + rich(e.note) + '</div>' : '';
   }
   function progressBar(p) { return '<div class="progress" role="progressbar" aria-label="Review progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(p * 100) + '"><i style="width:' + Math.round(p * 100) + '%"></i></div>'; }
+  function meter(p) { return '<span class="meter" aria-hidden="true"><i style="width:' + Math.round(Math.min(1, p) * 100) + '%"></i></span>'; }
+  function ring(p, text) {
+    var c = 2 * Math.PI * 26;
+    return '<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" class="ring-track"/>' +
+      '<circle cx="32" cy="32" r="26" class="ring-fill" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + (c * (1 - Math.min(1, p))).toFixed(1) + '" transform="rotate(-90 32 32)"/>' +
+      '<text x="32" y="37" text-anchor="middle">' + esc(text) + '</text></svg>';
+  }
+  function goalPanel() {
+    var done = reviewsToday(), goal = S.settings.goal || 20, n = streak();
+    var week = lastDays(7).map(function (d, i) { return '<i class="' + (d.reviews ? 'on' : '') + (i === 6 ? ' today' : '') + '"></i>'; }).join('');
+    return '<div class="goal"><div class="goal-ring">' + ring(done / goal, done + '/' + goal) + '</div><div class="goal-text"><span class="eyebrow">Today’s goal</span>' +
+      '<b class="goal-streak">' + ICON.flame + '<span>' + esc(Tx(n === 1 ? '{n} day in a row' : '{n} days in a row', { n: n })) + '</span></b>' +
+      '<span class="week" role="img" aria-label="Last 7 days">' + week + '</span></div></div>';
+  }
   function mascot(label, small) {
     return '<svg class="mascot' + (small ? ' sm' : '') + '" viewBox="0 0 240 240" role="img" aria-label="' + esc(label || 'Noor, the Tarteel mascot') + '">' +
       '<ellipse cx="120" cy="222" rx="70" ry="9" fill="#a355ff" opacity=".3"/>' +
@@ -194,24 +248,43 @@
   function nextLesson() { for (var i = 0; i < lessonOrder.length; i++) if (!lessonDone(lessonOrder[i])) return lessonOrder[i]; return null; }
 
   // ----- home
+  var METHOD = [
+    ['Meet the rule', 'One idea at a time: what it means, which letters trigger it, and how long it lasts.'],
+    ['Hear it in the Quran', 'Real verses with the reciter. Each word lights up as it is recited, and you can tap a word to hear it alone.'],
+    ['Recite, then review', 'Say it from memory before you listen. Cards come back just before you would forget them.']
+  ];
   function viewHome() {
     setNav('home'); setTitle('');
-    var all = deckById.all.cards, st = countStates(all);
-    var learned = all.filter(function (id) { return S.cards[id] && S.cards[id].reps > 0; }).length;
+    var all = deckById.all.cards, st = countStates(allowedIds(deckById.all));
+    var learned = learnedIn(all);
     var done = lessonOrder.filter(lessonDone).length, nl = nextLesson();
-    var plan = (done || learned) && (nl || st.due) ? '<div class="plan">' +
-      (nl ? '<a class="plan-card" href="#/lesson/' + nl + '"><span class="eyebrow">Next lesson</span><b>' + esc(D.lessons[nl].title) + '</b><span class="small muted">' + esc(D.lessons[nl].meaning) + '</span></a>' : '') +
-      (st.due ? '<a class="plan-card" href="#/practice/all"><span class="eyebrow">Review</span><b>' + plural(st.due, 'card') + ' due</b><span class="small muted">A few minutes now keeps them fresh.</span></a>' : '') + '</div>' : '';
+    var returning = !!(done || learned);
+    var hero;
+    if (!returning) {
+      var demo = D.frags['001001_001-004'] || D.frags[Object.keys(D.frags)[0]];
+      hero = '<section class="hero on-dark"><div class="hero-in"><div><div class="eyebrow">Levels 0 to ' + (D.levels.length - 1) + ' · Madinah Mushaf</div><h1>Learn tajweed,<br>one friendly step at a time</h1>' +
+        '<p class="lead">Read the Madinah Mushaf in color, hear each rule recited, then practice with flashcards until it feels natural.</p>' +
+        '<div class="row"><a class="btn big" href="#/lesson/' + lessonOrder[0] + '">Start at Level 0 ↗</a><a class="btn soft big" href="#/path">See the whole path</a></div></div>' +
+        '<div class="demo"><div class="demo-head">' + mascot('Noor, the Tarteel mascot, holding an open book', true) + '<div><span class="eyebrow">Try it now</span><p>Press Listen. Each word lights up exactly as it is recited, and every color is a rule you will learn.</p></div></div>' +
+        verseBox(demo, null, { play: true, echo: false }) + chips(demo.classes) + '</div></div></section>';
+    } else {
+      var headline = st.due ? Tx(st.due === 1 ? '{n} card is ready for review' : '{n} cards are ready for review', { n: st.due }) : nl ? I18n.text('Ready for your next lesson') : I18n.text('You are all caught up');
+      var primary = st.due ? '<a class="btn big" href="#/practice/all">Review now</a>' :
+        '<a class="btn big" href="#/' + (nl ? 'lesson/' + nl : 'path') + '">' + (nl ? 'Continue learning' : 'Course complete — revisit the path') + ' ↗</a>';
+      var secondary = st.due && nl ? '<a class="btn soft big" href="#/lesson/' + nl + '">' + esc(Tx('Next lesson: {t}', { t: D.lessons[nl].title })) + '</a>' : '<a class="btn soft big" href="#/practice">Flashcards</a>';
+      hero = '<section class="hero today on-dark"><div class="hero-in"><div><div class="eyebrow">Welcome back</div><h1>' + esc(headline) + '</h1>' +
+        '<p class="lead">A short session every day does more than a long one once a week.</p>' +
+        '<div class="row">' + primary + secondary + '</div></div>' + goalPanel() + '</div></section>' +
+        '<div class="stats"><div class="stat"><b>' + done + '/' + lessonOrder.length + '</b><span>Lessons done</span></div><div class="stat"><b>' + learned + '</b><span>Cards learned</span></div><div class="stat"><b>' + st.due + '</b><span>Due now</span></div><div class="stat"><b>' + recall() + '</b><span>Recall this week</span></div></div>';
+    }
     var strip = D.legend.slice(0, 12).map(function (c) { return '<span class="chip"><span class="dot bg-' + c.id + '"></span>' + esc(c.name) + '</span>'; }).join('');
-    app.innerHTML =
-      '<section class="hero on-dark"><div class="hero-in"><div><div class="eyebrow">Levels 0 to ' + (D.levels.length - 1) + ' · Madinah Mushaf</div><h1>Learn tajweed,<br>one friendly step at a time</h1>' +
-      '<p class="lead">Read the Madinah Mushaf in color, hear each rule recited, then practice with flashcards until it feels natural.</p>' +
-      '<div class="row"><a class="btn big" href="#/' + (nl && done ? 'lesson/' + nl : 'path') + '">' + (nl ? (done ? 'Continue learning' : 'Start at Level 0') : 'Course complete — revisit the path') + ' ↗</a><a class="btn soft big" href="#/practice">Flashcards</a></div></div>' +
-      '<div>' + mascot('Noor, the Tarteel mascot, holding an open book') + '</div></div></section>' + plan +
+    app.innerHTML = hero +
+      (returning ? '' : '<div class="section-head"><div class="eyebrow">Method</div><h2>How Tarteel teaches</h2></div><ol class="method">' + METHOD.map(function (m, i) {
+        return '<li><span class="index">' + two(i + 1) + '</span><h3>' + m[0] + '</h3><p>' + m[1] + '</p></li>';
+      }).join('') + '</ol>') +
       '<div class="section-head"><div class="eyebrow">Two ways to learn</div><h2>Choose how you like to learn</h2></div><div class="paths">' +
       '<a class="path-card" href="#/path"><span class="index">01</span><h3>Guided path</h3><p>Levels 0 to ' + (D.levels.length - 1) + ', in order. Each lesson shows the rule, what it means, examples, then flashcards.</p><span class="go">Follow the path ↗</span></a>' +
       '<a class="path-card" href="#/practice"><span class="index">02</span><h3>Repetitive practice</h3><p>Jump straight into flashcards. A fragment of a verse appears: recite it, flip, press play, and compare.</p><span class="go">Open the decks ↗</span></a></div>' +
-      '<div class="stats"><div class="stat"><b>' + done + '/' + lessonOrder.length + '</b><span>Lessons done</span></div><div class="stat"><b>' + learned + '</b><span>Cards learned</span></div><div class="stat"><b>' + st.due + '</b><span>Due now</span></div><div class="stat"><b>' + streak() + '</b><span>Day streak</span></div></div>' +
       '<div class="section-head"><div class="eyebrow">Color key</div><h2>The colors you will learn</h2></div><div class="legend-strip">' + strip + '</div><p class="small muted" style="margin-top:var(--s-3)"><a href="#/colors">See the whole color key</a></p>' +
       '<div class="section-head"><div class="eyebrow">Anki</div><h2>Take it with you</h2></div><div class="card stack"><p>The same course is available as Anki decks: ' + (D.meta.counts.cards + D.meta.counts.symbol + D.meta.counts.color) + ' cards with audio, organized into one deck per rule.</p><div class="row" id="dl-row"></div></div>';
     fillDownloads($('#dl-row'));
@@ -230,10 +303,11 @@
       '<div class="search"><input id="lesson-search" type="search" placeholder="Find a lesson or rule" aria-label="Find a lesson or rule" autocomplete="off"></div><p id="search-empty" class="muted" hidden>No lessons match your search.</p><div class="map">';
     D.levels.forEach(function (lv) {
       var done = lv.lessons.filter(lessonDone).length, hasNext = lv.lessons.indexOf(nl) >= 0;
-      html += '<section class="level-card" id="level-' + lv.level + '">' + (hasNext ? '<span class="here">You are here</span>' : '') +
+      var cards = deckById['level-' + lv.level].cards;
+      html += '<section class="level-card' + (hasNext ? ' current' : '') + (done === lv.lessons.length ? ' complete' : '') + '" id="level-' + lv.level + '">' + (hasNext ? '<span class="here">You are here</span>' : '') +
         '<header><span class="level-badge" aria-hidden="true">' + two(lv.level) + '</span><div><div class="num">Level ' + lv.level + '</div><h2>' + esc(lv.title) + '</h2></div></header>' +
         '<p>' + rich(lv.tagline) + '</p>' + progressBar(done / lv.lessons.length) +
-        '<div class="small"><b>' + done + '/' + lv.lessons.length + '</b> lessons · <a href="#/level/' + lv.level + '">Level overview</a> · <a href="#/practice/level-' + lv.level + '">Practice this level</a></div>' +
+        '<div class="small level-meta"><span><b>' + done + '/' + lv.lessons.length + '</b> lessons ·</span> <span><b>' + learnedIn(cards) + '/' + cards.length + '</b> cards learned ·</span> <a href="#/level/' + lv.level + '">Level overview</a> · <a href="#/practice/level-' + lv.level + '">Practice this level</a></div>' +
         '<ul class="lesson-list">' + lv.lessons.map(function (id) {
           var l = D.lessons[id];
           return '<li data-q="' + esc(searchText(id)) + '"><a class="lesson-link ' + (lessonDone(id) ? 'done' : '') + (id === nl ? ' next' : '') + '" href="#/lesson/' + id + '"><span class="dot" aria-hidden="true">' + (lessonDone(id) ? '✓' : l.n) + '</span><span>' + esc(l.title) + '</span><span class="ar-inline" lang="ar">' + esc(l.arabic) + '</span></a></li>';
@@ -251,7 +325,7 @@
     });
   }
   // Search both editions, so "ikhfa" and "إخفاء" find the same lesson in either language.
-  function normalize(s) { return String(s || '').toLowerCase().replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '').replace(/[أإآٱ]/g, 'ا'); }
+  function normalize(s) { return String(s || '').toLowerCase().replace(/[ً-ٰٟۖ-ۭـ]/g, '').replace(/[أإآٱ]/g, 'ا'); }
   function searchText(id) {
     return normalize([window.TARTEEL, window.TARTEEL_AR].map(function (data) {
       var l = data && data.lessons[id];
@@ -283,14 +357,18 @@
     var rec = S.lessons[id] = S.lessons[id] || {};
     rec.seen = rec.seen || {}; rec.seen[step] = true; saveState();
 
+    // The first step introduces the rule in full; the next two keep the heading small, so the work is on screen.
     var head = '<div class="crumbs"><a href="#/path">Guided path</a> › <a href="#/level/' + lv.level + '">Level ' + lv.level + '</a> › ' + esc(l.title) + '</div>' +
-      '<div class="lesson-head on-dark"><div class="ar" lang="ar" dir="rtl">' + esc(l.arabic) + '</div><h1>' + esc(l.title) + '</h1><div class="muted"><b>' + esc(l.meaning) + '</b></div></div>' +
+      '<div class="lesson-head on-dark' + (step === 'learn' ? '' : ' compact') + '"><div class="ar" lang="ar" dir="rtl">' + esc(l.arabic) + '</div><h1>' + esc(l.title) + '</h1><div class="muted"><b>' + esc(l.meaning) + '</b></div></div>' +
       '<nav class="steps" aria-label="Lesson steps">' + STEPS.map(function (s) { return '<a class="step ' + (rec.seen[s[0]] && s[0] !== step ? 'done' : '') + '" href="#/lesson/' + id + '/' + s[0] + '"' + (s[0] === step ? ' aria-current="step"' : '') + '>' + s[1] + '</a>'; }).join('') + '</nav>';
 
     var body = '';
     if (step === 'learn') {
-      body += '<div class="card stack"><p style="font-size:1.2rem;margin:0"><b>' + rich(l.summary) + '</b></p>' + chips(l.colors) +
+      body += '<div class="card stack"><p class="summary-line"><b>' + rich(l.summary) + '</b></p>' + chips(l.colors) +
         (l.colors && l.colors.length === 0 && l.level > 0 && l.level < 6 && l.id !== 'ra-rules' ? '<p class="small muted" style="margin:0">This rule has no color in the Mushaf: you spot it by its letters.</p>' : '') + '</div>';
+      // Sound and sight together: the first example plays right beside the explanation.
+      var first = l.examples[0] || l.showcase[0];
+      if (first) body += '<div class="card stack hear" style="margin-top:1rem"><h2>Hear it first</h2>' + verseBox(D.frags[first.f], null, { play: true, echo: true, gloss: true }) + (first.note ? '<div class="note">' + rich(first.note) + '</div>' : '') + '</div>';
       body += '<div class="card stack" style="margin-top:1rem"><h2>How it works</h2>' + l.explain.map(function (p) { return '<p>' + rich(p) + '</p>'; }).join('') + '</div>';
       var facts = '';
       if (l.letters) facts += '<div class="fact"><h3>' + esc(l.letters_label || 'Letters') + '</h3><div class="letters" lang="ar">' + esc(l.letters) + '</div></div>';
@@ -304,11 +382,12 @@
       if (lists) body += '<div class="facts" style="margin-top:1rem">' + lists + '</div>';
     } else if (step === 'see') {
       var exs = l.examples.concat(l.showcase);
-      body += '<p class="muted">Read each fragment aloud first. Then press Listen to hear the reciter.</p>';
+      body += '<div class="see-bar"><p class="muted">Read each fragment aloud first. Then press Listen to hear the reciter. <span class="tap-hint">Tap any word to hear it on its own.</span></p>' +
+        (exs.length > 1 ? '<button type="button" class="btn soft act" id="play-all" data-playall data-idle="Play all" aria-pressed="false">' + ICON.list + '<span class="t">Play all</span></button>' : '') + '</div>';
       if (!exs.length) body += '<div class="card">No examples for this lesson. Head to the next step.</div>';
       body += '<div class="examples">' + exs.map(function (e) {
         var f = D.frags[e.f];
-        return '<div class="example">' + verseBox(f, null, { play: true, gloss: true }) + (e.note ? '<div class="note">' + rich(e.note) + '</div>' : '') + '</div>';
+        return '<div class="example">' + verseBox(f, null, { play: true, echo: true, gloss: true }) + (e.note ? '<div class="note">' + rich(e.note) + '</div>' : '') + '</div>';
       }).join('') + '</div>';
       if (l.practice_link) body += '<p style="margin-top:1rem"><a class="btn" href="#/symbols">Open the Symbols page</a></p>';
     } else {
@@ -318,8 +397,11 @@
     var order = STEPS.map(function (s) { return s[0]; }), si = order.indexOf(step);
     var nav = '<div class="nextbar">' +
       (si > 0 ? '<a class="btn soft" href="#/lesson/' + id + '/' + order[si - 1] + '">← Back</a>' : (prev ? '<a class="btn soft" href="#/lesson/' + prev + '">← ' + esc(D.lessons[prev].title) + '</a>' : '<span></span>')) +
-      (si < order.length - 1 ? '<a class="btn" href="#/lesson/' + id + '/' + order[si + 1] + '">Next →</a>' : '<span></span>') + '</div>';
+      (si < order.length - 1 ? '<a class="btn big" href="#/lesson/' + id + '/' + order[si + 1] + '">Next →</a>' : '<span></span>') + '</div>';
     app.innerHTML = head + body + (step === 'try' ? '' : nav);
+
+    var all = $('#play-all');
+    if (all) all.addEventListener('click', function () { A.playAll(all, $$('.examples .play', app)); });
 
     if (step === 'try') {
       var ids = l.cards.filter(function (cid) { return S.settings.types[cardById[cid].t]; });
@@ -354,11 +436,12 @@
   function deckCard(d) {
     var ids = allowedIds(d), st = countStates(ids);
     if (!ids.length) return '';
-    return '<a class="deck" href="#/practice/' + d.id + '"><h3>' + esc(d.title) + '</h3><span class="counts">' + plural(ids.length, 'card') + (st.due ? ' · ' + st.due + ' due' : '') + (st.new ? ' · ' + st.new + ' new' : '') + '</span></a>';
+    return '<a class="deck" href="#/practice/' + d.id + '"><h3>' + esc(d.title) + '</h3><span class="counts">' + plural(ids.length, 'card') + (st.due ? ' · ' + st.due + ' due' : '') + (st.new ? ' · ' + st.new + ' new' : '') + '</span>' + meter(learnedIn(ids) / ids.length) + '</a>';
   }
   function practiceDue() {
-    var st = countStates(allowedIds(deckById.all));
-    return '<div class="due-card on-dark"><div><b>' + st.due + '</b> due now · <b>' + Math.min(st.new, Math.max(0, S.settings.newPerDay - today().fresh)) + '</b> new for today<br><span class="small muted">' + plural(D.cards.length, 'card') + ' in the whole course</span></div>' +
+    var st = countStates(allowedIds(deckById.all)), goal = S.settings.goal || 20, done = reviewsToday();
+    return '<div class="due-card on-dark"><div><b>' + st.due + '</b> due now · <b>' + Math.min(st.new, Math.max(0, S.settings.newPerDay - today().fresh)) + '</b> new for today<br><span class="small muted">' + plural(D.cards.length, 'card') + ' in the whole course</span>' +
+      '<div class="today-line"><span class="small">Today’s goal</span>' + meter(done / goal) + '<span class="small count">' + done + '/' + goal + '</span></div></div>' +
       '<a class="btn big" href="#/practice/all">Review now</a></div>';
   }
   function practiceDecks() {
@@ -371,18 +454,22 @@
   function viewPractice() {
     setNav('practice'); setTitle('Flashcards');
     var names = { r: 'Recite', i: 'Identify the rule', c: 'Concepts', s: 'Symbols', k: 'Colors' };
+    var pick = function (attr, values) { return values.map(function (v) { return '<button class="toggle num-toggle" type="button" data-' + attr + '="' + v + '">' + v + '</button>'; }).join(''); };
+    var row = function (label, inner) { return '<div class="set-row" role="group" aria-label="' + label + '"><span class="set-label">' + label + '</span><div class="toggles">' + inner + '</div></div>'; };
     app.innerHTML = '<h1>Flashcards</h1><p class="muted">The repetitive path. Each card shows a fragment of a verse: say it aloud, flip, press play, and compare. The cards you find hard come back sooner.</p>' +
       '<div id="practice-due">' + practiceDue() + '</div>' +
-      '<h2 style="margin-top:1.5rem">Settings</h2><div id="practice-settings"><div class="toggles">' +
-      Object.keys(names).map(function (k) { return '<button class="toggle" type="button" data-type="' + k + '">' + names[k] + '</button>'; }).join('') + '</div>' +
-      '<div class="toggles"><button class="toggle" type="button" data-mode="smart">Smart review</button>' +
-      '<button class="toggle" type="button" data-mode="free">Free practice (shuffle)</button>' +
-      '<button class="toggle" type="button" data-autoplay>Autoplay audio after flipping</button></div></div>' +
+      '<h2 style="margin-top:1.5rem">Settings</h2><div id="practice-settings" class="card settings">' +
+      row('Card types', Object.keys(names).map(function (k) { return '<button class="toggle" type="button" data-type="' + k + '">' + names[k] + '</button>'; }).join('')) +
+      row('Order', '<button class="toggle" type="button" data-mode="smart">Smart review</button><button class="toggle" type="button" data-mode="free">Free practice (shuffle)</button>') +
+      row('Audio', '<button class="toggle" type="button" data-autoplay>Autoplay audio after flipping</button>') +
+      row('New cards per day', pick('new', [5, 12, 20])) +
+      row('Daily goal', pick('goal', [10, 20, 40])) + '</div>' +
       '<div id="practice-decks" aria-live="off">' + practiceDecks() + '</div>';
     var settings = $('#practice-settings');
     function syncToggles() {
       $$('.toggle', settings).forEach(function (b) {
-        var on = b.dataset.type ? S.settings.types[b.dataset.type] : b.dataset.mode ? S.settings.mode === b.dataset.mode : S.settings.autoplay;
+        var d = b.dataset;
+        var on = d.type ? S.settings.types[d.type] : d.mode ? S.settings.mode === d.mode : d.new ? S.settings.newPerDay === +d.new : d.goal ? S.settings.goal === +d.goal : S.settings.autoplay;
         b.setAttribute('aria-pressed', String(!!on));
       });
     }
@@ -390,14 +477,19 @@
     // The listener lives on an element replaced by every render, so there is only ever one.
     settings.addEventListener('click', function (e) {
       var b = e.target.closest('.toggle'); if (!b) return;
-      if (b.dataset.type) S.settings.types[b.dataset.type] = !S.settings.types[b.dataset.type];
-      else if (b.dataset.mode) S.settings.mode = b.dataset.mode;
+      var d = b.dataset;
+      if (d.type) S.settings.types[d.type] = !S.settings.types[d.type];
+      else if (d.mode) S.settings.mode = d.mode;
+      else if (d.new) S.settings.newPerDay = +d.new;
+      else if (d.goal) S.settings.goal = +d.goal;
       else S.settings.autoplay = !S.settings.autoplay;
       saveState();
       syncToggles();
-      if (!b.dataset.type) return;
+      var due = $('#practice-due');
+      if (d.new || d.goal) { due.innerHTML = practiceDue(); I18n.localize(due); }
+      if (!d.type) return;
       // Only card types change the counts. The buttons stay in place, so focus and scroll do too.
-      var due = $('#practice-due'), decks = $('#practice-decks'), open = $('details.more', decks).open;
+      var decks = $('#practice-decks'), open = $('details.more', decks).open;
       due.innerHTML = practiceDue();
       decks.innerHTML = practiceDecks();
       $('details.more', decks).open = open;
@@ -411,6 +503,8 @@
     var ids = resume ? resume.ids : buildQueue(d, {});
     app.innerHTML = '<div class="crumbs"><a href="#/practice">Flashcards</a> › ' + esc(d.title) + '</div><div id="deck-session"></div>';
     var root = $('#deck-session');
+    // After a sitting, offer whatever is still waiting in this deck.
+    var opts = { title: d.title, exitHref: '#/practice', more: function () { return S.settings.mode === 'free' ? [] : buildQueue(d, {}); } };
     if (!ids.length) {
       var total = allowedIds(d).length;
       root.innerHTML = '<div class="done-screen card">' + mascot('Noor', true) + '<h2>' + (total ? 'All caught up!' : 'No cards selected') + '</h2><p>' + (total ? 'Nothing is due in this deck right now. You can practice everything anyway.' : 'Turn some card types back on in the settings.') + '</p><div class="row" style="justify-content:center">' +
@@ -418,22 +512,23 @@
       var b = $('#practice-all'); if (b) b.onclick = function () { cleanup = startSession(root, shuffle(allowedIds(d)), { title: d.title, exitHref: '#/practice' }); };
       return;
     }
-    cleanup = startSession(root, ids, { title: d.title, exitHref: '#/practice' });
+    cleanup = startSession(root, ids, opts);
   }
 
   // ----- the flashcard session
   function startSession(root, ids, opts) {
     var queue = ids.slice(), total = ids.length, done = 0, again = 0, cur = null, revealed = false, answered = false, order = null;
-    var counts = [0, 0, 0, 0];
+    var counts = [0, 0, 0, 0], missed = {};
     var resumed = resume && resume.hash === location.hash ? resume : null;
     resume = null;
     if (resumed) {
       ids = resumed.ids; queue = resumed.queue; total = resumed.total; done = resumed.done; again = resumed.again;
-      counts = resumed.counts; cur = resumed.cur; revealed = resumed.revealed; answered = resumed.answered; order = resumed.order;
+      counts = resumed.counts; cur = resumed.cur; revealed = resumed.revealed; answered = resumed.answered; order = resumed.order; missed = resumed.missed || {};
     }
+    document.body.classList.add('in-session');
 
     function next() {
-      stopAudio();
+      stopAudio(); A.recorder.clear();
       cur = queue.shift();
       if (!cur) return finish();
       revealed = false; answered = false; order = null;
@@ -441,20 +536,28 @@
     }
     function finish() {
       cur = null;
+      stopAudio(); A.recorder.clear();
+      var firstTry = total ? Math.round(100 * (total - Object.keys(missed).length) / total) : 100;
+      var more = opts.more ? opts.more() : [];
+      var goal = S.settings.goal || 20;
       root.innerHTML = '<div class="done-screen card">' + mascot('Noor', true) + '<h2>Session complete</h2>' +
-        '<p>You reviewed <b>' + plural(total, 'card') + '</b>' + (again ? ' (' + plural(again, 'miss') + ' came back and were practiced again)' : '') + '. Nice recitation!</p>' +
-        '<div class="row" style="justify-content:center">' + (opts.onFinish ? '' : '<a class="btn big" href="#/practice">More decks</a>') +
+        '<p>You reviewed <b>' + plural(total, 'card') + '</b>' + (again ? ' (' + plural(again, 'miss') + ' came back for another try)' : '') + '. Nice recitation!</p>' +
+        '<div class="summary"><div class="stat"><b>' + firstTry + '%</b><span>Right first time</span></div><div class="stat"><b>' + reviewsToday() + '/' + goal + '</b><span>Today’s goal</span></div><div class="stat"><b>' + streak() + '</b><span>Day streak</span></div></div>' +
+        '<div class="row" style="justify-content:center">' +
+        (more.length ? '<button class="btn big" type="button" data-act="more">' + esc(Tx('Continue with {n} more', { n: more.length })) + '</button>' : '') +
+        (opts.onFinish ? '' : '<a class="btn' + (more.length ? ' soft' : ' big') + '" href="#/practice">More decks</a>') +
         '<button class="btn soft" type="button" data-act="again-session">Practice again</button></div></div>';
       if (opts.onFinish) opts.onFinish();
       I18n.localize(root);
     }
+    function restart(list) { ids = list; queue = list.slice(); total = queue.length; done = 0; again = 0; counts = [0, 0, 0, 0]; missed = {}; next(); }
     function top() {
       var p = total ? done / total : 1;
-      return '<div class="session-top">' + progressBar(p) + '<span class="count">' + done + '/' + total + '</span></div>';
+      return '<div class="session-top">' + (opts.exitHref ? '<a class="session-exit" href="' + opts.exitHref + '" aria-label="End session" title="End session">✕</a>' : '') + progressBar(p) + '<span class="count">' + done + '/' + total + '</span></div>';
     }
-    function gradesHTML() {
+    function gradesHTML(ask) {
       var c = S.cards[cur];
-      return '<div class="grades">' + [['Again', 0], ['Hard', 1], ['Good', 2], ['Easy', 3]].map(function (g) {
+      return '<div class="grade-ask">' + (ask || 'How well did you know it?') + '</div><div class="grades">' + [['Again', 0], ['Hard', 1], ['Good', 2], ['Easy', 3]].map(function (g) {
         return '<button type="button" class="grade g' + g[1] + '" data-grade="' + g[1] + '">' + g[0] + '<small>' + fmtInterval(nextInterval(c, g[1])) + ' · ' + (g[1] + 1) + '</small></button>';
       }).join('') + '</div>';
     }
@@ -463,16 +566,31 @@
       var l = c.lesson ? D.lessons[c.lesson].title : (grp ? grp.title : 'Color key');
       return '<div class="kind"><span>' + ({ r: 'Recite', i: 'Identify the rule', c: 'Concept', s: 'Symbol', k: 'Color key' }[c.t]) + '</span><span>' + esc(l) + '</span></div>';
     }
+    // Record, then compare: the learner's own recitation next to the reciter's.
+    function recHTML() {
+      var R = A.recorder; if (!R.supported) return '';
+      if (R.recording()) return '<button type="button" class="btn soft act rec-on" data-act="rec-stop">' + ICON.stop + '<span>Stop recording</span><span class="rec-time" id="rec-time">0:00</span></button>';
+      if (R.has()) return '<button type="button" class="btn soft act" data-act="rec-play" aria-pressed="false">' + ICON.play + '<span>My recitation</span></button><button type="button" class="btn soft act" data-act="rec-start">' + ICON.mic + '<span>Record again</span></button>';
+      return '<button type="button" class="btn soft act" data-act="rec-start">' + ICON.mic + '<span>Record yourself</span></button>';
+    }
+    function recSlot() { return A.recorder.supported ? '<div class="rec-slot" id="rec-slot" aria-live="off">' + recHTML() + '</div>' : ''; }
+    onRecorder = function (name, detail) {
+      var slot = $('#rec-slot', root); if (!slot) return;
+      if (name === 'recording' && detail && detail.seconds) { var t = $('#rec-time', slot); if (t) { t.textContent = Math.floor(detail.seconds / 60) + ':' + two(detail.seconds % 60); return; } }
+      slot.innerHTML = recHTML(); I18n.localize(slot);
+    };
     function render() {
       var c = cardById[cur], h = top() + '<div class="flash" id="flash">' + kindLabel(c);
       var f = c.f ? D.frags[c.f] : null;
       if (c.t === 'r') {
         if (!revealed) {
           h += '<div class="center-col" data-act="flip"><div class="prompt">Say it out loud, then flip the card.</div>' + verseBox(f) + '</div>' +
+            (A.recorder.supported ? '<div class="rec-front">' + recSlot() + '<span class="small muted">Recordings stay on this device.</span></div>' : '') +
             '<button class="btn big" type="button" data-act="flip">Show answer <kbd>Space</kbd></button>';
         } else {
-          h += '<div class="center-col">' + verseBox(f, null, { gloss: true }) + '</div><div class="answer"><div class="row">' + playBtn(f, true) + '<span class="small muted">Compare your recitation with the reciter’s.</span></div>' +
-            chips(f.classes) + exampleNote(c) + '<div class="small">Lesson: ' + lessonLink(c.lesson) + '</div></div>' + gradesHTML();
+          h += '<div class="center-col">' + verseBox(f, null, { gloss: true, tap: true }) + '</div><div class="answer"><div class="row listen-row">' + playBtn(f, true, true) + recSlot() + '</div>' +
+            '<div class="small muted">Compare your recitation with the reciter’s.</div>' +
+            chips(f.classes) + exampleNote(c) + '<div class="small">Lesson: ' + lessonLink(c.lesson) + '</div></div>' + gradesHTML('How close was your recitation?');
         }
       } else if (c.t === 'i') {
         var L = D.lessons[c.lesson];
@@ -481,11 +599,14 @@
           h += '<div class="center-col"><div class="prompt">' + esc(c.prompt) + ' <span class="small">(highlighted letters)</span></div>' + verseBox(f, c.m) + '</div><div class="options">' +
             order.map(function (id) { return '<button class="opt" type="button" data-opt="' + id + '">' + esc(D.lessons[id].title) + '</button>'; }).join('') + '</div>';
         } else {
-          var ok = answered === c.lesson;
-          h += '<div class="center-col">' + verseBox(f, null, { gloss: true }) + '</div><div class="options">' + order.map(function (id) {
+          var ok = answered === c.lesson, chosen = D.lessons[answered];
+          h += '<div class="center-col">' + verseBox(f, null, { gloss: true, tap: true }) + '</div><div class="options">' + order.map(function (id) {
             return '<button class="opt ' + (id === c.lesson ? 'right' : (id === answered ? 'wrong' : '')) + '" type="button" disabled>' + esc(D.lessons[id].title) + '</button>';
           }).join('') + '</div><div class="answer"><div class="verdict ' + (ok ? 'ok' : 'no') + '">' + (ok ? 'Correct! ' : 'Not quite. ') + 'This is <b>' + esc(L.title) + '</b>.</div>' +
-            '<div class="row">' + playBtn(f, true) + '</div><div>' + rich(L.summary) + '</div>' + chips(f.classes) + exampleNote(c) + '</div>' +
+            '<div class="row">' + playBtn(f, true) + '</div><div>' + rich(L.summary) + '</div>' +
+            // Telling two similar rules apart is the skill: show what the wrong choice would have needed.
+            (!ok && chosen ? '<div class="contrast"><span class="contrast-label">You chose</span> <b>' + esc(chosen.title) + '</b><div>' + rich(chosen.summary) + '</div></div>' : '') +
+            chips(f.classes) + exampleNote(c) + '</div>' +
             '<button class="btn big" type="button" data-act="continue">Continue <kbd>Space</kbd></button>';
         }
       } else if (c.t === 'c') {
@@ -507,29 +628,39 @@
       h += '</div><div class="hint-keys">Keys: <kbd>Space</kbd> flip · <kbd>1</kbd>–<kbd>4</kbd> grade · <kbd>P</kbd> play</div>';
       root.innerHTML = h;
       I18n.localize(root);
+      // Have this card's clip, and the next one's, ready before they are asked for.
+      [c, cardById[queue[0]]].forEach(function (x) {
+        var fr = x && (x.f ? D.frags[x.f] : x.t === 's' && symById[x.sym].f ? D.frags[symById[x.sym].f] : null);
+        if (fr) A.preload(fr.audio);
+      });
     }
     function reveal() {
+      if (A.recorder.recording()) A.recorder.stop();
       revealed = true; render();
       var c = cardById[cur];
       if (S.settings.autoplay && (c.t === 'r' || (c.t === 's' && symById[c.sym].f))) {
-        var b = $('[data-audio]', root); if (b) playClip(b.dataset.audio, b);
+        var b = $('[data-audio]', root); if (b) A.play(b);
       }
     }
     function doGrade(g) {
       if (!revealed && !(cardById[cur].t === 'i' && answered)) return;
       grade(cur, g); counts[g]++;
-      if (g === 0) { again++; queue.splice(Math.min(3, queue.length), 0, cur); } else done++;
+      if (g === 0) { again++; missed[cur] = 1; queue.splice(Math.min(3, queue.length), 0, cur); } else done++;
       next();
     }
     function onClick(e) {
       var t = e.target.closest('[data-act],[data-grade],[data-opt]');
       if (!t || !root.contains(t)) return;
       if (t.dataset.grade != null) return doGrade(+t.dataset.grade);
-      if (t.dataset.opt) { answered = t.dataset.opt; revealed = true; render(); var b = $('[data-audio]', root); if (b && S.settings.autoplay) playClip(b.dataset.audio, b); return; }
+      if (t.dataset.opt) { answered = t.dataset.opt; revealed = true; render(); var b = $('[data-audio]', root); if (b && S.settings.autoplay) A.play(b); return; }
       var a = t.dataset.act;
       if (a === 'flip' && !revealed) reveal();
       else if (a === 'continue') doGrade(answered === cardById[cur].lesson ? 2 : 0);
-      else if (a === 'again-session') { queue = shuffle(ids); total = queue.length; done = 0; again = 0; counts = [0, 0, 0, 0]; next(); }
+      else if (a === 'again-session') restart(shuffle(ids));
+      else if (a === 'more') { var list = opts.more(); if (list.length) restart(list); }
+      else if (a === 'rec-start') { A.recorder.clear(); A.recorder.start(t); }
+      else if (a === 'rec-stop') A.recorder.stop();
+      else if (a === 'rec-play') A.recorder.play(t);
     }
     function onKey(e) {
       if (e.target.closest && e.target.closest('dialog')) return;
@@ -546,15 +677,18 @@
         if (c.t === 'i' && !answered) { var o = $$('.opt', root)[+e.key - 1]; if (o) o.click(); }
         else doGrade(+e.key - 1);
       } else if (e.key.toLowerCase() === 'p') {
-        var b = $('[data-audio]', root); if (b) playClip(b.dataset.audio, b);
+        var b = $('[data-audio]', root); if (b) A.play(b);
       }
     }
     root.addEventListener('click', onClick);
     document.addEventListener('keydown', onKey);
     if (!resumed) next(); else if (cur) render(); else finish();
-    var stop = function () { root.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey); stopAudio(); };
+    var stop = function () {
+      root.removeEventListener('click', onClick); document.removeEventListener('keydown', onKey);
+      stopAudio(); A.recorder.clear(); onRecorder = null; document.body.classList.remove('in-session');
+    };
     stop.snapshot = function () {
-      return { hash: location.hash, ids: ids, queue: queue.slice(), total: total, done: done, again: again, counts: counts.slice(), cur: cur, revealed: revealed, answered: answered, order: order };
+      return { hash: location.hash, ids: ids, queue: queue.slice(), total: total, done: done, again: again, counts: counts.slice(), cur: cur, revealed: revealed, answered: answered, order: order, missed: missed };
     };
     return stop;
   }
@@ -572,12 +706,15 @@
     app.innerHTML = html;
     function show(id) {
       var s = symById[id]; if (!s) return;
-      var f = s.f ? D.frags[s.f] : null;
-      $('#sym-detail').innerHTML = '<div class="card stack"><div class="row"><span class="big-sign" style="font-size:3.4rem" lang="ar">' + esc(s.glyph) + '</span><div><h2 style="margin:0">' + esc(s.name) + '</h2><span class="ar-inline" lang="ar">' + esc(s.arabic) + '</span></div></div>' +
+      var f = s.f ? D.frags[s.f] : null, detail = $('#sym-detail'), btn = $('.sym[data-sym="' + id + '"]', app);
+      stopAudio();
+      // The explanation opens right under the group that was tapped, not at the foot of the page.
+      if (btn) btn.closest('.sym-grid').after(detail);
+      detail.innerHTML = '<div class="card stack"><div class="row"><span class="big-sign" style="font-size:3.4rem" lang="ar">' + esc(s.glyph) + '</span><div><h2 style="margin:0">' + esc(s.name) + '</h2><span class="ar-inline" lang="ar">' + esc(s.arabic) + '</span></div></div>' +
         '<p style="margin:0">' + rich(s.meaning) + '</p><p style="margin:0"><b>' + rich(s.action) + '</b></p>' + (f ? verseBox(f, null, { play: true, gloss: true }) + (s.note ? '<div class="note">' + rich(s.note) + '</div>' : '') : '') + '</div>';
       $$('.sym', app).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.sym === id)); });
-      $('#sym-detail').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      I18n.localize($('#sym-detail'));
+      detail.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      I18n.localize(detail);
     }
     app.onclick = function (e) { var b = e.target.closest('.sym'); if (b) show(b.dataset.sym); };
     if (sel) show(sel);
@@ -592,14 +729,73 @@
     app.innerHTML = '<h1>Tajweed color key</h1><p class="muted">Tap a color to open its lesson. Longer madd means a deeper blue. Grays are quiet or hidden letters.</p><div class="row" style="margin-bottom:1rem"><a class="btn" href="#/practice/colors">Practice the colors</a></div>' + colorRows(false);
   }
 
+  // ----- about, backup and offline use
+  var TEACHING = [
+    ['Recall before you listen.', 'You recite each fragment from memory first, then check it. Retrieving an answer strengthens memory more than rereading it.'],
+    ['Spaced reviews.', 'Each card returns after a growing interval, timed for just before you would forget it.'],
+    ['Mixed practice.', 'Reviews mix rules from different lessons, and the identify cards make you tell similar rules apart.'],
+    ['Listen, then echo.', 'Listen and repeat alternates the reciter with a silent turn for you, at full or reduced speed.'],
+    ['Feedback you can see and hear.', 'Words light up as they are recited, and your own recording plays next to the reciter’s, so you can hear what to adjust.']
+  ];
   function viewAbout() {
     setNav(''); setTitle('About');
+    var offline = 'caches' in window && navigator.serviceWorker && navigator.serviceWorker.controller;
     app.innerHTML = '<h1>About Tarteel</h1><div class="card stack"><p>Tarteel (<span class="ar-inline" lang="ar">ترتيل</span>) means reciting the Quran slowly, clearly and in order. This project is a free study aid for learning tajweed: a step-by-step course, flashcards with audio, and the same content as Anki decks.</p>' +
       '<p><b>Please learn with a teacher.</b> Tajweed is learned by listening and reciting back to someone qualified. Use this as practice between lessons, not as a replacement.</p>' +
+      '<h2>How Tarteel teaches</h2><ul class="list">' + TEACHING.map(function (t) { return '<li><b>' + t[0] + '</b> ' + t[1] + '</li>'; }).join('') + '</ul>' +
       '<h2>Counts and lengths</h2><p>Lengths of madd follow the common teaching for Hafs ʿan ʿĀṣim (Shāṭibiyyah): natural 2, connected and separated 4 to 5, necessary 6, and 2, 4 or 6 on stopping. If your teacher uses a different length, follow your teacher.</p>' +
+      '<h2>Your progress</h2><p>Progress is saved only in this browser. Export a backup to keep it safe or to move it to another device.</p>' +
+      '<div class="row"><button class="btn soft" type="button" id="backup-export">Export backup</button><button class="btn soft" type="button" id="backup-import">Import backup</button><input type="file" id="backup-file" accept="application/json,.json" hidden></div>' +
+      (offline ? '<h2>Use offline</h2><p>Save every recitation clip on this device, so the whole course works without a connection.</p><div class="row"><button class="btn soft" type="button" id="offline-save">Save audio for offline use</button><span class="small muted" id="offline-status" role="status"></span></div>' : '') +
       '<h2>Credits</h2><ul class="list"><li>Quran text, KFGQPC Uthmanic Hafs font © King Fahd Glorious Quran Printing Complex, used unmodified under its free-use license.</li><li>Tajweed annotation, word timings and word-by-word meanings via the Quran.com API.</li><li>Recitation: Mahmoud Khalil Al-Husary (Murattal), via EveryAyah.com.</li><li>Interface fonts: IBM Plex Sans Arabic, DM Sans and DM Mono (SIL Open Font License).</li><li>Natural-madd coloring on unmarked letters is added by this project.</li></ul>' +
       '<h2>Anki decks</h2><div class="row" id="dl-row"></div></div>';
     fillDownloads($('#dl-row'));
+    $('#backup-export').onclick = function () {
+      var blob = new Blob([JSON.stringify({ app: 'tarteel', version: 1, exported: new Date().toISOString(), state: S }, null, 1)], { type: 'application/json' });
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'tarteel-backup-' + dayKey() + '.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    };
+    var file = $('#backup-file');
+    $('#backup-import').onclick = function () { file.click(); };
+    file.onchange = function () {
+      var f = file.files && file.files[0]; if (!f) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        var data = null;
+        try { data = JSON.parse(reader.result); } catch (e) { /* not JSON */ }
+        if (!data || data.app !== 'tarteel' || !data.state || typeof data.state.cards !== 'object') { toast('That file is not a Tarteel backup'); return; }
+        adopt(data.state); saveState(); applyTheme(); A.setRate(S.settings.speed);
+        toast('Backup imported');
+      };
+      reader.readAsText(f); file.value = '';
+    };
+    var save = $('#offline-save');
+    if (save) {
+      var status = $('#offline-status');
+      var saved = function () { try { return localStorage.getItem('tarteel.offline') === '1'; } catch (e) { return false; } };
+      if (saved()) status.textContent = I18n.text('All audio is saved on this device.');
+      save.onclick = function () {
+        var urls = Object.keys(D.frags).map(function (k) { return D.frags[k].audio; }), i = 0, failed = 0;
+        save.disabled = true;
+        // The service worker stores each clip as it is fetched; a few at a time keeps the page responsive.
+        var step = function () {
+          if (!document.contains(save)) return;
+          if (i >= urls.length) {
+            save.disabled = false;
+            if (!failed) { try { localStorage.setItem('tarteel.offline', '1'); } catch (e) { /* ignore */ } }
+            status.textContent = I18n.text(failed ? 'Some clips could not be saved. Check your connection and try again.' : 'All audio is saved on this device.');
+            return;
+          }
+          var batch = urls.slice(i, i + 6); i += batch.length;
+          Promise.all(batch.map(function (u) { return fetch(u).then(function (r) { if (!r.ok) failed++; return r.blob(); }).catch(function () { failed++; }); })).then(function () {
+            status.textContent = Tx('Saving… {n}%', { n: Math.round(100 * i / urls.length) });
+            step();
+          });
+        };
+        step();
+      };
+    }
   }
 
   // ---------------------------------------------------------------- router
@@ -624,15 +820,22 @@
     }
     window.scrollTo(0, 0);
     I18n.localize(app);
+    // restart the entrance animation for the new view
+    app.classList.remove('view-in'); void app.offsetWidth; app.classList.add('view-in');
     app.focus({ preventScroll: true });
   }
 
   // ---------------------------------------------------------------- chrome
   document.addEventListener('click', function (e) {
     var a = e.target.closest('[data-audio]');
-    if (a) { e.preventDefault(); playClip(a.dataset.audio, a); }
-    if (e.target.closest('[data-speed]')) cycleSpeed();
+    if (a) { e.preventDefault(); A.play(a); return; }
+    var echo = e.target.closest('[data-echo]');
+    if (echo) { A.echo(echo); return; }
+    if (e.target.closest('[data-speed]')) { cycleSpeed(); return; }
     if (e.target.closest('[data-close]')) $('#colors-dialog').close();
+    // One word of a verse, on its own.
+    var w = e.target.closest('.verse.can-tap .w');
+    if (w) A.playWord(w.closest('.verse'), +w.dataset.w);
   });
   function applyTheme() {
     var t = S.settings.theme;
@@ -645,7 +848,7 @@
   $('#btn-colors').addEventListener('click', function () { $('#colors-body').innerHTML = colorRows(true); I18n.localize($('#colors-body')); $('#colors-dialog').showModal(); });
   $('#colors-dialog').addEventListener('click', function (e) { if (e.target === this) this.close(); });
 
-  loadState(); applyTheme();
+  loadState(); applyTheme(); A.setRate(S.settings.speed);
 
   // ---------------------------------------------------------------- language
   // The header, footer and dialog are static English HTML. Remember the originals,
@@ -696,4 +899,9 @@
   window.addEventListener('hashchange', route);
   route();
   document.documentElement.removeAttribute('data-booting');
+
+  // Offline support: over https, or on localhost once localStorage "tarteel.sw" is "1".
+  try {
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || localStorage.getItem('tarteel.sw') === '1')) navigator.serviceWorker.register('sw.js').catch(function () { /* the site works without it */ });
+  } catch (e) { /* storage blocked */ }
 })();
